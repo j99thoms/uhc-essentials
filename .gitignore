@@ -1,0 +1,21 @@
+# Gradle
+build/
+.gradle/
+gradle-app.setting
+.gradletasknamecache
+
+# Forge dev environment
+run/
+out/
+
+# IDE
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+
+# Compiled output (keep reference/ class files)
+*.class
+!reference/**/*.class
