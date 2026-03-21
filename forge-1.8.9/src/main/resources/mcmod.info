@@ -1,0 +1,12 @@
+[
+  {
+    "modid": "uhcessentials",
+    "name": "UHC Essentials",
+    "description": "HUD overlays for UHC: coordinates, FPS, biome, compass, clock, arrow count, and more.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://github.com/j99thoms/uhc-essentials",
+    "authorList": ["j99thoms"],
+    "credits": "Original mod by sintinium"
+  }
+]
