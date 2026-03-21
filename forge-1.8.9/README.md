@@ -29,7 +29,14 @@ Minecraft 1.8.9 + Forge port of UHC Essentials.
 src/main/java/com/j99thoms/uhcessentials/
     UHCEssentialsMod.java     - @Mod entry point, registers event handler
     HUDEventHandler.java      - Forge event subscriptions (tick + render overlay)
-    windows/                  - HUD window classes (ported from reference/source-1.7.10/)
+    VersionChecker.java       - Background version check against forge-1.8.9/version.txt
+    BetterHUD.java            - Render helpers
+    windows/
+        BaseWindow.java       - Abstract base class for all HUD windows
+        FileManager.java      - Config file I/O (.minecraft/UHC Essentials/configs/)
+        WindowManager.java    - Registry of all active windows, delegates update/render
+        ...                   - Individual window classes
 src/main/resources/
     mcmod.info                - Mod metadata shown in the Forge mod list
+version.txt                   - Latest version string, fetched by VersionChecker on startup
 ```
