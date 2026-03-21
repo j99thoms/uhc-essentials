@@ -38,9 +38,7 @@ public class BetterHUD {
     }
 
     public void update() {
-        if (shouldRender) {
-            WM.update();
-        }
+        WM.update();
     }
 
     public void render() {
