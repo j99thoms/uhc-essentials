@@ -21,7 +21,7 @@ All windows are draggable, individually toggleable, and fully color-customizable
 ## Requirements
 
 - Minecraft 1.8.9
-- Forge 11.15.1.1722
+- Forge 11.15.1.2318
 - Java 8
 - OptiFine compatible
 
