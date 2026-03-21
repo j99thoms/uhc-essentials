@@ -11,22 +11,25 @@ public class HUDEventHandler {
 
     private static final Logger LOGGER = LogManager.getLogger(UHCEssentialsMod.MODID);
     private final Minecraft mc = Minecraft.getMinecraft();
-    private boolean loaded = false;
+    private BetterHUD betterHUD;
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
         if (mc.thePlayer == null || mc.theWorld == null) return;
 
-        if (!loaded) {
+        if (betterHUD == null) {
             LOGGER.info("UHC Essentials loaded successfully.");
-            loaded = true;
+            betterHUD = new BetterHUD(mc.fontRendererObj, mc);
         }
     }
 
     @SubscribeEvent
     public void onRenderOverlay(RenderGameOverlayEvent.Post event) {
         if (event.type != RenderGameOverlayEvent.ElementType.ALL) return;
-        // TODO: call betterHUD.render() once BetterHUD is wired up
+        if (betterHUD == null) return;
+
+        betterHUD.update();
+        betterHUD.render();
     }
 }
