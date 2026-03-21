@@ -72,7 +72,7 @@ public class BiomeWindow extends BaseWindow {
         int playerX = (int) Math.floor(mc.thePlayer.posX);
         int playerZ = (int) Math.floor(mc.thePlayer.posZ);
         String biomeName = mc.theWorld.getBiomeGenForCoords(
-                new BlockPos(playerX, 64, playerZ)).getBiomeName();
+                new BlockPos(playerX, 64, playerZ)).biomeName;
 
         width = mc.fontRendererObj.getStringWidth(biomeName);
         BH.drawHUDRectWithBorder(x - 1, y - 1, mc.fontRendererObj.getStringWidth(biomeName) + 1, getHeight(),
