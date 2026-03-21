@@ -3,7 +3,7 @@ package com.j99thoms.uhcessentials.windows;
 import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.Items;
+import net.minecraft.init.Items;
 
 import com.j99thoms.uhcessentials.BetterHUD;
 
