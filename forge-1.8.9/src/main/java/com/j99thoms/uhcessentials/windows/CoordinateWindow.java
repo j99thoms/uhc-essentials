@@ -102,7 +102,7 @@ public class CoordinateWindow extends BaseWindow {
         int width;
         if (x < 1000 && y < 1000 && z < 1000 && x > -1000 && y > -1000 && z > -1000)
             width = 54;
-        else if (x > -10000 && y > -10000 & z > -10000 && x < 10000 && y < 10000 && z < 10000)
+        else if (x > -10000 && y > -10000 && z > -10000 && x < 10000 && y < 10000 && z < 10000)
             width = 60;
         else if (x > -100000 && y > -100000 && z > -100000 && x < 100000 && y < 100000 && z < 100000)
             width = 66;
