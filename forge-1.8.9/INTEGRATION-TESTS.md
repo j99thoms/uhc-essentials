@@ -113,7 +113,7 @@ The other windows share its color theme and cannot be individually colored yet (
 To test the update notification path, temporarily change `CURRENT_VERSION` to `"1.0"` in `VersionChecker.java` (do not commit).
 
 - [ ] No chat message appears on load when `version.txt` matches `CURRENT_VERSION`
-- [ ] Chat message `[UHC Essentials] A new version is available: 1.2` appears when versions differ
+- [ ] Chat message `[UHC Essentials] A new version is available: 1.2.0` appears when versions differ
 - [ ] No crash and no chat message when offline - only a warning in the FML log
 
 
