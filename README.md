@@ -2,9 +2,9 @@
 
 A port of [UHC Essentials](https://github.com/abandonedaccount6235/UHC-Essentials) by sintinium to Minecraft 1.8.9 via Forge.
 
-> **Status:** Work in progress.
+> **Latest release:** [v1.2.0](https://github.com/j99thoms/uhc-essentials/releases/tag/v1.2.0) - Initial Forge 1.8.9 port
 
-## What it does
+## Features
 
 Adds a customizable HUD with overlays:
 
@@ -18,12 +18,18 @@ Adds a customizable HUD with overlays:
 
 All windows are draggable, individually toggleable, and fully color-customizable with per-window RGBA settings. Configuration is saved between sessions.
 
+## Installation
+
+1. Install [Forge 11.15.1.2318](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.8.9.html) for Minecraft 1.8.9
+2. Download the latest `uhc-essentials-1.8.9` jar from the [Releases page](https://github.com/j99thoms/uhc-essentials/releases).
+3. Drop the `uhc-essentials-1.8.9` jar into your `.minecraft/mods/` folder
+4. Launch Minecraft with the Forge profile
+
 ## Requirements
 
 - Minecraft 1.8.9
 - Forge 11.15.1.2318
 - Java 8
-- OptiFine compatible
 
 ## Original mod
 
