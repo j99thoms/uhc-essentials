@@ -7,6 +7,6 @@
     "mcversion": "${mcversion}",
     "url": "https://github.com/j99thoms/uhc-essentials",
     "authorList": ["j99thoms"],
-    "credits": "Original mod by sintinium"
+    "credits": "Original mod by sintinium. Forge port by j99thoms."
   }
 ]
