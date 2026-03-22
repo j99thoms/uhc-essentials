@@ -14,13 +14,10 @@ import com.j99thoms.uhcessentials.windows.WindowManager;
 
 public class BetterHUD {
 
-    public boolean shouldRender = false;
     public boolean move = false;
     private FontRenderer FR;
     private WindowManager WM;
     private Minecraft mc;
-
-    public static boolean resetDefaults = false;
 
     public BetterHUD(FontRenderer FR, Minecraft mc) {
         this.FR = FR;
@@ -31,10 +28,6 @@ public class BetterHUD {
 
     public FontRenderer getFontRenderer() {
         return FR;
-    }
-
-    public void setRenderState(boolean renderState) {
-        this.shouldRender = renderState;
     }
 
     public void update() {
