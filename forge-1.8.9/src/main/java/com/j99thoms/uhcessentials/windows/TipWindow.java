@@ -2,6 +2,7 @@ package com.j99thoms.uhcessentials.windows;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
@@ -9,9 +10,14 @@ import java.util.Random;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.j99thoms.uhcessentials.BetterHUD;
 
 public class TipWindow extends BaseWindow {
+
+    private static final Logger LOGGER = LogManager.getLogger(TipWindow.class);
 
     BetterHUD BH;
 
@@ -64,18 +70,19 @@ public class TipWindow extends BaseWindow {
     public void toggle() {
         if (toggle == 0 && !gotTips) {
             try {
-                URL oracle = new URL("http://pastebin.com/raw.php?i=EErKqZMx");
-                BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream()));
+                HttpURLConnection conn = (HttpURLConnection) new URL("https://pastebin.com/raw/EErKqZMx").openConnection();
+                conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 tips.clear();
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
                     tips.add(inputLine);
                 }
                 in.close();
+                gotTips = true;
             } catch (Exception e) {
-                System.out.println("[UHC ESSENTIALS] Couldn't fetch the tip :(.");
+                LOGGER.warn("Could not fetch tips: " + e);
             }
-            gotTips = true;
         } else {
             newTip();
         }
