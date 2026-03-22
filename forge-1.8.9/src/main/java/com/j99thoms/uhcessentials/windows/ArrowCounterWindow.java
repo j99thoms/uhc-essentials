@@ -12,7 +12,7 @@ import com.j99thoms.uhcessentials.BetterHUD;
 
 public class ArrowCounterWindow extends BaseWindow {
 
-    BetterHUD betterHUD;
+    private final BetterHUD betterHUD;
 
     private int x = 16;
     private int y = 68;
@@ -33,7 +33,7 @@ public class ArrowCounterWindow extends BaseWindow {
 
     private float thickness = .8f;
     private ArrayList<Double> data = new ArrayList<Double>();
-    private FileManager fileManager;
+    private final FileManager fileManager;
     private ItemStack[] inventory = new ItemStack[36];
     private Item item;
     private int nextFlash = 2;
@@ -43,7 +43,7 @@ public class ArrowCounterWindow extends BaseWindow {
     private int secondTimer = 0;
     private long lastTime;
 
-    private Minecraft mc;
+    private final Minecraft mc;
 
     private double toggle = 1;
 
@@ -113,7 +113,7 @@ public class ArrowCounterWindow extends BaseWindow {
             lastTime = System.currentTimeMillis();
         }
 
-        betterHUD.drawItemSprite(x, y, Items.arrow, this);
+        betterHUD.drawItemSprite(x, y, Items.arrow);
 
         if (toggle != 2 || count < 64)
             mc.fontRendererObj.drawStringWithShadow(count + "", x + 11, y + 9, 0xffffffff);

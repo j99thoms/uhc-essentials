@@ -9,7 +9,7 @@ import com.j99thoms.uhcessentials.BetterHUD;
 
 public class BiomeWindow extends BaseWindow {
 
-    BetterHUD betterHUD;
+    private final BetterHUD betterHUD;
 
     private int x = 2;
     private int y = 46;
@@ -20,10 +20,10 @@ public class BiomeWindow extends BaseWindow {
     private double toggle = 1;
 
     private ArrayList<Double> data = new ArrayList<Double>();
-    private FileManager fileManager;
-    private WindowTheme theme;
+    private final FileManager fileManager;
+    private final WindowTheme theme;
 
-    private Minecraft mc;
+    private final Minecraft mc;
 
     public BiomeWindow(BetterHUD betterHUD, Minecraft mc, WindowTheme theme) {
         this.mc = mc;

@@ -11,10 +11,10 @@ import com.j99thoms.uhcessentials.BetterHUD;
 
 public class CoordinateWindow extends BaseWindow {
 
-    private BetterHUD betterHUD;
-    private FontRenderer fontRenderer;
-    private Minecraft mc;
-    private WindowTheme theme;
+    private final BetterHUD betterHUD;
+    private final FontRenderer fontRenderer;
+    private final Minecraft mc;
+    private final WindowTheme theme;
 
     private int x = 2;
     private int y = 2;
@@ -29,7 +29,7 @@ public class CoordinateWindow extends BaseWindow {
     private int height = 30;
     float scale = .75F;
 
-    private FileManager fileManager;
+    private final FileManager fileManager;
     private ArrayList<Double> data = new ArrayList<Double>();
 
     public CoordinateWindow(BetterHUD betterHUD, FontRenderer fontRenderer, Minecraft mc, WindowTheme theme) {

@@ -8,24 +8,24 @@ import net.minecraft.client.gui.FontRenderer;
 import com.j99thoms.uhcessentials.BetterHUD;
 
 public class WindowManager {
-    public ArrayList<BaseWindow> windows;
-    private FontRenderer fontRenderer;
-    private Minecraft mc;
-    private BetterHUD betterHUD;
+    ArrayList<BaseWindow> windows;
+    private final FontRenderer fontRenderer;
+    private final Minecraft mc;
+    private final BetterHUD betterHUD;
     private HUDConfigScreen hudConfigScreen;
-    public static boolean init;
+    static boolean init;
 
-    public WindowTheme theme;
-    public CoordinateWindow coordWindow;
-    public CompassWindow compassWindow;
-    public ClockWindow clockWindow;
-    public ArrowCounterWindow arrowWindow;
-    public BiomeWindow biomeWindow;
-    public ArmorWindow armorWindow;
-    public TipWindow tipWindow;
-    public FPSWindow fpsWindow;
-    // public KillCounterWindow kills;  // TODO: uncomment once KillCounterWindow is ported
-    public static boolean toggled = true;
+    WindowTheme theme;
+    CoordinateWindow coordWindow;
+    CompassWindow compassWindow;
+    ClockWindow clockWindow;
+    ArrowCounterWindow arrowWindow;
+    BiomeWindow biomeWindow;
+    ArmorWindow armorWindow;
+    TipWindow tipWindow;
+    FPSWindow fpsWindow;
+    // KillCounterWindow kills;  // TODO: uncomment once KillCounterWindow is ported
+    static boolean toggled = true;
 
     private int showAllOverride = 0;
 

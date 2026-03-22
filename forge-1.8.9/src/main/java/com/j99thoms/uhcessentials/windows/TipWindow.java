@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,7 +18,7 @@ public class TipWindow extends BaseWindow {
 
     private static final Logger LOGGER = LogManager.getLogger(TipWindow.class);
 
-    BetterHUD betterHUD;
+    private final BetterHUD betterHUD;
 
     private int x = 2;
     private int y = 220;
@@ -27,17 +26,16 @@ public class TipWindow extends BaseWindow {
     private int width = 0;
     private int height = 0;
 
-    public static double toggle = 0;
+    private double toggle = 0;
 
-    private WindowTheme theme;
+    private final WindowTheme theme;
 
-    private Minecraft mc;
+    private final Minecraft mc;
 
     private ArrayList<String> tips;
-    public static boolean gotTips = false;
-    public Random random = new Random();
-    public boolean closeTip = true;
-    public int currentTipIndex = 0;
+    boolean gotTips = false;
+    boolean closeTip = true;
+    private int currentTipIndex = 0;
     private String tipOfThePage = "";
 
     public TipWindow(BetterHUD betterHUD, Minecraft mc, WindowTheme theme) {

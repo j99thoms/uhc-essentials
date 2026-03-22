@@ -11,9 +11,9 @@ import com.j99thoms.uhcessentials.BetterHUD;
 
 public class Colorizer extends GuiScreen {
 
-    private BetterHUD betterHUD;
-    private BaseWindow window;
-    private Minecraft mc;
+    private final BetterHUD betterHUD;
+    private final BaseWindow window;
+    private final Minecraft mc;
 
     private int fillRed;
     private int fillGreen;

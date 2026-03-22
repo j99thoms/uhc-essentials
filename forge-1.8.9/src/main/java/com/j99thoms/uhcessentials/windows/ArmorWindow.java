@@ -10,7 +10,7 @@ import com.j99thoms.uhcessentials.BetterHUD;
 
 public class ArmorWindow extends BaseWindow {
 
-    BetterHUD betterHUD;
+    private final BetterHUD betterHUD;
 
     private int x = 2;
     private int y = 102;
@@ -21,13 +21,13 @@ public class ArmorWindow extends BaseWindow {
     private ArrayList<Item> armor = new ArrayList<Item>();
     private ArrayList<Float> armorDamage = new ArrayList<Float>();
 
-    public static double toggle = 1;
+    private double toggle = 1;
 
     private ArrayList<Double> data = new ArrayList<Double>();
-    private FileManager fileManager;
+    private final FileManager fileManager;
 
-    private Minecraft mc;
-    private WindowTheme theme;
+    private final Minecraft mc;
+    private final WindowTheme theme;
 
     public ArmorWindow(BetterHUD betterHUD, Minecraft mc, WindowTheme theme) {
         this.mc = mc;
@@ -87,7 +87,7 @@ public class ArmorWindow extends BaseWindow {
             int space = 15;
             int itemX = this.x;
             int itemY = this.y + i * space;
-            betterHUD.drawItemSprite(itemX, itemY, item, this);
+            betterHUD.drawItemSprite(itemX, itemY, item);
             if (healthPct == 100) {
                 itemX -= 2;
             } else if (healthPct < 10) {

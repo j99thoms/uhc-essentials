@@ -9,15 +9,13 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
-import com.j99thoms.uhcessentials.windows.BaseWindow;
 import com.j99thoms.uhcessentials.windows.WindowManager;
 
 public class BetterHUD {
 
-    public boolean move = false;
-    private FontRenderer fontRenderer;
-    private WindowManager windowManager;
-    private Minecraft mc;
+    private final FontRenderer fontRenderer;
+    private final WindowManager windowManager;
+    private final Minecraft mc;
 
     public BetterHUD(FontRenderer fontRenderer, Minecraft mc) {
         this.fontRenderer = fontRenderer;
@@ -49,7 +47,7 @@ public class BetterHUD {
         fontRenderer.drawStringWithShadow(text, x, y, color);
     }
 
-    public void drawItemSprite(int xPos, int yPos, Item item, BaseWindow window) {
+    public void drawItemSprite(int xPos, int yPos, Item item) {
         GL11.glPushMatrix();
         RenderHelper.enableGUIStandardItemLighting();
         mc.getRenderItem().renderItemIntoGUI(new ItemStack(item), xPos, yPos);
