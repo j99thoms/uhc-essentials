@@ -12,20 +12,20 @@ import com.j99thoms.uhcessentials.BetterHUD;
 
 public class ArrowCounterWindow extends BaseWindow {
 
-    BetterHUD BH;
+    BetterHUD betterHUD;
 
     private int x = 16;
     private int y = 68;
 
-    private int r = 69;
-    private int g = 69;
-    private int b = 69;
-    private int a = 150;
+    private int fillRed = 69;
+    private int fillGreen = 69;
+    private int fillBlue = 69;
+    private int fillAlpha = 150;
 
-    private int r1 = 0;
-    private int g1 = 0;
-    private int b1 = 0;
-    private int a1 = 255;
+    private int borderRed = 0;
+    private int borderGreen = 0;
+    private int borderBlue = 0;
+    private int borderAlpha = 255;
 
     private int width = 0;
     private int height = 0;
@@ -33,8 +33,8 @@ public class ArrowCounterWindow extends BaseWindow {
 
     private float thickness = .8f;
     private ArrayList<Double> data = new ArrayList<Double>();
-    private FileManager FM;
-    private ItemStack[] inventroy = new ItemStack[36];
+    private FileManager fileManager;
+    private ItemStack[] inventory = new ItemStack[36];
     private Item item;
     private int nextFlash = 2;
     private boolean shouldFlash = true;
@@ -47,10 +47,10 @@ public class ArrowCounterWindow extends BaseWindow {
 
     private double toggle = 1;
 
-    public ArrowCounterWindow(BetterHUD BH, Minecraft mc) {
+    public ArrowCounterWindow(BetterHUD betterHUD, Minecraft mc) {
         this.mc = mc;
-        this.BH = BH;
-        FM = new FileManager("Arrow", 3);
+        this.betterHUD = betterHUD;
+        fileManager = new FileManager("Arrow", 3);
         load();
     }
 
@@ -82,11 +82,11 @@ public class ArrowCounterWindow extends BaseWindow {
     @Override
     public void update() {
         count = 0;
-        inventroy = mc.thePlayer.inventory.mainInventory;
-        for (int i = 0; i < inventroy.length; i++) {
-            if (inventroy[i] != null) {
-                if (inventroy[i].getItem() == Items.arrow)
-                    count += inventroy[i].stackSize;
+        inventory = mc.thePlayer.inventory.mainInventory;
+        for (int i = 0; i < inventory.length; i++) {
+            if (inventory[i] != null) {
+                if (inventory[i].getItem() == Items.arrow)
+                    count += inventory[i].stackSize;
             }
         }
 
@@ -100,7 +100,7 @@ public class ArrowCounterWindow extends BaseWindow {
                     lastTime = System.currentTimeMillis();
                     timer++;
                 } else {
-                    BH.drawHUDRectWithBorder(getX() + 2, getY() + 2, getWidth() + 1, getHeight() + 1,
+                    betterHUD.drawHUDRectWithBorder(getX() + 2, getY() + 2, getWidth() + 1, getHeight() + 1,
                             255, 0, 0, 255, 0, 0, 0, 255, 1.0);
                 }
             } else if (timer >= 3) {
@@ -113,7 +113,7 @@ public class ArrowCounterWindow extends BaseWindow {
             lastTime = System.currentTimeMillis();
         }
 
-        BH.drawItemSprite(x, y, Items.arrow, this);
+        betterHUD.drawItemSprite(x, y, Items.arrow, this);
 
         if (toggle != 2 || count < 64)
             mc.fontRendererObj.drawStringWithShadow(count + "", x + 11, y + 9, 0xffffffff);
@@ -163,7 +163,7 @@ public class ArrowCounterWindow extends BaseWindow {
     }
 
     @Override
-    public void setRGBA(int r, int g, int b, int a) {
+    public void setRGBA(int red, int green, int blue, int alpha) {
     }
 
     @Override
@@ -187,7 +187,7 @@ public class ArrowCounterWindow extends BaseWindow {
     }
 
     @Override
-    public void setBorderRGB(int r, int g, int b, int a) {
+    public void setBorderRGB(int red, int green, int blue, int alpha) {
     }
 
     @Override
@@ -211,7 +211,7 @@ public class ArrowCounterWindow extends BaseWindow {
     }
 
     @Override
-    public void setThickness(float t) {
+    public void setThickness(float thickness) {
     }
 
     @Override
@@ -235,13 +235,13 @@ public class ArrowCounterWindow extends BaseWindow {
         data.add((double) x);
         data.add((double) y);
         data.add((double) toggle);
-        FM.setArray(data);
+        fileManager.setArray(data);
     }
 
     @Override
     public void load() {
         data.clear();
-        data = FM.getArray();
+        data = fileManager.getArray();
         if (data.size() < 3) {
             save();
         } else {

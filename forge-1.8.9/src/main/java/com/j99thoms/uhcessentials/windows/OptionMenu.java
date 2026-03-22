@@ -14,103 +14,103 @@ import com.j99thoms.uhcessentials.BetterHUD;
 public class OptionMenu extends GuiScreen {
 
     private Minecraft mc;
-    private CoordsGUI cGui;
-    private BetterHUD BH;
-    private FileManager FM;
+    private CoordsGUI coordsGUI;
+    private BetterHUD betterHUD;
+    private FileManager fileManager;
     private ArrayList<Double> data = new ArrayList<Double>();
 
     private double drag;
     private double bright;
-    private int x1;
-    private int x2;
-    private int y1;
-    private int y2;
-    private int width1;
-    private int width2;
-    private int height1;
-    private int height2;
-    private String text1;
-    private String text2;
-    private double button1;
-    private double button2;
-    private boolean set1;
-    private boolean set2;
+    private int button1X;
+    private int button2X;
+    private int button1Y;
+    private int button2Y;
+    private int button1Width;
+    private int button2Width;
+    private int button1Height;
+    private int button2Height;
+    private String key1Name;
+    private String key2Name;
+    private double keyCode1;
+    private double keyCode2;
+    private boolean awaitingKey1;
+    private boolean awaitingKey2;
 
-    String func1 = "Draggable HUD";
-    String func2 = "Full Gamma Bright";
+    String label1 = "Draggable HUD";
+    String label2 = "Full Gamma Bright";
 
-    public OptionMenu(Minecraft mc, CoordsGUI cGui, BetterHUD BH) {
+    public OptionMenu(Minecraft mc, CoordsGUI coordsGUI, BetterHUD betterHUD) {
         this.mc = mc;
-        this.cGui = cGui;
-        this.BH = BH;
-        this.width1 = 40;
-        this.width2 = 40;
-        this.height1 = 10;
-        this.height2 = 10;
-        FM = new FileManager("keys.txt", 2);
-        data = FM.getArray();
+        this.coordsGUI = coordsGUI;
+        this.betterHUD = betterHUD;
+        this.button1Width = 40;
+        this.button2Width = 40;
+        this.button1Height = 10;
+        this.button2Height = 10;
+        fileManager = new FileManager("keys.txt", 2);
+        data = fileManager.getArray();
         drag = (int) data.get(0).doubleValue();
         bright = (int) data.get(1).doubleValue();
-        text1 = Keyboard.getKeyName((int) drag);
-        text2 = Keyboard.getKeyName((int) bright);
+        key1Name = Keyboard.getKeyName((int) drag);
+        key2Name = Keyboard.getKeyName((int) bright);
     }
 
     public void render() {
-        if (Mouse.isButtonDown(0) && !set1 && !set2) {
+        if (Mouse.isButtonDown(0) && !awaitingKey1 && !awaitingKey2) {
             mouse();
-        } else if (set1) {
+        } else if (awaitingKey1) {
             if (Keyboard.getEventKeyState()) {
-                button1 = Keyboard.getEventKey();
-                text1 = Keyboard.getKeyName((int) button1);
-                set1 = false;
-                data.set(0, button1);
+                keyCode1 = Keyboard.getEventKey();
+                key1Name = Keyboard.getKeyName((int) keyCode1);
+                awaitingKey1 = false;
+                data.set(0, keyCode1);
                 save();
             }
-        } else if (set2 && Keyboard.getEventKeyState()) {
-            button2 = Keyboard.getEventKey();
-            text2 = Keyboard.getKeyName((int) button2);
-            set2 = false;
-            data.set(1, button2);
+        } else if (awaitingKey2 && Keyboard.getEventKeyState()) {
+            keyCode2 = Keyboard.getEventKey();
+            key2Name = Keyboard.getKeyName((int) keyCode2);
+            awaitingKey2 = false;
+            data.set(1, keyCode2);
             save();
         }
-        ScaledResolution var1 = new ScaledResolution(mc);
-        x1 = var1.getScaledWidth() / 2 - width1 / 2;
-        y1 = var1.getScaledHeight() / 2 - height1 / 2 - 22;
-        x2 = var1.getScaledWidth() / 2 - width2 / 2;
-        y2 = var1.getScaledHeight() / 2 - height2 / 2 + 22;
-        BH.drawHUDRectWithBorder(x1, y1, width1, height1, 0, 0, 0, 255, 255, 255, 255, 255, 1.5);
-        mc.fontRendererObj.drawString(func1, x1 - mc.fontRendererObj.getStringWidth(func1) / 4, y1 - 12, -1);
-        BH.drawHUDRectWithBorder(x2, y2, width2, height2, 0, 0, 0, 255, 255, 255, 255, 255, 1.5);
-        mc.fontRendererObj.drawString(func2, x2 - mc.fontRendererObj.getStringWidth(func2) / 4, y2 - 12, -1);
-        if (!set1 && !set2) {
-            mc.fontRendererObj.drawString(text1, x1 + 1, y1 + 1, -1);
-            mc.fontRendererObj.drawString(text2, x2 + 1, y2 + 1, -1);
-        } else if (set1) {
-            mc.fontRendererObj.drawString(text1, x1 + 1, y1 + 1, -65536);
-            mc.fontRendererObj.drawString(text2, x2 + 1, y2 + 1, -1);
-        } else if (set2) {
-            mc.fontRendererObj.drawString(text1, x1 + 1, y1 + 1, -1);
-            mc.fontRendererObj.drawString(text2, x2 + 1, y2 + 1, -65536);
+        ScaledResolution scaledRes = new ScaledResolution(mc);
+        button1X = scaledRes.getScaledWidth() / 2 - button1Width / 2;
+        button1Y = scaledRes.getScaledHeight() / 2 - button1Height / 2 - 22;
+        button2X = scaledRes.getScaledWidth() / 2 - button2Width / 2;
+        button2Y = scaledRes.getScaledHeight() / 2 - button2Height / 2 + 22;
+        betterHUD.drawHUDRectWithBorder(button1X, button1Y, button1Width, button1Height, 0, 0, 0, 255, 255, 255, 255, 255, 1.5);
+        mc.fontRendererObj.drawString(label1, button1X - mc.fontRendererObj.getStringWidth(label1) / 4, button1Y - 12, -1);
+        betterHUD.drawHUDRectWithBorder(button2X, button2Y, button2Width, button2Height, 0, 0, 0, 255, 255, 255, 255, 255, 1.5);
+        mc.fontRendererObj.drawString(label2, button2X - mc.fontRendererObj.getStringWidth(label2) / 4, button2Y - 12, -1);
+        if (!awaitingKey1 && !awaitingKey2) {
+            mc.fontRendererObj.drawString(key1Name, button1X + 1, button1Y + 1, -1);
+            mc.fontRendererObj.drawString(key2Name, button2X + 1, button2Y + 1, -1);
+        } else if (awaitingKey1) {
+            mc.fontRendererObj.drawString(key1Name, button1X + 1, button1Y + 1, -65536);
+            mc.fontRendererObj.drawString(key2Name, button2X + 1, button2Y + 1, -1);
+        } else if (awaitingKey2) {
+            mc.fontRendererObj.drawString(key1Name, button1X + 1, button1Y + 1, -1);
+            mc.fontRendererObj.drawString(key2Name, button2X + 1, button2Y + 1, -65536);
         }
     }
 
     public void reset() {
-        set1 = false;
-        set2 = false;
+        awaitingKey1 = false;
+        awaitingKey2 = false;
     }
 
     public void save() {
-        FM.setArray(data);
+        fileManager.setArray(data);
     }
 
     public void mouse() {
         int x = Mouse.getEventX() * this.width / mc.displayWidth;
         int y = this.height - Mouse.getEventY() * this.height / mc.displayHeight - 1;
-        if (x >= x1 && x <= x1 + width1 && y >= y1 && y <= y1 + height1) {
-            set1 = true;
+        if (x >= button1X && x <= button1X + button1Width && y >= button1Y && y <= button1Y + button1Height) {
+            awaitingKey1 = true;
         }
-        if (x >= x2 && x <= x2 + width2 && y >= y2 && y <= y2 + height2) {
-            set2 = true;
+        if (x >= button2X && x <= button2X + button2Width && y >= button2Y && y <= button2Y + button2Height) {
+            awaitingKey2 = true;
         }
     }
 

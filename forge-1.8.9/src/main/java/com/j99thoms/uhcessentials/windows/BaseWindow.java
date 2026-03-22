@@ -20,7 +20,7 @@ public abstract class BaseWindow {
 
     public abstract int getHeight();
 
-    public abstract void setRGBA(int r, int g, int b, int a);
+    public abstract void setRGBA(int red, int green, int blue, int alpha);
 
     public abstract int getR();
 
@@ -30,7 +30,7 @@ public abstract class BaseWindow {
 
     public abstract int getA();
 
-    public abstract void setBorderRGB(int r, int g, int b, int a);
+    public abstract void setBorderRGB(int red, int green, int blue, int alpha);
 
     public abstract int getBorderR();
 
@@ -40,7 +40,7 @@ public abstract class BaseWindow {
 
     public abstract int getBorderA();
 
-    public abstract void setThickness(float t);
+    public abstract void setThickness(float thickness);
 
     public abstract double getThickness();
 

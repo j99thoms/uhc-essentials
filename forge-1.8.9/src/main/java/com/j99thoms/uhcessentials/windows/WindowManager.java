@@ -8,91 +8,91 @@ import net.minecraft.client.gui.FontRenderer;
 import com.j99thoms.uhcessentials.BetterHUD;
 
 public class WindowManager {
-    public ArrayList<BaseWindow> BW;
-    private FontRenderer FR;
+    public ArrayList<BaseWindow> windows;
+    private FontRenderer fontRenderer;
     private Minecraft mc;
-    private BetterHUD BH;
-    private CoordsGUI cGui;
+    private BetterHUD betterHUD;
+    private CoordsGUI coordsGUI;
     public static boolean init;
 
-    public CoordinateWindow CW;
-    public CompassWindow Compass;
-    public ClockWindow Clock;
-    public ArrowCounterWindow arrow;
+    public CoordinateWindow coordWindow;
+    public CompassWindow compassWindow;
+    public ClockWindow clockWindow;
+    public ArrowCounterWindow arrowWindow;
     public BiomeWindow biomeWindow;
     public ArmorWindow armorWindow;
     public TipWindow tipWindow;
-    public FPSWindow FPS;
+    public FPSWindow fpsWindow;
     // public KillCounterWindow kills;  // TODO: uncomment once KillCounterWindow is ported
     public static boolean toggled = true;
 
-    private int showall = 0;
+    private int showAllOverride = 0;
 
-    public WindowManager(BetterHUD BH, FontRenderer FR, Minecraft mc) {
+    public WindowManager(BetterHUD betterHUD, FontRenderer fontRenderer, Minecraft mc) {
         init = false;
-        this.FR = FR;
+        this.fontRenderer = fontRenderer;
         this.mc = mc;
-        this.BH = BH;
-        BW = new ArrayList<BaseWindow>();
+        this.betterHUD = betterHUD;
+        windows = new ArrayList<BaseWindow>();
         init();
-        BW.add(Compass);
-        BW.add(Clock);
-        BW.add(arrow);
-        BW.add(CW);
-        BW.add(biomeWindow);
-        BW.add(armorWindow);
-        BW.add(tipWindow);
-        BW.add(FPS);
-        // BW.add(kills);
+        windows.add(compassWindow);
+        windows.add(clockWindow);
+        windows.add(arrowWindow);
+        windows.add(coordWindow);
+        windows.add(biomeWindow);
+        windows.add(armorWindow);
+        windows.add(tipWindow);
+        windows.add(fpsWindow);
+        // windows.add(kills);
         init = true;
     }
 
     public void reset() {
-        showall = 0;
+        showAllOverride = 0;
     }
 
     public void showAll() {
-        showall = 1;
+        showAllOverride = 1;
     }
 
     public void resetAllWindowsPositions() {
-        for (int i = 0; i < BW.size(); i++) {
-            BW.get(i).setToDefault();
+        for (int i = 0; i < windows.size(); i++) {
+            windows.get(i).setToDefault();
         }
     }
 
     public void init() {
-        CW = new CoordinateWindow(BH, FR, mc);
-        cGui = new CoordsGUI(this, mc, BH);
-        Compass = new CompassWindow(BH, mc);
-        biomeWindow = new BiomeWindow(BH, mc, CW);
-        Clock = new ClockWindow(BH, mc);
-        arrow = new ArrowCounterWindow(BH, mc);
-        FPS = new FPSWindow(BH, mc, CW);
-        armorWindow = new ArmorWindow(BH, mc, CW);
-        tipWindow = new TipWindow(BH, mc, CW);
-        // kills = new KillCounterWindow(BH, FR, mc, CW);
+        coordWindow = new CoordinateWindow(betterHUD, fontRenderer, mc);
+        coordsGUI = new CoordsGUI(this, mc, betterHUD);
+        compassWindow = new CompassWindow(betterHUD, mc);
+        biomeWindow = new BiomeWindow(betterHUD, mc, coordWindow);
+        clockWindow = new ClockWindow(betterHUD, mc);
+        arrowWindow = new ArrowCounterWindow(betterHUD, mc);
+        fpsWindow = new FPSWindow(betterHUD, mc, coordWindow);
+        armorWindow = new ArmorWindow(betterHUD, mc, coordWindow);
+        tipWindow = new TipWindow(betterHUD, mc, coordWindow);
+        // kills = new KillCounterWindow(betterHUD, fontRenderer, mc, coordWindow);
     }
 
     public void update() {
         if (toggled) {
-            for (int i = 0; i < BW.size(); i++) {
-                if (BW.get(i).getToggled() == 1 || showall == 1)
-                    BW.get(i).update();
+            for (int i = 0; i < windows.size(); i++) {
+                if (windows.get(i).getToggled() == 1 || showAllOverride == 1)
+                    windows.get(i).update();
             }
         }
-        // cGui.update() runs regardless of toggled state so the config GUI
+        // coordsGUI.update() runs regardless of toggled state so the config GUI
         // remains responsive even when HUD windows are hidden
         if (init) {
-            cGui.update();
+            coordsGUI.update();
         }
     }
 
     public void render() {
         if (toggled) {
-            for (int i = 0; i < BW.size(); i++) {
-                if (BW.get(i).getToggled() == 1 || showall == 1)
-                    BW.get(i).render();
+            for (int i = 0; i < windows.size(); i++) {
+                if (windows.get(i).getToggled() == 1 || showAllOverride == 1)
+                    windows.get(i).render();
             }
         }
     }

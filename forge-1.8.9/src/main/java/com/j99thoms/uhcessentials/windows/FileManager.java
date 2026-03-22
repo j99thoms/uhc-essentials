@@ -11,8 +11,8 @@ import java.util.ArrayList;
 public class FileManager {
     private String fileName;
     private File file;
-    private BufferedReader FR;
-    private BufferedWriter FW;
+    private BufferedReader reader;
+    private BufferedWriter writer;
     private ArrayList<Double> data = new ArrayList<Double>();
     private int amount;
     private static String filePath = "UHC Essentials/configs";
@@ -73,15 +73,15 @@ public class FileManager {
         data.clear();
 
         try {
-            FileReader GFR = new FileReader(file);
-            FR = new BufferedReader(GFR);
+            FileReader fileReader = new FileReader(file);
+            reader = new BufferedReader(fileReader);
 
             for (int i = 0; i < amount; i++) {
-                data.add(Double.parseDouble(FR.readLine()));
+                data.add(Double.parseDouble(reader.readLine()));
             }
 
-            FR.close();
-            GFR.close();
+            reader.close();
+            fileReader.close();
         } catch (Exception e) {
         }
     }
@@ -90,15 +90,15 @@ public class FileManager {
         clearFile();
 
         try {
-            FileWriter GFR = new FileWriter(file);
-            FW = new BufferedWriter(GFR);
+            FileWriter fileWriter = new FileWriter(file);
+            writer = new BufferedWriter(fileWriter);
 
             for (int i = 0; i < data.size(); i++) {
-                FW.write(data.get(i) + "");
-                FW.newLine();
+                writer.write(data.get(i) + "");
+                writer.newLine();
             }
-            FW.close();
-            GFR.close();
+            writer.close();
+            fileWriter.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

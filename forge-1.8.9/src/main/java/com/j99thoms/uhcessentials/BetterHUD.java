@@ -15,23 +15,23 @@ import com.j99thoms.uhcessentials.windows.WindowManager;
 public class BetterHUD {
 
     public boolean move = false;
-    private FontRenderer FR;
-    private WindowManager WM;
+    private FontRenderer fontRenderer;
+    private WindowManager windowManager;
     private Minecraft mc;
 
-    public BetterHUD(FontRenderer FR, Minecraft mc) {
-        this.FR = FR;
+    public BetterHUD(FontRenderer fontRenderer, Minecraft mc) {
+        this.fontRenderer = fontRenderer;
         this.mc = mc;
-        WM = new WindowManager(this, FR, mc);
+        windowManager = new WindowManager(this, fontRenderer, mc);
         new VersionChecker().check(mc);
     }
 
     public FontRenderer getFontRenderer() {
-        return FR;
+        return fontRenderer;
     }
 
     public void update() {
-        WM.update();
+        windowManager.update();
     }
 
     public void render() {
@@ -39,17 +39,17 @@ public class BetterHUD {
         GlStateManager.enableBlend();
         GlStateManager.depthMask(false);
         GlStateManager.blendFunc(770, 771);
-        WM.render();
+        windowManager.render();
         GlStateManager.depthMask(true);
         GlStateManager.disableBlend();
         GlStateManager.enableTexture2D();
     }
 
     public void drawShadowedFont(String text, int x, int y, int color) {
-        FR.drawStringWithShadow(text, x, y, color);
+        fontRenderer.drawStringWithShadow(text, x, y, color);
     }
 
-    public void drawItemSprite(int xPos, int yPos, Item item, BaseWindow BW) {
+    public void drawItemSprite(int xPos, int yPos, Item item, BaseWindow window) {
         GL11.glPushMatrix();
         RenderHelper.enableGUIStandardItemLighting();
         mc.getRenderItem().renderItemIntoGUI(new ItemStack(item), xPos, yPos);

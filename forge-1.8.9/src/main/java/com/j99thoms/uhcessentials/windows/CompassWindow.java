@@ -9,20 +9,20 @@ import com.j99thoms.uhcessentials.BetterHUD;
 
 public class CompassWindow extends BaseWindow {
 
-    BetterHUD BH;
+    BetterHUD betterHUD;
 
     private int x = 1;
     private int y = 68;
 
-    private int r = 69;
-    private int g = 69;
-    private int b = 69;
-    private int a = 150;
+    private int fillRed = 69;
+    private int fillGreen = 69;
+    private int fillBlue = 69;
+    private int fillAlpha = 150;
 
-    private int r1 = 0;
-    private int g1 = 0;
-    private int b1 = 0;
-    private int a1 = 255;
+    private int borderRed = 0;
+    private int borderGreen = 0;
+    private int borderBlue = 0;
+    private int borderAlpha = 255;
 
     private int width = 0;
     private int height = 0;
@@ -32,14 +32,14 @@ public class CompassWindow extends BaseWindow {
     private float thickness = .8f;
 
     private ArrayList<Double> data = new ArrayList<Double>();
-    private FileManager FM;
+    private FileManager fileManager;
 
     private Minecraft mc;
 
-    public CompassWindow(BetterHUD BH, Minecraft mc) {
+    public CompassWindow(BetterHUD betterHUD, Minecraft mc) {
         this.mc = mc;
-        this.BH = BH;
-        FM = new FileManager("Compass", 3);
+        this.betterHUD = betterHUD;
+        fileManager = new FileManager("Compass", 3);
         load();
     }
 
@@ -67,7 +67,7 @@ public class CompassWindow extends BaseWindow {
 
     @Override
     public void update() {
-        BH.drawItemSprite(x, y, Items.compass, this);
+        betterHUD.drawItemSprite(x, y, Items.compass, this);
         if ((int) toggle == 0)
             mc.fontRendererObj.drawStringWithShadow("X", x, y, 0xffffffff);
     }
@@ -102,7 +102,7 @@ public class CompassWindow extends BaseWindow {
     }
 
     @Override
-    public void setRGBA(int r, int g, int b, int a) {
+    public void setRGBA(int red, int green, int blue, int alpha) {
     }
 
     @Override
@@ -126,7 +126,7 @@ public class CompassWindow extends BaseWindow {
     }
 
     @Override
-    public void setBorderRGB(int r, int g, int b, int a) {
+    public void setBorderRGB(int red, int green, int blue, int alpha) {
     }
 
     @Override
@@ -150,7 +150,7 @@ public class CompassWindow extends BaseWindow {
     }
 
     @Override
-    public void setThickness(float t) {
+    public void setThickness(float thickness) {
     }
 
     @Override
@@ -174,13 +174,13 @@ public class CompassWindow extends BaseWindow {
         data.add((double) x);
         data.add((double) y);
         data.add((double) toggle);
-        FM.setArray(data);
+        fileManager.setArray(data);
     }
 
     @Override
     public void load() {
         data.clear();
-        data = FM.getArray();
+        data = fileManager.getArray();
         if (data.size() < 3) {
             save();
         } else {
