@@ -14,19 +14,10 @@ public class CoordinateWindow extends BaseWindow {
     private BetterHUD betterHUD;
     private FontRenderer fontRenderer;
     private Minecraft mc;
+    private WindowTheme theme;
 
     private int x = 2;
     private int y = 2;
-
-    private int fillRed = 69;
-    private int fillGreen = 69;
-    private int fillBlue = 69;
-    private int fillAlpha = 150;
-
-    private int borderRed = 0;
-    private int borderGreen = 0;
-    private int borderBlue = 0;
-    private int borderAlpha = 255;
 
     private String direction;
     private String xSign;
@@ -36,23 +27,28 @@ public class CoordinateWindow extends BaseWindow {
 
     private int width;
     private int height = 30;
-    private double thickness = .8f;
     float scale = .75F;
 
     private FileManager fileManager;
     private ArrayList<Double> data = new ArrayList<Double>();
 
-    public CoordinateWindow(BetterHUD betterHUD, FontRenderer fontRenderer, Minecraft mc) {
+    public CoordinateWindow(BetterHUD betterHUD, FontRenderer fontRenderer, Minecraft mc, WindowTheme theme) {
         this.mc = mc;
         this.betterHUD = betterHUD;
         this.fontRenderer = fontRenderer;
-        fileManager = new FileManager("Coord", 12);
+        this.theme = theme;
+        fileManager = new FileManager("CoordPos", 3);
         load();
     }
 
     @Override
+    public boolean isThemed() {
+        return true;
+    }
+
+    @Override
     public String getToolTip() {
-        return "Shows your position right click to change the color of everything!`And right click again to close out of the colorizer";
+        return "Shows your position`Right click to change colors";
     }
 
     @Override
@@ -121,8 +117,9 @@ public class CoordinateWindow extends BaseWindow {
 
         this.width = width;
         betterHUD.drawHUDRectWithBorder(this.x - 1, this.y - 1, width, this.height,
-                fillRed, fillGreen, fillBlue, fillAlpha,
-                borderRed, borderGreen, borderBlue, borderAlpha, thickness);
+                theme.getR(), theme.getG(), theme.getB(), theme.getA(),
+                theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
+                theme.getThickness());
         GlStateManager.enableTexture2D();
 
         if (rotation > -22.5 && rotation <= 22.5) {
@@ -206,104 +203,81 @@ public class CoordinateWindow extends BaseWindow {
         data.clear();
         data.add((double) x);
         data.add((double) y);
-        data.add((double) fillRed);
-        data.add((double) fillGreen);
-        data.add((double) fillBlue);
-        data.add((double) fillAlpha);
-        data.add((double) borderRed);
-        data.add((double) borderGreen);
-        data.add((double) borderBlue);
-        data.add((double) borderAlpha);
-        data.add(thickness);
         data.add(toggle);
         fileManager.setArray(data);
+        theme.save();
     }
 
     @Override
     public void load() {
         data.clear();
         data = fileManager.getArray();
-        if (data.size() < 12) {
+        if (data.size() < 3) {
             save();
         } else {
             x = data.get(0).intValue();
             y = data.get(1).intValue();
-            fillRed = data.get(2).intValue();
-            fillGreen = data.get(3).intValue();
-            fillBlue = data.get(4).intValue();
-            fillAlpha = data.get(5).intValue();
-            borderRed = data.get(6).intValue();
-            borderGreen = data.get(7).intValue();
-            borderBlue = data.get(8).intValue();
-            borderAlpha = data.get(9).intValue();
-            thickness = data.get(10);
-            toggle = data.get(11);
+            toggle = data.get(2);
         }
     }
 
     @Override
     public void setRGBA(int red, int green, int blue, int alpha) {
-        this.fillRed = red;
-        this.fillGreen = green;
-        this.fillBlue = blue;
-        this.fillAlpha = alpha;
+        theme.setRGBA(red, green, blue, alpha);
     }
 
     @Override
     public int getR() {
-        return fillRed;
+        return theme.getR();
     }
 
     @Override
     public int getG() {
-        return fillGreen;
+        return theme.getG();
     }
 
     @Override
     public int getB() {
-        return fillBlue;
+        return theme.getB();
     }
 
     @Override
     public int getA() {
-        return fillAlpha;
+        return theme.getA();
     }
 
     @Override
     public void setBorderRGB(int red, int green, int blue, int alpha) {
-        this.borderRed = red;
-        this.borderGreen = green;
-        this.borderBlue = blue;
-        this.borderAlpha = alpha;
+        theme.setBorderRGB(red, green, blue, alpha);
     }
 
     @Override
     public int getBorderR() {
-        return borderRed;
+        return theme.getBorderR();
     }
 
     @Override
     public int getBorderG() {
-        return borderGreen;
+        return theme.getBorderG();
     }
 
     @Override
     public int getBorderB() {
-        return borderBlue;
+        return theme.getBorderB();
     }
 
     @Override
     public int getBorderA() {
-        return borderAlpha;
+        return theme.getBorderA();
     }
 
     @Override
     public void setThickness(float thickness) {
-        this.thickness = thickness;
+        theme.setThickness(thickness);
     }
 
     @Override
     public double getThickness() {
-        return this.thickness;
+        return theme.getThickness();
     }
 }

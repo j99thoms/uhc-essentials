@@ -13,46 +13,32 @@ public class FPSWindow extends BaseWindow {
     private int x = 2;
     private int y = 34;
 
-    private int fillRed = 69;
-    private int fillGreen = 69;
-    private int fillBlue = 69;
-    private int fillAlpha = 150;
-
-    private int borderRed = 0;
-    private int borderGreen = 0;
-    private int borderBlue = 0;
-    private int borderAlpha = 255;
-
     private int width = 0;
-    private int height = 0;
-    private int flash = 0;
 
-    private float thickness = .8f;
     private ArrayList<Double> data = new ArrayList<Double>();
     private FileManager fileManager;
-    private int nextFlash = 2;
-    private boolean shouldFlash = true;
-    private int count = 0;
-    private int timer = 0;
-    private int secondTimer = 0;
-    private int fpsCount = 0;
+    private WindowTheme theme;
 
     private Minecraft mc;
-    private CoordinateWindow coordWindow;
 
     private double toggle = 1;
 
-    public FPSWindow(BetterHUD betterHUD, Minecraft mc, CoordinateWindow coordWindow) {
+    public FPSWindow(BetterHUD betterHUD, Minecraft mc, WindowTheme theme) {
         this.mc = mc;
         this.betterHUD = betterHUD;
-        this.coordWindow = coordWindow;
+        this.theme = theme;
         fileManager = new FileManager("FPSWindow", 3);
         load();
     }
 
     @Override
+    public boolean isThemed() {
+        return true;
+    }
+
+    @Override
     public String getToolTip() {
-        return "Shows how slow your computer really is";
+        return "Shows how slow your computer really is`Right click to change colors";
     }
 
     @Override
@@ -74,13 +60,13 @@ public class FPSWindow extends BaseWindow {
 
     @Override
     public void update() {
-        fpsCount = Minecraft.getDebugFPS();
+        int fpsCount = Minecraft.getDebugFPS();
         String info = fpsCount + " FPS";
         width = mc.fontRendererObj.getStringWidth(info);
         betterHUD.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
-                coordWindow.getR(), coordWindow.getG(), coordWindow.getB(), coordWindow.getA(),
-                coordWindow.getBorderR(), coordWindow.getBorderG(), coordWindow.getBorderB(), coordWindow.getBorderA(),
-                coordWindow.getThickness());
+                theme.getR(), theme.getG(), theme.getB(), theme.getA(),
+                theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
+                theme.getThickness());
         mc.fontRendererObj.drawStringWithShadow(info, x, y, 0xffffffff);
 
         if (toggle == 0) {
@@ -119,59 +105,62 @@ public class FPSWindow extends BaseWindow {
 
     @Override
     public void setRGBA(int red, int green, int blue, int alpha) {
+        theme.setRGBA(red, green, blue, alpha);
     }
 
     @Override
     public int getR() {
-        return 0;
+        return theme.getR();
     }
 
     @Override
     public int getG() {
-        return 0;
+        return theme.getG();
     }
 
     @Override
     public int getB() {
-        return 0;
+        return theme.getB();
     }
 
     @Override
     public int getA() {
-        return 0;
+        return theme.getA();
     }
 
     @Override
     public void setBorderRGB(int red, int green, int blue, int alpha) {
+        theme.setBorderRGB(red, green, blue, alpha);
     }
 
     @Override
     public int getBorderR() {
-        return 0;
+        return theme.getBorderR();
     }
 
     @Override
     public int getBorderG() {
-        return 0;
+        return theme.getBorderG();
     }
 
     @Override
     public int getBorderB() {
-        return 0;
+        return theme.getBorderB();
     }
 
     @Override
     public int getBorderA() {
-        return 0;
+        return theme.getBorderA();
     }
 
     @Override
     public void setThickness(float thickness) {
+        theme.setThickness(thickness);
     }
 
     @Override
     public double getThickness() {
-        return 0;
+        return theme.getThickness();
     }
 
     @Override
@@ -191,6 +180,7 @@ public class FPSWindow extends BaseWindow {
         data.add((double) y);
         data.add((double) toggle);
         fileManager.setArray(data);
+        theme.save();
     }
 
     @Override

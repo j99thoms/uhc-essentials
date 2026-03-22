@@ -127,9 +127,9 @@ public class ArrowCounterWindow extends BaseWindow {
 
         if ((int) toggle == 0)
             mc.fontRendererObj.drawStringWithShadow("X", x, y, 0xffffffff);
-        if ((int) toggle == 1 && CoordsGUI.guiOpen)
+        if ((int) toggle == 1 && HUDConfigScreen.guiOpen)
             mc.fontRendererObj.drawStringWithShadow("Sum", x, y, 0xffffffff);
-        if ((int) toggle == 2 && CoordsGUI.guiOpen)
+        if ((int) toggle == 2 && HUDConfigScreen.guiOpen)
             mc.fontRendererObj.drawStringWithShadow("Stacks", x, y, 0xffffffff);
     }
 

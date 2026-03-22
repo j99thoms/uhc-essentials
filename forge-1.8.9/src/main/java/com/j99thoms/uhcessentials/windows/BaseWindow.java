@@ -55,4 +55,8 @@ public abstract class BaseWindow {
     public abstract int getToggled();
 
     public abstract String getToolTip();
+
+    public boolean isThemed() {
+        return false;
+    }
 }

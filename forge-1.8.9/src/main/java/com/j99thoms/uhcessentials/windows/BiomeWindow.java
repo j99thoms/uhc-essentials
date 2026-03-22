@@ -14,40 +14,33 @@ public class BiomeWindow extends BaseWindow {
     private int x = 2;
     private int y = 46;
 
-    private int fillRed = 69;
-    private int fillGreen = 69;
-    private int fillBlue = 69;
-    private int fillAlpha = 150;
-
-    private int borderRed = 0;
-    private int borderGreen = 0;
-    private int borderBlue = 0;
-    private int borderAlpha = 255;
-
     private int width = 0;
     private int height = 12;
 
     private double toggle = 1;
 
-    private float thickness = .8f;
-
     private ArrayList<Double> data = new ArrayList<Double>();
     private FileManager fileManager;
-    private CoordinateWindow coordWindow;
+    private WindowTheme theme;
 
     private Minecraft mc;
 
-    public BiomeWindow(BetterHUD betterHUD, Minecraft mc, CoordinateWindow coordWindow) {
+    public BiomeWindow(BetterHUD betterHUD, Minecraft mc, WindowTheme theme) {
         this.mc = mc;
         this.betterHUD = betterHUD;
-        this.coordWindow = coordWindow;
+        this.theme = theme;
         fileManager = new FileManager("BiomeWindow", 3);
         load();
     }
 
     @Override
+    public boolean isThemed() {
+        return true;
+    }
+
+    @Override
     public String getToolTip() {
-        return "Shows what biome you're currently in";
+        return "Shows what biome you're currently in`Right click to change colors";
     }
 
     @Override
@@ -76,9 +69,9 @@ public class BiomeWindow extends BaseWindow {
 
         width = mc.fontRendererObj.getStringWidth(biomeName);
         betterHUD.drawHUDRectWithBorder(x - 1, y - 1, mc.fontRendererObj.getStringWidth(biomeName) + 1, getHeight(),
-                coordWindow.getR(), coordWindow.getG(), coordWindow.getB(), coordWindow.getA(),
-                coordWindow.getBorderR(), coordWindow.getBorderG(), coordWindow.getBorderB(), coordWindow.getBorderA(),
-                coordWindow.getThickness());
+                theme.getR(), theme.getG(), theme.getB(), theme.getA(),
+                theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
+                theme.getThickness());
         mc.fontRendererObj.drawStringWithShadow(biomeName, x, y, 0xffffffff);
 
         if ((int) toggle == 0)
@@ -116,59 +109,62 @@ public class BiomeWindow extends BaseWindow {
 
     @Override
     public void setRGBA(int red, int green, int blue, int alpha) {
+        theme.setRGBA(red, green, blue, alpha);
     }
 
     @Override
     public int getR() {
-        return 0;
+        return theme.getR();
     }
 
     @Override
     public int getG() {
-        return 0;
+        return theme.getG();
     }
 
     @Override
     public int getB() {
-        return 0;
+        return theme.getB();
     }
 
     @Override
     public int getA() {
-        return 0;
+        return theme.getA();
     }
 
     @Override
     public void setBorderRGB(int red, int green, int blue, int alpha) {
+        theme.setBorderRGB(red, green, blue, alpha);
     }
 
     @Override
     public int getBorderR() {
-        return 0;
+        return theme.getBorderR();
     }
 
     @Override
     public int getBorderG() {
-        return 0;
+        return theme.getBorderG();
     }
 
     @Override
     public int getBorderB() {
-        return 0;
+        return theme.getBorderB();
     }
 
     @Override
     public int getBorderA() {
-        return 0;
+        return theme.getBorderA();
     }
 
     @Override
     public void setThickness(float thickness) {
+        theme.setThickness(thickness);
     }
 
     @Override
     public double getThickness() {
-        return 0;
+        return theme.getThickness();
     }
 
     @Override
@@ -188,6 +184,7 @@ public class BiomeWindow extends BaseWindow {
         data.add((double) y);
         data.add((double) toggle);
         fileManager.setArray(data);
+        theme.save();
     }
 
     @Override

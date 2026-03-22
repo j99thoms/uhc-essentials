@@ -12,9 +12,10 @@ public class WindowManager {
     private FontRenderer fontRenderer;
     private Minecraft mc;
     private BetterHUD betterHUD;
-    private CoordsGUI coordsGUI;
+    private HUDConfigScreen hudConfigScreen;
     public static boolean init;
 
+    public WindowTheme theme;
     public CoordinateWindow coordWindow;
     public CompassWindow compassWindow;
     public ClockWindow clockWindow;
@@ -62,16 +63,17 @@ public class WindowManager {
     }
 
     public void init() {
-        coordWindow = new CoordinateWindow(betterHUD, fontRenderer, mc);
-        coordsGUI = new CoordsGUI(this, mc, betterHUD);
+        theme = new WindowTheme("Theme"); // One shared theme for all windows
+        coordWindow = new CoordinateWindow(betterHUD, fontRenderer, mc, theme);
+        hudConfigScreen = new HUDConfigScreen(this, mc, betterHUD);
         compassWindow = new CompassWindow(betterHUD, mc);
-        biomeWindow = new BiomeWindow(betterHUD, mc, coordWindow);
+        biomeWindow = new BiomeWindow(betterHUD, mc, theme);
         clockWindow = new ClockWindow(betterHUD, mc);
         arrowWindow = new ArrowCounterWindow(betterHUD, mc);
-        fpsWindow = new FPSWindow(betterHUD, mc, coordWindow);
-        armorWindow = new ArmorWindow(betterHUD, mc, coordWindow);
-        tipWindow = new TipWindow(betterHUD, mc, coordWindow);
-        // kills = new KillCounterWindow(betterHUD, fontRenderer, mc, coordWindow);
+        fpsWindow = new FPSWindow(betterHUD, mc, theme);
+        armorWindow = new ArmorWindow(betterHUD, mc, theme);
+        tipWindow = new TipWindow(betterHUD, mc, theme);
+        // kills = new KillCounterWindow(betterHUD, fontRenderer, mc, theme);
     }
 
     public void update() {
@@ -81,10 +83,10 @@ public class WindowManager {
                     windows.get(i).update();
             }
         }
-        // coordsGUI.update() runs regardless of toggled state so the config GUI
+        // hudConfigScreen.update() runs regardless of toggled state so the config GUI
         // remains responsive even when HUD windows are hidden
         if (init) {
-            coordsGUI.update();
+            hudConfigScreen.update();
         }
     }
 

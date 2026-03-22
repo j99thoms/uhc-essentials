@@ -15,7 +15,7 @@ import org.lwjgl.input.Mouse;
 
 import com.j99thoms.uhcessentials.BetterHUD;
 
-public class CoordsGUI extends GuiScreen {
+public class HUDConfigScreen extends GuiScreen {
 
     private static boolean[] keyStates;
     private WindowManager windowManager;
@@ -55,7 +55,7 @@ public class CoordsGUI extends GuiScreen {
     public long lastTime;
     public static boolean guiOpen;
     private boolean optionsMenu = false;
-    public CoordinateWindow coordWindow;
+    private WindowTheme theme;
 
     private String resetAll = "Reset All Windows";
     private String toggleButton = "Toggle UHC Essentials";
@@ -66,12 +66,12 @@ public class CoordsGUI extends GuiScreen {
         guiOpen = false;
     }
 
-    public CoordsGUI(WindowManager windowManager, Minecraft mc, BetterHUD betterHUD) {
+    public HUDConfigScreen(WindowManager windowManager, Minecraft mc, BetterHUD betterHUD) {
         this.windowManager = windowManager;
         keyStates = new boolean[256];
         this.mc = mc;
         this.betterHUD = betterHUD;
-        this.coordWindow = windowManager.coordWindow;
+        this.theme = windowManager.theme;
         gammaFileManager = new FileManager("Gamma", 1);
         keysFileManager = new FileManager("keys.txt", 2);
         keysData = keysFileManager.getArray();
@@ -317,7 +317,7 @@ public class CoordsGUI extends GuiScreen {
                 draggedWindow = windowManager.windows.get(i);
                 if (x < windowManager.windows.get(i).getX() || x > windowManager.windows.get(i).getX() + windowManager.windows.get(i).getWidth()
                         || y < windowManager.windows.get(i).getY() || y > windowManager.windows.get(i).getY() + windowManager.windows.get(i).getHeight()
-                        || !draggedWindow.getName().equalsIgnoreCase("Coordinate"))
+                        || !draggedWindow.isThemed())
                     continue;
                 if (!on) {
                     color = new Colorizer(betterHUD, draggedWindow, mc);
@@ -336,16 +336,16 @@ public class CoordsGUI extends GuiScreen {
                 BaseWindow hoveredWindow = windowManager.windows.get(i);
                 if (previewAlpha > 255) {
                     alphaDown = true;
-                } else if (previewAlpha < 0 && hoveredWindow.getName() == "Coordinate") {
+                } else if (previewAlpha < 0 && hoveredWindow.isThemed()) {
                     alphaDown = false;
                     previewR = random.nextInt(255);
                     previewG = random.nextInt(255);
                     previewB = random.nextInt(255);
-                } else if (previewAlpha < 150 && hoveredWindow.getName() != "Coordinate") {
+                } else if (previewAlpha < 150 && !hoveredWindow.isThemed()) {
                     alphaDown = false;
                 }
                 int time = 10;
-                if (hoveredWindow.getName() == "Coordinate") {
+                if (hoveredWindow.isThemed()) {
                     time = 5;
                 }
                 if (System.currentTimeMillis() - lastTime > time) {
@@ -359,16 +359,16 @@ public class CoordsGUI extends GuiScreen {
                         if (betterHUD.getFontRenderer().getStringWidth(split[j]) > longestWidth)
                             longestWidth = betterHUD.getFontRenderer().getStringWidth(split[j]);
                     }
-                    if (hoveredWindow.getName() == "Coordinate") {
+                    if (hoveredWindow.isThemed()) {
                         betterHUD.drawHUDRectWithBorder(x - 1 + 10, y - 1, longestWidth + 2, split.length * 10,
                                 previewR, previewG, previewB, previewAlpha,
-                                coordWindow.getBorderR(), coordWindow.getBorderG(), coordWindow.getBorderB(), previewAlpha,
-                                coordWindow.getThickness());
+                                theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), previewAlpha,
+                                theme.getThickness());
                     } else {
                         betterHUD.drawHUDRectWithBorder(x - 1 + 10, y - 1, longestWidth + 2, split.length * 10,
-                                coordWindow.getR(), coordWindow.getG(), coordWindow.getB(), previewAlpha,
-                                coordWindow.getBorderR(), coordWindow.getBorderG(), coordWindow.getBorderB(), coordWindow.getBorderA(),
-                                coordWindow.getThickness());
+                                theme.getR(), theme.getG(), theme.getB(), previewAlpha,
+                                theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
+                                theme.getThickness());
                     }
                     for (int j = 0; j < split.length; j++) {
                         betterHUD.drawShadowedFont(split[j], x + 10, y + j * 10, -1);
@@ -377,9 +377,9 @@ public class CoordsGUI extends GuiScreen {
                 }
                 int tipWidth = betterHUD.getFontRenderer().getStringWidth(hoveredWindow.getToolTip());
                 betterHUD.drawHUDRectWithBorder(x - 1 + 10, y - 1, tipWidth + 2, 10,
-                        coordWindow.getR(), coordWindow.getG(), coordWindow.getB(), previewAlpha,
-                        coordWindow.getBorderR(), coordWindow.getBorderG(), coordWindow.getBorderB(), coordWindow.getBorderA(),
-                        coordWindow.getThickness());
+                        theme.getR(), theme.getG(), theme.getB(), previewAlpha,
+                        theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
+                        theme.getThickness());
                 betterHUD.drawShadowedFont(hoveredWindow.getToolTip(), x + 10, y, -1);
             }
         }

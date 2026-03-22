@@ -15,16 +15,6 @@ public class ArmorWindow extends BaseWindow {
     private int x = 2;
     private int y = 102;
 
-    private int fillRed = 69;
-    private int fillGreen = 69;
-    private int fillBlue = 69;
-    private int fillAlpha = 150;
-
-    private int borderRed = 0;
-    private int borderGreen = 0;
-    private int borderBlue = 0;
-    private int borderAlpha = 255;
-
     private int width = 0;
     private int height = 0;
 
@@ -33,18 +23,16 @@ public class ArmorWindow extends BaseWindow {
 
     public static double toggle = 1;
 
-    private float thickness = .8f;
-
     private ArrayList<Double> data = new ArrayList<Double>();
     private FileManager fileManager;
 
     private Minecraft mc;
-    private CoordinateWindow coordWindow;
+    private WindowTheme theme;
 
-    public ArmorWindow(BetterHUD betterHUD, Minecraft mc, CoordinateWindow coordWindow) {
+    public ArmorWindow(BetterHUD betterHUD, Minecraft mc, WindowTheme theme) {
         this.mc = mc;
         this.betterHUD = betterHUD;
-        this.coordWindow = coordWindow;
+        this.theme = theme;
         fileManager = new FileManager("Armor", 3);
         load();
     }
@@ -124,9 +112,9 @@ public class ArmorWindow extends BaseWindow {
             width = betterHUD.getFontRenderer().getStringWidth("No Armor");
             height = 10;
             betterHUD.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
-                    coordWindow.getR(), coordWindow.getG(), coordWindow.getB(), coordWindow.getA(),
-                    coordWindow.getBorderR(), coordWindow.getBorderG(), coordWindow.getBorderB(), coordWindow.getBorderA(),
-                    coordWindow.getThickness());
+                    theme.getR(), theme.getG(), theme.getB(), theme.getA(),
+                    theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
+                    theme.getThickness());
             betterHUD.drawShadowedFont("No Armor", x, y, 0xFFFFFF);
             if ((int) toggle == 0) {
                 betterHUD.drawShadowedFont("X", x - 2, y - 2, 0xFFFFFF);

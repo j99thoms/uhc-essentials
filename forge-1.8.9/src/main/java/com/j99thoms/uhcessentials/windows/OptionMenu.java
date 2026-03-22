@@ -14,7 +14,7 @@ import com.j99thoms.uhcessentials.BetterHUD;
 public class OptionMenu extends GuiScreen {
 
     private Minecraft mc;
-    private CoordsGUI coordsGUI;
+    private HUDConfigScreen hudConfigScreen;
     private BetterHUD betterHUD;
     private FileManager fileManager;
     private ArrayList<Double> data = new ArrayList<Double>();
@@ -39,9 +39,9 @@ public class OptionMenu extends GuiScreen {
     String label1 = "Draggable HUD";
     String label2 = "Full Gamma Bright";
 
-    public OptionMenu(Minecraft mc, CoordsGUI coordsGUI, BetterHUD betterHUD) {
+    public OptionMenu(Minecraft mc, HUDConfigScreen hudConfigScreen, BetterHUD betterHUD) {
         this.mc = mc;
-        this.coordsGUI = coordsGUI;
+        this.hudConfigScreen = hudConfigScreen;
         this.betterHUD = betterHUD;
         this.button1Width = 40;
         this.button2Width = 40;
