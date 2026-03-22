@@ -24,28 +24,14 @@ public class TipWindow extends BaseWindow {
     private int x = 2;
     private int y = 220;
 
-    private int fillRed = 69;
-    private int fillGreen = 69;
-    private int fillBlue = 69;
-    private int fillAlpha = 150;
-
-    private int borderRed = 0;
-    private int borderGreen = 0;
-    private int borderBlue = 0;
-    private int borderAlpha = 255;
-
     private int width = 0;
     private int height = 0;
 
     public static double toggle = 0;
 
-    private float thickness = .8f;
-
-    private ArrayList<Double> data = new ArrayList<Double>();
-    private FileManager fileManager;
+    private WindowTheme theme;
 
     private Minecraft mc;
-    private CoordinateWindow coordWindow;
 
     private ArrayList<String> tips;
     public static boolean gotTips = false;
@@ -54,16 +40,21 @@ public class TipWindow extends BaseWindow {
     public int currentTipIndex = 0;
     private String tipOfThePage = "";
 
-    public TipWindow(BetterHUD betterHUD, Minecraft mc, CoordinateWindow coordWindow) {
+    public TipWindow(BetterHUD betterHUD, Minecraft mc, WindowTheme theme) {
         this.mc = mc;
         this.betterHUD = betterHUD;
-        this.coordWindow = coordWindow;
+        this.theme = theme;
         this.tips = new ArrayList<String>();
     }
 
     @Override
+    public boolean isThemed() {
+        return true;
+    }
+
+    @Override
     public String getToolTip() {
-        return "Note to user: Don't touch the tip`if you click again I'll show another tip ;)";
+        return "Note to user: Don't touch the tip`Left click to cycle tips, right click to change colors";
     }
 
     @Override
@@ -108,16 +99,16 @@ public class TipWindow extends BaseWindow {
             String tipLoad = "Click me to load the tips!";
             width = betterHUD.getFontRenderer().getStringWidth(tipLoad);
             betterHUD.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
-                    coordWindow.getR(), coordWindow.getG(), coordWindow.getB(), coordWindow.getA(),
-                    coordWindow.getBorderR(), coordWindow.getBorderG(), coordWindow.getBorderB(), coordWindow.getBorderA(),
-                    coordWindow.getThickness());
+                    theme.getR(), theme.getG(), theme.getB(), theme.getA(),
+                    theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
+                    theme.getThickness());
             betterHUD.drawShadowedFont(tipLoad, x, y, -1);
         } else if (!tipOfThePage.contains("`")) {
             width = betterHUD.getFontRenderer().getStringWidth(tipOfThePage);
             betterHUD.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
-                    coordWindow.getR(), coordWindow.getG(), coordWindow.getB(), coordWindow.getA(),
-                    coordWindow.getBorderR(), coordWindow.getBorderG(), coordWindow.getBorderB(), coordWindow.getBorderA(),
-                    coordWindow.getThickness());
+                    theme.getR(), theme.getG(), theme.getB(), theme.getA(),
+                    theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
+                    theme.getThickness());
             betterHUD.drawShadowedFont(tipOfThePage, x, y, -1);
         } else {
             String[] split = tipOfThePage.split("`");
@@ -128,9 +119,9 @@ public class TipWindow extends BaseWindow {
             }
             width = longestWidth;
             betterHUD.drawHUDRectWithBorder(x - 1, y - 1, longestWidth + 2, split.length * 10,
-                    coordWindow.getR(), coordWindow.getG(), coordWindow.getB(), coordWindow.getA(),
-                    coordWindow.getBorderR(), coordWindow.getBorderG(), coordWindow.getBorderB(), coordWindow.getBorderA(),
-                    coordWindow.getThickness());
+                    theme.getR(), theme.getG(), theme.getB(), theme.getA(),
+                    theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
+                    theme.getThickness());
             for (int j = 0; j < split.length; j++) {
                 betterHUD.drawShadowedFont(split[j], x, y + j * 10, -1);
             }
@@ -178,59 +169,62 @@ public class TipWindow extends BaseWindow {
 
     @Override
     public void setRGBA(int red, int green, int blue, int alpha) {
+        theme.setRGBA(red, green, blue, alpha);
     }
 
     @Override
     public int getR() {
-        return 0;
+        return theme.getR();
     }
 
     @Override
     public int getG() {
-        return 0;
+        return theme.getG();
     }
 
     @Override
     public int getB() {
-        return 0;
+        return theme.getB();
     }
 
     @Override
     public int getA() {
-        return 0;
+        return theme.getA();
     }
 
     @Override
     public void setBorderRGB(int red, int green, int blue, int alpha) {
+        theme.setBorderRGB(red, green, blue, alpha);
     }
 
     @Override
     public int getBorderR() {
-        return 0;
+        return theme.getBorderR();
     }
 
     @Override
     public int getBorderG() {
-        return 0;
+        return theme.getBorderG();
     }
 
     @Override
     public int getBorderB() {
-        return 0;
+        return theme.getBorderB();
     }
 
     @Override
     public int getBorderA() {
-        return 0;
+        return theme.getBorderA();
     }
 
     @Override
     public void setThickness(float thickness) {
+        theme.setThickness(thickness);
     }
 
     @Override
     public double getThickness() {
-        return 0;
+        return theme.getThickness();
     }
 
     @Override
@@ -245,6 +239,7 @@ public class TipWindow extends BaseWindow {
 
     @Override
     public void save() {
+        theme.save();
     }
 
     @Override
