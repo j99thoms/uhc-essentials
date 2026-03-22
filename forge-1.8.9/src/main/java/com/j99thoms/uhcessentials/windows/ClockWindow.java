@@ -9,7 +9,7 @@ import com.j99thoms.uhcessentials.BetterHUD;
 
 public class ClockWindow extends BaseWindow {
 
-    BetterHUD betterHUD;
+    private final BetterHUD betterHUD;
 
     private int x = 36;
     private int y = 68;
@@ -27,14 +27,14 @@ public class ClockWindow extends BaseWindow {
     private int width = 0;
     private int height = 0;
 
-    public static double toggle = 1;
+    private double toggle = 1;
 
     private float thickness = .8f;
 
     private ArrayList<Double> data = new ArrayList<Double>();
-    private FileManager fileManager;
+    private final FileManager fileManager;
 
-    private Minecraft mc;
+    private final Minecraft mc;
 
     public ClockWindow(BetterHUD betterHUD, Minecraft mc) {
         this.mc = mc;
@@ -67,7 +67,7 @@ public class ClockWindow extends BaseWindow {
 
     @Override
     public void update() {
-        betterHUD.drawItemSprite(x, y, Items.clock, this);
+        betterHUD.drawItemSprite(x, y, Items.clock);
         if ((int) toggle == 0)
             mc.fontRendererObj.drawStringWithShadow("X", x, y, 0xffffffff);
     }

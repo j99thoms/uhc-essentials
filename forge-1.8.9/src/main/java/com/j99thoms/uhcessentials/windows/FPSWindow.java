@@ -8,7 +8,7 @@ import com.j99thoms.uhcessentials.BetterHUD;
 
 public class FPSWindow extends BaseWindow {
 
-    BetterHUD betterHUD;
+    private final BetterHUD betterHUD;
 
     private int x = 2;
     private int y = 34;
@@ -16,10 +16,10 @@ public class FPSWindow extends BaseWindow {
     private int width = 0;
 
     private ArrayList<Double> data = new ArrayList<Double>();
-    private FileManager fileManager;
-    private WindowTheme theme;
+    private final FileManager fileManager;
+    private final WindowTheme theme;
 
-    private Minecraft mc;
+    private final Minecraft mc;
 
     private double toggle = 1;
 
