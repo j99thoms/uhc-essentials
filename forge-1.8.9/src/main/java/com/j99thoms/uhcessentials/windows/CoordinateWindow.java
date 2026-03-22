@@ -98,7 +98,7 @@ public class CoordinateWindow extends BaseWindow {
 
     private void drawCoordPane() {
         double x = Math.floor(mc.thePlayer.posX);
-        double y = Math.floor(mc.thePlayer.posY - 1);
+        double y = Math.floor(mc.thePlayer.posY);
         double z = Math.floor(mc.thePlayer.posZ);
 
         double rotation = MathHelper.wrapAngleTo180_float(mc.thePlayer.rotationYaw);
