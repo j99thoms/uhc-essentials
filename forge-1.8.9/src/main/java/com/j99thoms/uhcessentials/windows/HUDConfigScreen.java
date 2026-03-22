@@ -200,7 +200,7 @@ public class HUDConfigScreen extends GuiScreen {
             } else if (checkKey(71)) {
                 // NumPad7 — copy coordinates to clipboard
                 String myString = "x: " + (int) mc.thePlayer.posX
-                        + " y: " + (int) (mc.thePlayer.posY - 1)
+                        + " y: " + (int) Math.floor(mc.thePlayer.posY)
                         + " z: " + (int) mc.thePlayer.posZ;
                 StringSelection stringSelection = new StringSelection(myString);
                 Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -282,7 +282,7 @@ public class HUDConfigScreen extends GuiScreen {
                                 || y < screenHeight / 2 - 5 + 36 || y > screenHeight / 2 + 5 + 36 || on)
                             continue;
                         String myString = "x: " + (int) mc.thePlayer.posX
-                                + " y: " + (int) (mc.thePlayer.posY - 1)
+                                + " y: " + (int) Math.floor(mc.thePlayer.posY)
                                 + " z: " + (int) mc.thePlayer.posZ;
                         StringSelection stringSelection = new StringSelection(myString);
                         Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
