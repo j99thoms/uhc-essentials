@@ -11,26 +11,26 @@ import com.j99thoms.uhcessentials.BetterHUD;
 
 public class CoordinateWindow extends BaseWindow {
 
-    private BetterHUD BH;
-    private FontRenderer FR;
+    private BetterHUD betterHUD;
+    private FontRenderer fontRenderer;
     private Minecraft mc;
 
     private int x = 2;
     private int y = 2;
 
-    private int r = 69;
-    private int g = 69;
-    private int b = 69;
-    private int a = 150;
+    private int fillRed = 69;
+    private int fillGreen = 69;
+    private int fillBlue = 69;
+    private int fillAlpha = 150;
 
-    private int r1 = 0;
-    private int g1 = 0;
-    private int b1 = 0;
-    private int a1 = 255;
+    private int borderRed = 0;
+    private int borderGreen = 0;
+    private int borderBlue = 0;
+    private int borderAlpha = 255;
 
     private String direction;
-    private String xEx;
-    private String zEx;
+    private String xSign;
+    private String zSign;
 
     private double toggle = 1;
 
@@ -39,14 +39,14 @@ public class CoordinateWindow extends BaseWindow {
     private double thickness = .8f;
     float scale = .75F;
 
-    private FileManager FM;
+    private FileManager fileManager;
     private ArrayList<Double> data = new ArrayList<Double>();
 
-    public CoordinateWindow(BetterHUD BH, FontRenderer FR, Minecraft mc) {
+    public CoordinateWindow(BetterHUD betterHUD, FontRenderer fontRenderer, Minecraft mc) {
         this.mc = mc;
-        this.BH = BH;
-        this.FR = FR;
-        FM = new FileManager("Coord", 12);
+        this.betterHUD = betterHUD;
+        this.fontRenderer = fontRenderer;
+        fileManager = new FileManager("Coord", 12);
         load();
     }
 
@@ -92,7 +92,7 @@ public class CoordinateWindow extends BaseWindow {
         GlStateManager.disableBlend();
         GlStateManager.enableTexture2D();
         if (getToggled() == 0) {
-            BH.drawShadowedFont("X", getX() - 3, getY() - 3, 0xFFFFFF);
+            betterHUD.drawShadowedFont("X", getX() - 3, getY() - 3, 0xFFFFFF);
         }
     }
 
@@ -120,53 +120,55 @@ public class CoordinateWindow extends BaseWindow {
             width = 86;
 
         this.width = width;
-        BH.drawHUDRectWithBorder(this.x - 1, this.y - 1, width, this.height, r, g, b, a, r1, g1, b1, a1, thickness);
+        betterHUD.drawHUDRectWithBorder(this.x - 1, this.y - 1, width, this.height,
+                fillRed, fillGreen, fillBlue, fillAlpha,
+                borderRed, borderGreen, borderBlue, borderAlpha, thickness);
         GlStateManager.enableTexture2D();
 
         if (rotation > -22.5 && rotation <= 22.5) {
             this.direction = "S";
-            this.zEx = "+";
+            this.zSign = "+";
         } else if (rotation > 22.5 && rotation <= 67.5) {
             this.direction = "SW";
-            this.zEx = "+";
-            this.xEx = "-";
+            this.zSign = "+";
+            this.xSign = "-";
         } else if (rotation > 67.5 && rotation <= 112.5) {
             this.direction = "W";
-            this.xEx = "-";
+            this.xSign = "-";
         } else if (rotation > 112.5 && rotation <= 157.5) {
             this.direction = "NW";
-            this.zEx = "-";
-            this.xEx = "-";
+            this.zSign = "-";
+            this.xSign = "-";
         } else if ((rotation > 157.5 && rotation <= 202.5) || (rotation > -180 && rotation <= -157.5)) {
             this.direction = "N";
-            this.zEx = "-";
+            this.zSign = "-";
         } else if (rotation > -157.5 && rotation <= -112.5) {
             this.direction = "NE";
-            this.zEx = "-";
-            this.xEx = "+";
+            this.zSign = "-";
+            this.xSign = "+";
         } else if (rotation > -112.5 && rotation <= -67.5) {
             this.direction = "E";
-            this.xEx = "+";
+            this.xSign = "+";
         } else if (rotation > -67.5 && rotation <= -22.5) {
             this.direction = "SE";
-            this.zEx = "+";
-            this.xEx = "+";
+            this.zSign = "+";
+            this.xSign = "+";
         }
 
-        FR.drawString("X: " + (int) x, this.x, this.y, 0xffffff);
-        FR.drawString("Y: " + (int) y, this.x, this.y + 10, 0xffffff);
-        FR.drawString("Z: " + (int) z, this.x, this.y + 20, 0xffffff);
+        fontRenderer.drawString("X: " + (int) x, this.x, this.y, 0xffffff);
+        fontRenderer.drawString("Y: " + (int) y, this.x, this.y + 10, 0xffffff);
+        fontRenderer.drawString("Z: " + (int) z, this.x, this.y + 20, 0xffffff);
 
         int tempx = getX() + getWidth() - 12;
         int dLength = mc.fontRendererObj.getStringWidth(this.direction) / 2;
 
-        FR.drawString(xEx, tempx, this.y, 0xffffff);
-        FR.drawString(this.direction, tempx - dLength + 3, this.y + 10, 0xffffff);
-        FR.drawString(zEx, tempx, this.y + 20, 0xffffff);
+        fontRenderer.drawString(xSign, tempx, this.y, 0xffffff);
+        fontRenderer.drawString(this.direction, tempx - dLength + 3, this.y + 10, 0xffffff);
+        fontRenderer.drawString(zSign, tempx, this.y + 20, 0xffffff);
 
         GlStateManager.disableTexture2D();
-        xEx = "";
-        zEx = "";
+        xSign = "";
+        zSign = "";
     }
 
     @Override
@@ -204,100 +206,100 @@ public class CoordinateWindow extends BaseWindow {
         data.clear();
         data.add((double) x);
         data.add((double) y);
-        data.add((double) r);
-        data.add((double) g);
-        data.add((double) b);
-        data.add((double) a);
-        data.add((double) r1);
-        data.add((double) g1);
-        data.add((double) b1);
-        data.add((double) a1);
+        data.add((double) fillRed);
+        data.add((double) fillGreen);
+        data.add((double) fillBlue);
+        data.add((double) fillAlpha);
+        data.add((double) borderRed);
+        data.add((double) borderGreen);
+        data.add((double) borderBlue);
+        data.add((double) borderAlpha);
         data.add(thickness);
         data.add(toggle);
-        FM.setArray(data);
+        fileManager.setArray(data);
     }
 
     @Override
     public void load() {
         data.clear();
-        data = FM.getArray();
+        data = fileManager.getArray();
         if (data.size() < 12) {
             save();
         } else {
             x = data.get(0).intValue();
             y = data.get(1).intValue();
-            r = data.get(2).intValue();
-            g = data.get(3).intValue();
-            b = data.get(4).intValue();
-            a = data.get(5).intValue();
-            r1 = data.get(6).intValue();
-            g1 = data.get(7).intValue();
-            b1 = data.get(8).intValue();
-            a1 = data.get(9).intValue();
+            fillRed = data.get(2).intValue();
+            fillGreen = data.get(3).intValue();
+            fillBlue = data.get(4).intValue();
+            fillAlpha = data.get(5).intValue();
+            borderRed = data.get(6).intValue();
+            borderGreen = data.get(7).intValue();
+            borderBlue = data.get(8).intValue();
+            borderAlpha = data.get(9).intValue();
             thickness = data.get(10);
             toggle = data.get(11);
         }
     }
 
     @Override
-    public void setRGBA(int r, int g, int b, int a) {
-        this.r = r;
-        this.g = g;
-        this.b = b;
-        this.a = a;
+    public void setRGBA(int red, int green, int blue, int alpha) {
+        this.fillRed = red;
+        this.fillGreen = green;
+        this.fillBlue = blue;
+        this.fillAlpha = alpha;
     }
 
     @Override
     public int getR() {
-        return r;
+        return fillRed;
     }
 
     @Override
     public int getG() {
-        return g;
+        return fillGreen;
     }
 
     @Override
     public int getB() {
-        return b;
+        return fillBlue;
     }
 
     @Override
     public int getA() {
-        return a;
+        return fillAlpha;
     }
 
     @Override
-    public void setBorderRGB(int r, int g, int b, int a) {
-        this.r1 = r;
-        this.g1 = g;
-        this.b1 = b;
-        this.a1 = a;
+    public void setBorderRGB(int red, int green, int blue, int alpha) {
+        this.borderRed = red;
+        this.borderGreen = green;
+        this.borderBlue = blue;
+        this.borderAlpha = alpha;
     }
 
     @Override
     public int getBorderR() {
-        return r1;
+        return borderRed;
     }
 
     @Override
     public int getBorderG() {
-        return g1;
+        return borderGreen;
     }
 
     @Override
     public int getBorderB() {
-        return b1;
+        return borderBlue;
     }
 
     @Override
     public int getBorderA() {
-        return a1;
+        return borderAlpha;
     }
 
     @Override
-    public void setThickness(float t) {
-        this.thickness = t;
+    public void setThickness(float thickness) {
+        this.thickness = thickness;
     }
 
     @Override

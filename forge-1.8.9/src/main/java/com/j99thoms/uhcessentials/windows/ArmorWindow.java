@@ -10,20 +10,20 @@ import com.j99thoms.uhcessentials.BetterHUD;
 
 public class ArmorWindow extends BaseWindow {
 
-    BetterHUD BH;
+    BetterHUD betterHUD;
 
     private int x = 2;
     private int y = 102;
 
-    private int r = 69;
-    private int g = 69;
-    private int b = 69;
-    private int a = 150;
+    private int fillRed = 69;
+    private int fillGreen = 69;
+    private int fillBlue = 69;
+    private int fillAlpha = 150;
 
-    private int r1 = 0;
-    private int g1 = 0;
-    private int b1 = 0;
-    private int a1 = 255;
+    private int borderRed = 0;
+    private int borderGreen = 0;
+    private int borderBlue = 0;
+    private int borderAlpha = 255;
 
     private int width = 0;
     private int height = 0;
@@ -36,16 +36,16 @@ public class ArmorWindow extends BaseWindow {
     private float thickness = .8f;
 
     private ArrayList<Double> data = new ArrayList<Double>();
-    private FileManager FM;
+    private FileManager fileManager;
 
     private Minecraft mc;
-    private CoordinateWindow CW;
+    private CoordinateWindow coordWindow;
 
-    public ArmorWindow(BetterHUD BH, Minecraft mc, CoordinateWindow CW) {
+    public ArmorWindow(BetterHUD betterHUD, Minecraft mc, CoordinateWindow coordWindow) {
         this.mc = mc;
-        this.BH = BH;
-        this.CW = CW;
-        FM = new FileManager("Armor", 3);
+        this.betterHUD = betterHUD;
+        this.coordWindow = coordWindow;
+        fileManager = new FileManager("Armor", 3);
         load();
     }
 
@@ -83,13 +83,13 @@ public class ArmorWindow extends BaseWindow {
         armorDamage.clear();
 
         for (int i = 0; i < mc.thePlayer.inventory.armorInventory.length; i++) {
-            int idx = mc.thePlayer.inventory.armorInventory.length - i - 1;
-            if (mc.thePlayer.inventory.armorInventory[idx] == null) continue;
-            Item currItem = mc.thePlayer.inventory.armorInventory[idx].getItem();
-            int damage = mc.thePlayer.inventory.armorInventory[idx].getItemDamage();
-            armor.add(currItem);
-            float pDamage = (float) (damage / (float) currItem.getMaxDamage());
-            armorDamage.add(pDamage);
+            int armorIdx = mc.thePlayer.inventory.armorInventory.length - i - 1;
+            if (mc.thePlayer.inventory.armorInventory[armorIdx] == null) continue;
+            Item armorItem = mc.thePlayer.inventory.armorInventory[armorIdx].getItem();
+            int damage = mc.thePlayer.inventory.armorInventory[armorIdx].getItemDamage();
+            armor.add(armorItem);
+            float damageFraction = (float) (damage / (float) armorItem.getMaxDamage());
+            armorDamage.add(damageFraction);
         }
 
         for (int i = 0; i < armor.size(); i++) {
@@ -97,19 +97,19 @@ public class ArmorWindow extends BaseWindow {
             float damage = armorDamage.get(i);
             int healthPct = (int) Math.round(100.0 - damage * 100.0);
             int space = 15;
-            int cx = this.x;
-            int cy = this.y + i * space;
-            BH.drawItemSprite(cx, cy, item, this);
+            int itemX = this.x;
+            int itemY = this.y + i * space;
+            betterHUD.drawItemSprite(itemX, itemY, item, this);
             if (healthPct == 100) {
-                cx -= 2;
+                itemX -= 2;
             } else if (healthPct < 10) {
-                cx += 3;
+                itemX += 3;
             }
-            BH.drawShadowedFont(healthPct + "%", cx, cy + 10, 0xFFFFFF);
+            betterHUD.drawShadowedFont(healthPct + "%", itemX, itemY + 10, 0xFFFFFF);
         }
 
         if ((int) toggle == 0 && armor.size() > 0) {
-            BH.drawShadowedFont("X", x - 2, y - 2, 0xFFFFFF);
+            betterHUD.drawShadowedFont("X", x - 2, y - 2, 0xFFFFFF);
         }
 
         GlStateManager.depthMask(true);
@@ -121,15 +121,15 @@ public class ArmorWindow extends BaseWindow {
             GlStateManager.enableBlend();
             GlStateManager.depthMask(false);
             GlStateManager.blendFunc(770, 771);
-            width = BH.getFontRenderer().getStringWidth("No Armor");
+            width = betterHUD.getFontRenderer().getStringWidth("No Armor");
             height = 10;
-            BH.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
-                    CW.getR(), CW.getG(), CW.getB(), CW.getA(),
-                    CW.getBorderR(), CW.getBorderG(), CW.getBorderB(), CW.getBorderA(),
-                    CW.getThickness());
-            BH.drawShadowedFont("No Armor", x, y, 0xFFFFFF);
+            betterHUD.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
+                    coordWindow.getR(), coordWindow.getG(), coordWindow.getB(), coordWindow.getA(),
+                    coordWindow.getBorderR(), coordWindow.getBorderG(), coordWindow.getBorderB(), coordWindow.getBorderA(),
+                    coordWindow.getThickness());
+            betterHUD.drawShadowedFont("No Armor", x, y, 0xFFFFFF);
             if ((int) toggle == 0) {
-                BH.drawShadowedFont("X", x - 2, y - 2, 0xFFFFFF);
+                betterHUD.drawShadowedFont("X", x - 2, y - 2, 0xFFFFFF);
             }
             GlStateManager.depthMask(true);
             GlStateManager.disableBlend();
@@ -166,7 +166,7 @@ public class ArmorWindow extends BaseWindow {
     }
 
     @Override
-    public void setRGBA(int r, int g, int b, int a) {
+    public void setRGBA(int red, int green, int blue, int alpha) {
     }
 
     @Override
@@ -190,7 +190,7 @@ public class ArmorWindow extends BaseWindow {
     }
 
     @Override
-    public void setBorderRGB(int r, int g, int b, int a) {
+    public void setBorderRGB(int red, int green, int blue, int alpha) {
     }
 
     @Override
@@ -214,7 +214,7 @@ public class ArmorWindow extends BaseWindow {
     }
 
     @Override
-    public void setThickness(float t) {
+    public void setThickness(float thickness) {
     }
 
     @Override
@@ -238,13 +238,13 @@ public class ArmorWindow extends BaseWindow {
         data.add((double) x);
         data.add((double) y);
         data.add((double) toggle);
-        FM.setArray(data);
+        fileManager.setArray(data);
     }
 
     @Override
     public void load() {
         data.clear();
-        data = FM.getArray();
+        data = fileManager.getArray();
         if (data.size() < 3) {
             save();
         } else {

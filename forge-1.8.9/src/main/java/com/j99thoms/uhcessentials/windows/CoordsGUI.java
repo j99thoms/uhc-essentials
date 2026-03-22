@@ -18,10 +18,10 @@ import com.j99thoms.uhcessentials.BetterHUD;
 public class CoordsGUI extends GuiScreen {
 
     private static boolean[] keyStates;
-    private WindowManager WM;
-    private BetterHUD BH;
+    private WindowManager windowManager;
+    private BetterHUD betterHUD;
     private Minecraft mc;
-    private OptionMenu om;
+    private OptionMenu optionMenu;
     private boolean fullbright = false;
     private boolean shouldChange = false;
     private double gamma;
@@ -33,7 +33,7 @@ public class CoordsGUI extends GuiScreen {
     private int dy = 0;
     private boolean mouseFree = false;
     private boolean grabbed = false;
-    private BaseWindow BW;
+    private BaseWindow draggedWindow;
     private boolean moved = false;
     private int drag = 54;
     private int bright = 48;
@@ -41,10 +41,10 @@ public class CoordsGUI extends GuiScreen {
     private boolean firstDrag = false;
     private boolean on = false;
     private Colorizer color;
-    private FileManager FM;
-    private FileManager FM1;
-    private ArrayList<Double> data;
-    private ArrayList<Double> data1;
+    private FileManager gammaFileManager;
+    private FileManager keysFileManager;
+    private ArrayList<Double> gammaData;
+    private ArrayList<Double> keysData;
     private boolean pressed = false;
     private int previewAlpha = 255;
     private int previewR = 255;
@@ -55,7 +55,7 @@ public class CoordsGUI extends GuiScreen {
     public long lastTime;
     public static boolean guiOpen;
     private boolean optionsMenu = false;
-    public CoordinateWindow cWindow;
+    public CoordinateWindow coordWindow;
 
     private String resetAll = "Reset All Windows";
     private String toggleButton = "Toggle UHC Essentials";
@@ -66,40 +66,40 @@ public class CoordsGUI extends GuiScreen {
         guiOpen = false;
     }
 
-    public CoordsGUI(WindowManager WM, Minecraft mc, BetterHUD BH) {
-        this.WM = WM;
+    public CoordsGUI(WindowManager windowManager, Minecraft mc, BetterHUD betterHUD) {
+        this.windowManager = windowManager;
         keyStates = new boolean[256];
         this.mc = mc;
-        this.BH = BH;
-        this.cWindow = WM.CW;
-        FM = new FileManager("Gamma", 1);
-        FM1 = new FileManager("keys.txt", 2);
-        data1 = FM1.getArray();
-        if (data1.size() < 2) {
-            data1.add((double) drag);
-            data1.add((double) bright);
-            FM1.setArray(data1);
-            data1.clear();
+        this.betterHUD = betterHUD;
+        this.coordWindow = windowManager.coordWindow;
+        gammaFileManager = new FileManager("Gamma", 1);
+        keysFileManager = new FileManager("keys.txt", 2);
+        keysData = keysFileManager.getArray();
+        if (keysData.size() < 2) {
+            keysData.add((double) drag);
+            keysData.add((double) bright);
+            keysFileManager.setArray(keysData);
+            keysData.clear();
         } else {
-            drag = (int) data1.get(0).doubleValue();
-            bright = (int) data1.get(1).doubleValue();
+            drag = (int) keysData.get(0).doubleValue();
+            bright = (int) keysData.get(1).doubleValue();
         }
-        om = new OptionMenu(mc, this, BH);
-        data = FM.getArray();
-        if (data.size() < 1) {
-            data.add((double) mc.gameSettings.gammaSetting);
-            FM.setArray(data);
-            data.clear();
+        optionMenu = new OptionMenu(mc, this, betterHUD);
+        gammaData = gammaFileManager.getArray();
+        if (gammaData.size() < 1) {
+            gammaData.add((double) mc.gameSettings.gammaSetting);
+            gammaFileManager.setArray(gammaData);
+            gammaData.clear();
         } else {
-            gamma = data.get(0);
+            gamma = gammaData.get(0);
             mc.gameSettings.gammaSetting = (float) gamma;
         }
     }
 
     public void save() {
-        data.clear();
-        data.add(gamma);
-        FM.setArray(data);
+        gammaData.clear();
+        gammaData.add(gamma);
+        gammaFileManager.setArray(gammaData);
     }
 
     public void update() {
@@ -108,51 +108,51 @@ public class CoordsGUI extends GuiScreen {
             color.update();
         }
         if (mouseFree && !optionsMenu && !on) {
-            ScaledResolution var1 = new ScaledResolution(mc);
-            BH.drawHUDRectWithBorder(
-                    var1.getScaledWidth() / 2 - BH.getFontRenderer().getStringWidth(options) / 2,
-                    var1.getScaledHeight() / 2 - 5,
-                    BH.getFontRenderer().getStringWidth(options) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
-            BH.drawShadowedFont(options,
-                    var1.getScaledWidth() / 2 - BH.getFontRenderer().getStringWidth(options) / 2 + 1,
-                    var1.getScaledHeight() / 2 - 4, -1);
-            BH.drawHUDRectWithBorder(
-                    var1.getScaledWidth() / 2 - BH.getFontRenderer().getStringWidth(resetAll) / 2,
-                    var1.getScaledHeight() / 2 - 5 + 12,
-                    BH.getFontRenderer().getStringWidth(resetAll) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
-            BH.drawShadowedFont(resetAll,
-                    var1.getScaledWidth() / 2 - BH.getFontRenderer().getStringWidth(resetAll) / 2 + 1,
-                    var1.getScaledHeight() / 2 - 4 + 12, -1);
-            BH.drawHUDRectWithBorder(
-                    var1.getScaledWidth() / 2 - BH.getFontRenderer().getStringWidth(toggleButton) / 2,
-                    var1.getScaledHeight() / 2 - 5 + 24,
-                    BH.getFontRenderer().getStringWidth(toggleButton) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
-            BH.drawShadowedFont(toggleButton,
-                    var1.getScaledWidth() / 2 - BH.getFontRenderer().getStringWidth(toggleButton) / 2 + 1,
-                    var1.getScaledHeight() / 2 - 4 + 24, -1);
-            BH.drawHUDRectWithBorder(
-                    var1.getScaledWidth() / 2 - BH.getFontRenderer().getStringWidth(copyCoordinates) / 2,
-                    var1.getScaledHeight() / 2 - 5 + 36,
-                    BH.getFontRenderer().getStringWidth(copyCoordinates) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
-            BH.drawShadowedFont(copyCoordinates,
-                    var1.getScaledWidth() / 2 - BH.getFontRenderer().getStringWidth(copyCoordinates) / 2 + 1,
-                    var1.getScaledHeight() / 2 - 4 + 36, -1);
+            ScaledResolution scaledRes = new ScaledResolution(mc);
+            betterHUD.drawHUDRectWithBorder(
+                    scaledRes.getScaledWidth() / 2 - betterHUD.getFontRenderer().getStringWidth(options) / 2,
+                    scaledRes.getScaledHeight() / 2 - 5,
+                    betterHUD.getFontRenderer().getStringWidth(options) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
+            betterHUD.drawShadowedFont(options,
+                    scaledRes.getScaledWidth() / 2 - betterHUD.getFontRenderer().getStringWidth(options) / 2 + 1,
+                    scaledRes.getScaledHeight() / 2 - 4, -1);
+            betterHUD.drawHUDRectWithBorder(
+                    scaledRes.getScaledWidth() / 2 - betterHUD.getFontRenderer().getStringWidth(resetAll) / 2,
+                    scaledRes.getScaledHeight() / 2 - 5 + 12,
+                    betterHUD.getFontRenderer().getStringWidth(resetAll) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
+            betterHUD.drawShadowedFont(resetAll,
+                    scaledRes.getScaledWidth() / 2 - betterHUD.getFontRenderer().getStringWidth(resetAll) / 2 + 1,
+                    scaledRes.getScaledHeight() / 2 - 4 + 12, -1);
+            betterHUD.drawHUDRectWithBorder(
+                    scaledRes.getScaledWidth() / 2 - betterHUD.getFontRenderer().getStringWidth(toggleButton) / 2,
+                    scaledRes.getScaledHeight() / 2 - 5 + 24,
+                    betterHUD.getFontRenderer().getStringWidth(toggleButton) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
+            betterHUD.drawShadowedFont(toggleButton,
+                    scaledRes.getScaledWidth() / 2 - betterHUD.getFontRenderer().getStringWidth(toggleButton) / 2 + 1,
+                    scaledRes.getScaledHeight() / 2 - 4 + 24, -1);
+            betterHUD.drawHUDRectWithBorder(
+                    scaledRes.getScaledWidth() / 2 - betterHUD.getFontRenderer().getStringWidth(copyCoordinates) / 2,
+                    scaledRes.getScaledHeight() / 2 - 5 + 36,
+                    betterHUD.getFontRenderer().getStringWidth(copyCoordinates) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
+            betterHUD.drawShadowedFont(copyCoordinates,
+                    scaledRes.getScaledWidth() / 2 - betterHUD.getFontRenderer().getStringWidth(copyCoordinates) / 2 + 1,
+                    scaledRes.getScaledHeight() / 2 - 4 + 36, -1);
         }
         if (mouseFree && !optionsMenu) {
-            WM.armorWindow.updateInGUI();
+            windowManager.armorWindow.updateInGUI();
             drag();
-            if (WM.tipWindow.closeTip && TipWindow.gotTips) {
-                WM.tipWindow.newTip();
-                WM.tipWindow.closeTip = false;
+            if (windowManager.tipWindow.closeTip && TipWindow.gotTips) {
+                windowManager.tipWindow.newTip();
+                windowManager.tipWindow.closeTip = false;
             }
         } else {
-            WM.tipWindow.closeTip = true;
+            windowManager.tipWindow.closeTip = true;
         }
         if (optionsMenu) {
             if (mc.currentScreen == null) {
-                mc.displayGuiScreen(om);
+                mc.displayGuiScreen(optionMenu);
             }
-            om.render();
+            optionMenu.render();
         }
         if (fullbright) {
             mc.gameSettings.gammaSetting = 2000.0f;
@@ -176,22 +176,22 @@ public class CoordsGUI extends GuiScreen {
 
     public void checkKeys() {
         if (Keyboard.getEventKeyState()) {
-            FM1 = new FileManager("keys.txt", 2);
-            data1 = FM1.getArray();
-            if (data1.size() < 2) {
-                data1.add((double) drag);
-                data1.add((double) bright);
-                FM1.setArray(data1);
-                data1.clear();
+            keysFileManager = new FileManager("keys.txt", 2);
+            keysData = keysFileManager.getArray();
+            if (keysData.size() < 2) {
+                keysData.add((double) drag);
+                keysData.add((double) bright);
+                keysFileManager.setArray(keysData);
+                keysData.clear();
             } else {
-                drag = (int) data1.get(0).doubleValue();
-                bright = (int) data1.get(1).doubleValue();
+                drag = (int) keysData.get(0).doubleValue();
+                bright = (int) keysData.get(1).doubleValue();
             }
         }
         if (mc.currentScreen == null && !optionsMenu) {
             if (checkKey(drag)) {
                 guiOpen = true;
-                WM.showAll();
+                windowManager.showAll();
                 mouseFree = true;
                 mc.displayGuiScreen(this);
             } else if (checkKey(bright)) {
@@ -212,8 +212,8 @@ public class CoordsGUI extends GuiScreen {
             guiOpen = false;
             optionsMenu = false;
             mouseFree = false;
-            om.reset();
-            WM.reset();
+            optionMenu.reset();
+            windowManager.reset();
             on = false;
             lastX = 0;
             lastY = 0;
@@ -233,53 +233,53 @@ public class CoordsGUI extends GuiScreen {
         dy = y - lastY;
         lastX = x;
         lastY = y;
-        ScaledResolution var1 = new ScaledResolution(mc);
-        int Twidth = var1.getScaledWidth();
-        int Theight = var1.getScaledHeight();
+        ScaledResolution scaledRes = new ScaledResolution(mc);
+        int screenWidth = scaledRes.getScaledWidth();
+        int screenHeight = scaledRes.getScaledHeight();
         if (Mouse.isButtonDown(0) && (!pressed || grabbed) && !optionsMenu) {
             if (!Mouse.isButtonDown(3)) {
-                if (x >= Twidth / 2 - BH.getFontRenderer().getStringWidth(options) / 2
-                        && x <= Twidth / 2 + BH.getFontRenderer().getStringWidth(options) / 2
-                        && y >= Theight / 2 - 22 && y <= Theight / 2 + 22) {
-                    WM.reset();
+                if (x >= screenWidth / 2 - betterHUD.getFontRenderer().getStringWidth(options) / 2
+                        && x <= screenWidth / 2 + betterHUD.getFontRenderer().getStringWidth(options) / 2
+                        && y >= screenHeight / 2 - 22 && y <= screenHeight / 2 + 22) {
+                    windowManager.reset();
                 }
                 if (!firstDrag) {
                     lastMove = 0;
                 }
                 if (!grabbed) {
-                    for (int i = 0; i < WM.BW.size(); i++) {
-                        if (x >= WM.BW.get(i).getX() && x <= WM.BW.get(i).getX() + WM.BW.get(i).getWidth()) {
-                            if (y < WM.BW.get(i).getY() || y > WM.BW.get(i).getY() + WM.BW.get(i).getHeight())
+                    for (int i = 0; i < windowManager.windows.size(); i++) {
+                        if (x >= windowManager.windows.get(i).getX() && x <= windowManager.windows.get(i).getX() + windowManager.windows.get(i).getWidth()) {
+                            if (y < windowManager.windows.get(i).getY() || y > windowManager.windows.get(i).getY() + windowManager.windows.get(i).getHeight())
                                 continue;
-                            BW = WM.BW.get(i);
+                            draggedWindow = windowManager.windows.get(i);
                             grabbed = true;
                             firstDrag = true;
                             return;
                         }
-                        if (x >= Twidth / 2 - BH.getFontRenderer().getStringWidth(options) / 2
-                                && x <= Twidth / 2 + BH.getFontRenderer().getStringWidth(options) / 2
-                                && y >= Theight / 2 - 5 && y <= Theight / 2 + 5 && !on) {
+                        if (x >= screenWidth / 2 - betterHUD.getFontRenderer().getStringWidth(options) / 2
+                                && x <= screenWidth / 2 + betterHUD.getFontRenderer().getStringWidth(options) / 2
+                                && y >= screenHeight / 2 - 5 && y <= screenHeight / 2 + 5 && !on) {
                             mc.displayGuiScreen(null);
                             optionsMenu = true;
                             return;
                         }
-                        if (x >= Twidth / 2 - BH.getFontRenderer().getStringWidth(resetAll) / 2
-                                && x <= Twidth / 2 + BH.getFontRenderer().getStringWidth(resetAll) / 2
-                                && y >= Theight / 2 - 5 + 12 && y <= Theight / 2 + 5 + 12 && !on) {
-                            WM.resetAllWindowsPositions();
+                        if (x >= screenWidth / 2 - betterHUD.getFontRenderer().getStringWidth(resetAll) / 2
+                                && x <= screenWidth / 2 + betterHUD.getFontRenderer().getStringWidth(resetAll) / 2
+                                && y >= screenHeight / 2 - 5 + 12 && y <= screenHeight / 2 + 5 + 12 && !on) {
+                            windowManager.resetAllWindowsPositions();
                             pressed = true;
                             return;
                         }
-                        if (x >= Twidth / 2 - BH.getFontRenderer().getStringWidth(toggleButton) / 2
-                                && x <= Twidth / 2 + BH.getFontRenderer().getStringWidth(toggleButton) / 2
-                                && y >= Theight / 2 - 5 + 24 && y <= Theight / 2 + 5 + 24 && !on) {
+                        if (x >= screenWidth / 2 - betterHUD.getFontRenderer().getStringWidth(toggleButton) / 2
+                                && x <= screenWidth / 2 + betterHUD.getFontRenderer().getStringWidth(toggleButton) / 2
+                                && y >= screenHeight / 2 - 5 + 24 && y <= screenHeight / 2 + 5 + 24 && !on) {
                             WindowManager.toggled = !WindowManager.toggled;
                             pressed = true;
                             return;
                         }
-                        if (x < Twidth / 2 - BH.getFontRenderer().getStringWidth(copyCoordinates) / 2
-                                || x > Twidth / 2 + BH.getFontRenderer().getStringWidth(copyCoordinates) / 2
-                                || y < Theight / 2 - 5 + 36 || y > Theight / 2 + 5 + 36 || on)
+                        if (x < screenWidth / 2 - betterHUD.getFontRenderer().getStringWidth(copyCoordinates) / 2
+                                || x > screenWidth / 2 + betterHUD.getFontRenderer().getStringWidth(copyCoordinates) / 2
+                                || y < screenHeight / 2 - 5 + 36 || y > screenHeight / 2 + 5 + 36 || on)
                             continue;
                         String myString = "x: " + (int) mc.thePlayer.posX
                                 + " y: " + (int) (mc.thePlayer.posY - 1)
@@ -292,16 +292,16 @@ public class CoordsGUI extends GuiScreen {
                     }
                 } else {
                     lastMove += dx + dy;
-                    BW.setX(BW.getX() + dx);
-                    BW.setY(BW.getY() + dy);
-                    BW.save();
+                    draggedWindow.setX(draggedWindow.getX() + dx);
+                    draggedWindow.setY(draggedWindow.getY() + dy);
+                    draggedWindow.save();
                 }
                 pressed = true;
             }
         } else if (lastMove == 0 && firstDrag) {
             firstDrag = false;
-            BW.toggle();
-            BW.save();
+            draggedWindow.toggle();
+            draggedWindow.save();
         } else {
             firstDrag = false;
             lastX = x;
@@ -313,14 +313,14 @@ public class CoordsGUI extends GuiScreen {
         }
         if (Mouse.isButtonDown(1) && !pressed) {
             pressed = true;
-            for (int i = 0; i < WM.BW.size(); i++) {
-                BW = WM.BW.get(i);
-                if (x < WM.BW.get(i).getX() || x > WM.BW.get(i).getX() + WM.BW.get(i).getWidth()
-                        || y < WM.BW.get(i).getY() || y > WM.BW.get(i).getY() + WM.BW.get(i).getHeight()
-                        || !BW.getName().equalsIgnoreCase("Coordinate"))
+            for (int i = 0; i < windowManager.windows.size(); i++) {
+                draggedWindow = windowManager.windows.get(i);
+                if (x < windowManager.windows.get(i).getX() || x > windowManager.windows.get(i).getX() + windowManager.windows.get(i).getWidth()
+                        || y < windowManager.windows.get(i).getY() || y > windowManager.windows.get(i).getY() + windowManager.windows.get(i).getHeight()
+                        || !draggedWindow.getName().equalsIgnoreCase("Coordinate"))
                     continue;
                 if (!on) {
-                    color = new Colorizer(BH, BW, mc);
+                    color = new Colorizer(betterHUD, draggedWindow, mc);
                     on = true;
                     break;
                 }
@@ -329,58 +329,58 @@ public class CoordsGUI extends GuiScreen {
             }
         }
         if (!(Mouse.isButtonDown(0) || Mouse.isButtonDown(1) || (pressed && !grabbed) || optionsMenu)) {
-            for (int i = 0; i < WM.BW.size(); i++) {
-                if (x < WM.BW.get(i).getX() || x > WM.BW.get(i).getX() + WM.BW.get(i).getWidth()
-                        || y < WM.BW.get(i).getY() || y > WM.BW.get(i).getY() + WM.BW.get(i).getHeight())
+            for (int i = 0; i < windowManager.windows.size(); i++) {
+                if (x < windowManager.windows.get(i).getX() || x > windowManager.windows.get(i).getX() + windowManager.windows.get(i).getWidth()
+                        || y < windowManager.windows.get(i).getY() || y > windowManager.windows.get(i).getY() + windowManager.windows.get(i).getHeight())
                     continue;
-                BaseWindow DW = WM.BW.get(i);
+                BaseWindow hoveredWindow = windowManager.windows.get(i);
                 if (previewAlpha > 255) {
                     alphaDown = true;
-                } else if (previewAlpha < 0 && DW.getName() == "Coordinate") {
+                } else if (previewAlpha < 0 && hoveredWindow.getName() == "Coordinate") {
                     alphaDown = false;
                     previewR = random.nextInt(255);
                     previewG = random.nextInt(255);
                     previewB = random.nextInt(255);
-                } else if (previewAlpha < 150 && DW.getName() != "Coordinate") {
+                } else if (previewAlpha < 150 && hoveredWindow.getName() != "Coordinate") {
                     alphaDown = false;
                 }
                 int time = 10;
-                if (DW.getName() == "Coordinate") {
+                if (hoveredWindow.getName() == "Coordinate") {
                     time = 5;
                 }
                 if (System.currentTimeMillis() - lastTime > time) {
                     previewAlpha = alphaDown ? (previewAlpha -= 2) : (previewAlpha += 2);
                     lastTime = System.currentTimeMillis();
                 }
-                if (DW.getToolTip().contains("`")) {
-                    String[] split = DW.getToolTip().split("`");
+                if (hoveredWindow.getToolTip().contains("`")) {
+                    String[] split = hoveredWindow.getToolTip().split("`");
                     int longestWidth = 0;
                     for (int j = 0; j < split.length; j++) {
-                        if (BH.getFontRenderer().getStringWidth(split[j]) > longestWidth)
-                            longestWidth = BH.getFontRenderer().getStringWidth(split[j]);
+                        if (betterHUD.getFontRenderer().getStringWidth(split[j]) > longestWidth)
+                            longestWidth = betterHUD.getFontRenderer().getStringWidth(split[j]);
                     }
-                    if (DW.getName() == "Coordinate") {
-                        BH.drawHUDRectWithBorder(x - 1 + 10, y - 1, longestWidth + 2, split.length * 10,
+                    if (hoveredWindow.getName() == "Coordinate") {
+                        betterHUD.drawHUDRectWithBorder(x - 1 + 10, y - 1, longestWidth + 2, split.length * 10,
                                 previewR, previewG, previewB, previewAlpha,
-                                cWindow.getBorderR(), cWindow.getBorderG(), cWindow.getBorderB(), previewAlpha,
-                                cWindow.getThickness());
+                                coordWindow.getBorderR(), coordWindow.getBorderG(), coordWindow.getBorderB(), previewAlpha,
+                                coordWindow.getThickness());
                     } else {
-                        BH.drawHUDRectWithBorder(x - 1 + 10, y - 1, longestWidth + 2, split.length * 10,
-                                cWindow.getR(), cWindow.getG(), cWindow.getB(), previewAlpha,
-                                cWindow.getBorderR(), cWindow.getBorderG(), cWindow.getBorderB(), cWindow.getBorderA(),
-                                cWindow.getThickness());
+                        betterHUD.drawHUDRectWithBorder(x - 1 + 10, y - 1, longestWidth + 2, split.length * 10,
+                                coordWindow.getR(), coordWindow.getG(), coordWindow.getB(), previewAlpha,
+                                coordWindow.getBorderR(), coordWindow.getBorderG(), coordWindow.getBorderB(), coordWindow.getBorderA(),
+                                coordWindow.getThickness());
                     }
                     for (int j = 0; j < split.length; j++) {
-                        BH.drawShadowedFont(split[j], x + 10, y + j * 10, -1);
+                        betterHUD.drawShadowedFont(split[j], x + 10, y + j * 10, -1);
                     }
                     continue;
                 }
-                int tipWidth = BH.getFontRenderer().getStringWidth(DW.getToolTip());
-                BH.drawHUDRectWithBorder(x - 1 + 10, y - 1, tipWidth + 2, 10,
-                        cWindow.getR(), cWindow.getG(), cWindow.getB(), previewAlpha,
-                        cWindow.getBorderR(), cWindow.getBorderG(), cWindow.getBorderB(), cWindow.getBorderA(),
-                        cWindow.getThickness());
-                BH.drawShadowedFont(DW.getToolTip(), x + 10, y, -1);
+                int tipWidth = betterHUD.getFontRenderer().getStringWidth(hoveredWindow.getToolTip());
+                betterHUD.drawHUDRectWithBorder(x - 1 + 10, y - 1, tipWidth + 2, 10,
+                        coordWindow.getR(), coordWindow.getG(), coordWindow.getB(), previewAlpha,
+                        coordWindow.getBorderR(), coordWindow.getBorderG(), coordWindow.getBorderB(), coordWindow.getBorderA(),
+                        coordWindow.getThickness());
+                betterHUD.drawShadowedFont(hoveredWindow.getToolTip(), x + 10, y, -1);
             }
         }
     }

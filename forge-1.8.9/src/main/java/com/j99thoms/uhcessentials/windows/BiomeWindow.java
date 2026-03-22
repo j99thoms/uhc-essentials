@@ -9,20 +9,20 @@ import com.j99thoms.uhcessentials.BetterHUD;
 
 public class BiomeWindow extends BaseWindow {
 
-    BetterHUD BH;
+    BetterHUD betterHUD;
 
     private int x = 2;
     private int y = 46;
 
-    private int r = 69;
-    private int g = 69;
-    private int b = 69;
-    private int a = 150;
+    private int fillRed = 69;
+    private int fillGreen = 69;
+    private int fillBlue = 69;
+    private int fillAlpha = 150;
 
-    private int r1 = 0;
-    private int g1 = 0;
-    private int b1 = 0;
-    private int a1 = 255;
+    private int borderRed = 0;
+    private int borderGreen = 0;
+    private int borderBlue = 0;
+    private int borderAlpha = 255;
 
     private int width = 0;
     private int height = 12;
@@ -32,16 +32,16 @@ public class BiomeWindow extends BaseWindow {
     private float thickness = .8f;
 
     private ArrayList<Double> data = new ArrayList<Double>();
-    private FileManager FM;
-    private CoordinateWindow CW;
+    private FileManager fileManager;
+    private CoordinateWindow coordWindow;
 
     private Minecraft mc;
 
-    public BiomeWindow(BetterHUD BH, Minecraft mc, CoordinateWindow CW) {
+    public BiomeWindow(BetterHUD betterHUD, Minecraft mc, CoordinateWindow coordWindow) {
         this.mc = mc;
-        this.BH = BH;
-        this.CW = CW;
-        FM = new FileManager("BiomeWindow", 3);
+        this.betterHUD = betterHUD;
+        this.coordWindow = coordWindow;
+        fileManager = new FileManager("BiomeWindow", 3);
         load();
     }
 
@@ -75,9 +75,10 @@ public class BiomeWindow extends BaseWindow {
                 new BlockPos(playerX, 64, playerZ)).biomeName;
 
         width = mc.fontRendererObj.getStringWidth(biomeName);
-        BH.drawHUDRectWithBorder(x - 1, y - 1, mc.fontRendererObj.getStringWidth(biomeName) + 1, getHeight(),
-                CW.getR(), CW.getG(), CW.getB(), CW.getA(),
-                CW.getBorderR(), CW.getBorderG(), CW.getBorderB(), CW.getBorderA(), CW.getThickness());
+        betterHUD.drawHUDRectWithBorder(x - 1, y - 1, mc.fontRendererObj.getStringWidth(biomeName) + 1, getHeight(),
+                coordWindow.getR(), coordWindow.getG(), coordWindow.getB(), coordWindow.getA(),
+                coordWindow.getBorderR(), coordWindow.getBorderG(), coordWindow.getBorderB(), coordWindow.getBorderA(),
+                coordWindow.getThickness());
         mc.fontRendererObj.drawStringWithShadow(biomeName, x, y, 0xffffffff);
 
         if ((int) toggle == 0)
@@ -114,7 +115,7 @@ public class BiomeWindow extends BaseWindow {
     }
 
     @Override
-    public void setRGBA(int r, int g, int b, int a) {
+    public void setRGBA(int red, int green, int blue, int alpha) {
     }
 
     @Override
@@ -138,7 +139,7 @@ public class BiomeWindow extends BaseWindow {
     }
 
     @Override
-    public void setBorderRGB(int r, int g, int b, int a) {
+    public void setBorderRGB(int red, int green, int blue, int alpha) {
     }
 
     @Override
@@ -162,7 +163,7 @@ public class BiomeWindow extends BaseWindow {
     }
 
     @Override
-    public void setThickness(float t) {
+    public void setThickness(float thickness) {
     }
 
     @Override
@@ -186,13 +187,13 @@ public class BiomeWindow extends BaseWindow {
         data.add((double) x);
         data.add((double) y);
         data.add((double) toggle);
-        FM.setArray(data);
+        fileManager.setArray(data);
     }
 
     @Override
     public void load() {
         data.clear();
-        data = FM.getArray();
+        data = fileManager.getArray();
         if (data.size() < 3) {
             save();
         } else {

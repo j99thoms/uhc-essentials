@@ -19,20 +19,20 @@ public class TipWindow extends BaseWindow {
 
     private static final Logger LOGGER = LogManager.getLogger(TipWindow.class);
 
-    BetterHUD BH;
+    BetterHUD betterHUD;
 
     private int x = 2;
     private int y = 220;
 
-    private int r = 69;
-    private int g = 69;
-    private int b = 69;
-    private int a = 150;
+    private int fillRed = 69;
+    private int fillGreen = 69;
+    private int fillBlue = 69;
+    private int fillAlpha = 150;
 
-    private int r1 = 0;
-    private int g1 = 0;
-    private int b1 = 0;
-    private int a1 = 255;
+    private int borderRed = 0;
+    private int borderGreen = 0;
+    private int borderBlue = 0;
+    private int borderAlpha = 255;
 
     private int width = 0;
     private int height = 0;
@@ -42,22 +42,22 @@ public class TipWindow extends BaseWindow {
     private float thickness = .8f;
 
     private ArrayList<Double> data = new ArrayList<Double>();
-    private FileManager FM;
+    private FileManager fileManager;
 
     private Minecraft mc;
-    private CoordinateWindow CW;
+    private CoordinateWindow coordWindow;
 
     private ArrayList<String> tips;
     public static boolean gotTips = false;
     public Random random = new Random();
     public boolean closeTip = true;
-    public int currTip = 0;
+    public int currentTipIndex = 0;
     private String tipOfThePage = "";
 
-    public TipWindow(BetterHUD BH, Minecraft mc, CoordinateWindow CW) {
+    public TipWindow(BetterHUD betterHUD, Minecraft mc, CoordinateWindow coordWindow) {
         this.mc = mc;
-        this.BH = BH;
-        this.CW = CW;
+        this.betterHUD = betterHUD;
+        this.coordWindow = coordWindow;
         this.tips = new ArrayList<String>();
     }
 
@@ -106,33 +106,33 @@ public class TipWindow extends BaseWindow {
 
         if (!gotTips) {
             String tipLoad = "Click me to load the tips!";
-            width = BH.getFontRenderer().getStringWidth(tipLoad);
-            BH.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
-                    CW.getR(), CW.getG(), CW.getB(), CW.getA(),
-                    CW.getBorderR(), CW.getBorderG(), CW.getBorderB(), CW.getBorderA(),
-                    CW.getThickness());
-            BH.drawShadowedFont(tipLoad, x, y, -1);
+            width = betterHUD.getFontRenderer().getStringWidth(tipLoad);
+            betterHUD.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
+                    coordWindow.getR(), coordWindow.getG(), coordWindow.getB(), coordWindow.getA(),
+                    coordWindow.getBorderR(), coordWindow.getBorderG(), coordWindow.getBorderB(), coordWindow.getBorderA(),
+                    coordWindow.getThickness());
+            betterHUD.drawShadowedFont(tipLoad, x, y, -1);
         } else if (!tipOfThePage.contains("`")) {
-            width = BH.getFontRenderer().getStringWidth(tipOfThePage);
-            BH.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
-                    CW.getR(), CW.getG(), CW.getB(), CW.getA(),
-                    CW.getBorderR(), CW.getBorderG(), CW.getBorderB(), CW.getBorderA(),
-                    CW.getThickness());
-            BH.drawShadowedFont(tipOfThePage, x, y, -1);
+            width = betterHUD.getFontRenderer().getStringWidth(tipOfThePage);
+            betterHUD.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
+                    coordWindow.getR(), coordWindow.getG(), coordWindow.getB(), coordWindow.getA(),
+                    coordWindow.getBorderR(), coordWindow.getBorderG(), coordWindow.getBorderB(), coordWindow.getBorderA(),
+                    coordWindow.getThickness());
+            betterHUD.drawShadowedFont(tipOfThePage, x, y, -1);
         } else {
             String[] split = tipOfThePage.split("`");
             int longestWidth = 0;
             for (int i = 0; i < split.length; i++) {
-                if (BH.getFontRenderer().getStringWidth(split[i]) > longestWidth)
-                    longestWidth = BH.getFontRenderer().getStringWidth(split[i]);
+                if (betterHUD.getFontRenderer().getStringWidth(split[i]) > longestWidth)
+                    longestWidth = betterHUD.getFontRenderer().getStringWidth(split[i]);
             }
             width = longestWidth;
-            BH.drawHUDRectWithBorder(x - 1, y - 1, longestWidth + 2, split.length * 10,
-                    CW.getR(), CW.getG(), CW.getB(), CW.getA(),
-                    CW.getBorderR(), CW.getBorderG(), CW.getBorderB(), CW.getBorderA(),
-                    CW.getThickness());
+            betterHUD.drawHUDRectWithBorder(x - 1, y - 1, longestWidth + 2, split.length * 10,
+                    coordWindow.getR(), coordWindow.getG(), coordWindow.getB(), coordWindow.getA(),
+                    coordWindow.getBorderR(), coordWindow.getBorderG(), coordWindow.getBorderB(), coordWindow.getBorderA(),
+                    coordWindow.getThickness());
             for (int j = 0; j < split.length; j++) {
-                BH.drawShadowedFont(split[j], x, y + j * 10, -1);
+                betterHUD.drawShadowedFont(split[j], x, y + j * 10, -1);
             }
         }
 
@@ -140,10 +140,10 @@ public class TipWindow extends BaseWindow {
     }
 
     public void newTip() {
-        tipOfThePage = tips.get(currTip);
-        currTip++;
-        if (currTip >= tips.size()) {
-            currTip = 0;
+        tipOfThePage = tips.get(currentTipIndex);
+        currentTipIndex++;
+        if (currentTipIndex >= tips.size()) {
+            currentTipIndex = 0;
         }
     }
 
@@ -177,7 +177,7 @@ public class TipWindow extends BaseWindow {
     }
 
     @Override
-    public void setRGBA(int r, int g, int b, int a) {
+    public void setRGBA(int red, int green, int blue, int alpha) {
     }
 
     @Override
@@ -201,7 +201,7 @@ public class TipWindow extends BaseWindow {
     }
 
     @Override
-    public void setBorderRGB(int r, int g, int b, int a) {
+    public void setBorderRGB(int red, int green, int blue, int alpha) {
     }
 
     @Override
@@ -225,7 +225,7 @@ public class TipWindow extends BaseWindow {
     }
 
     @Override
-    public void setThickness(float t) {
+    public void setThickness(float thickness) {
     }
 
     @Override
