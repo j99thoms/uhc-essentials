@@ -20,7 +20,7 @@ public class BetterHUD implements HUDGraphics {
     public BetterHUD(FontRenderer fontRenderer, Minecraft mc) {
         this.fontRenderer = fontRenderer;
         this.mc = mc;
-        windowManager = new WindowManager(this, fontRenderer, mc);
+        windowManager = new WindowManager(this, mc);
         new VersionChecker().check(mc);
     }
 
