@@ -16,7 +16,6 @@ public class BiomeWindow extends ThemedWindow {
     private int y = DEFAULT_Y;
 
     private int width = 0;
-    private int height = 12;
 
     private double toggle = 1;
 
@@ -68,7 +67,7 @@ public class BiomeWindow extends ThemedWindow {
                 theme.getThickness());
         hudGraphics.drawShadowedFont(biomeName, x, y, 0xffffffff);
 
-        if ((int) toggle == 0)
+        if (getToggled() == 0)
             hudGraphics.drawShadowedFont("X", getX() - 5, getY() - 5, 0xffffffff);
     }
 
@@ -125,7 +124,7 @@ public class BiomeWindow extends ThemedWindow {
         } else {
             x = data.get(0).intValue();
             y = data.get(1).intValue();
-            toggle = data.get(2);
+            toggle = data.get(2).intValue();
         }
     }
 }

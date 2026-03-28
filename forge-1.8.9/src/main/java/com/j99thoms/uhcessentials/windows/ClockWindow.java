@@ -15,9 +15,6 @@ public class ClockWindow extends BaseWindow {
     private int x = DEFAULT_X;
     private int y = DEFAULT_Y;
 
-    private int width = 0;
-    private int height = 0;
-
     private double toggle = 1;
 
     private ArrayList<Double> data = new ArrayList<Double>();
@@ -57,7 +54,7 @@ public class ClockWindow extends BaseWindow {
     @Override
     public void update() {
         hudGraphics.drawItemSprite(x, y, Items.clock);
-        if ((int) toggle == 0)
+        if (getToggled() == 0)
             hudGraphics.drawShadowedFont("X", x, y, 0xffffffff);
     }
 

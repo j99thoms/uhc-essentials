@@ -63,7 +63,7 @@ public class FPSWindow extends ThemedWindow {
                 theme.getThickness());
         hudGraphics.drawShadowedFont(info, x, y, 0xffffffff);
 
-        if (toggle == 0) {
+        if (getToggled() == 0) {
             hudGraphics.drawShadowedFont("X", x - 5, y - 5, 0xffffffff);
         }
     }
