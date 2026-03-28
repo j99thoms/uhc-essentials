@@ -9,12 +9,11 @@ import net.minecraft.util.MathHelper;
 
 import com.j99thoms.uhcessentials.BetterHUD;
 
-public class CoordinateWindow extends BaseWindow implements Colorizable {
+public class CoordinateWindow extends ThemedWindow {
 
     private final BetterHUD betterHUD;
     private final FontRenderer fontRenderer;
     private final Minecraft mc;
-    private final WindowTheme theme;
 
     private static final int DEFAULT_X = 2;
     private static final int DEFAULT_Y = 2;
@@ -36,10 +35,10 @@ public class CoordinateWindow extends BaseWindow implements Colorizable {
     private ArrayList<Double> data = new ArrayList<Double>();
 
     public CoordinateWindow(BetterHUD betterHUD, FontRenderer fontRenderer, Minecraft mc, WindowTheme theme) {
+        super(theme);
         this.mc = mc;
         this.betterHUD = betterHUD;
         this.fontRenderer = fontRenderer;
-        this.theme = theme;
         fileManager = new FileManager("CoordPos", 3);
         load();
     }
@@ -214,63 +213,4 @@ public class CoordinateWindow extends BaseWindow implements Colorizable {
         }
     }
 
-    @Override
-    public void setRGBA(int red, int green, int blue, int alpha) {
-        theme.setRGBA(red, green, blue, alpha);
-    }
-
-    @Override
-    public int getR() {
-        return theme.getR();
-    }
-
-    @Override
-    public int getG() {
-        return theme.getG();
-    }
-
-    @Override
-    public int getB() {
-        return theme.getB();
-    }
-
-    @Override
-    public int getA() {
-        return theme.getA();
-    }
-
-    @Override
-    public void setBorderRGB(int red, int green, int blue, int alpha) {
-        theme.setBorderRGB(red, green, blue, alpha);
-    }
-
-    @Override
-    public int getBorderR() {
-        return theme.getBorderR();
-    }
-
-    @Override
-    public int getBorderG() {
-        return theme.getBorderG();
-    }
-
-    @Override
-    public int getBorderB() {
-        return theme.getBorderB();
-    }
-
-    @Override
-    public int getBorderA() {
-        return theme.getBorderA();
-    }
-
-    @Override
-    public void setThickness(float thickness) {
-        theme.setThickness(thickness);
-    }
-
-    @Override
-    public double getThickness() {
-        return theme.getThickness();
-    }
 }
