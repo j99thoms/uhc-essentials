@@ -15,9 +15,6 @@ public class ArrowCounterWindow extends BaseWindow {
     private static final int DEFAULT_X = 16;
     private static final int DEFAULT_Y = 68;
 
-    private int x = DEFAULT_X;
-    private int y = DEFAULT_Y;
-
     private int width = 0;
     private int height = 0;
 
@@ -33,11 +30,11 @@ public class ArrowCounterWindow extends BaseWindow {
 
     private final Minecraft mc;
 
-    private double toggle = 1;
-
     public ArrowCounterWindow(HUDGraphics hudGraphics, Minecraft mc) {
         super(hudGraphics);
         this.mc = mc;
+        setX(DEFAULT_X);
+        setY(DEFAULT_Y);
         fileManager = new FileManager("Arrow", 3);
         load();
     }
@@ -122,26 +119,6 @@ public class ArrowCounterWindow extends BaseWindow {
 
     @Override
     public void render() {
-    }
-
-    @Override
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    @Override
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    @Override
-    public int getX() {
-        return x;
-    }
-
-    @Override
-    public int getY() {
-        return y;
     }
 
     @Override

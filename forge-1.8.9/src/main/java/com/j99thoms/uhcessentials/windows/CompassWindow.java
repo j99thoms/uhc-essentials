@@ -12,11 +12,6 @@ public class CompassWindow extends BaseWindow {
     private static final int DEFAULT_X = 1;
     private static final int DEFAULT_Y = 68;
 
-    private int x = DEFAULT_X;
-    private int y = DEFAULT_Y;
-
-    private double toggle = 1;
-
     private ArrayList<Double> data = new ArrayList<Double>();
     private final FileManager fileManager;
 
@@ -25,6 +20,8 @@ public class CompassWindow extends BaseWindow {
     public CompassWindow(HUDGraphics hudGraphics, Minecraft mc) {
         super(hudGraphics);
         this.mc = mc;
+        setX(DEFAULT_X);
+        setY(DEFAULT_Y);
         fileManager = new FileManager("Compass", 3);
         load();
     }
@@ -35,20 +32,10 @@ public class CompassWindow extends BaseWindow {
     }
 
     @Override
-    public void toggle() {
-        toggle = toggle == 0 ? 1 : 0;
-    }
-
-    @Override
     public void setToDefault() {
         setX(DEFAULT_X);
         setY(DEFAULT_Y);
         save();
-    }
-
-    @Override
-    public int getToggled() {
-        return (int) toggle;
     }
 
     @Override
@@ -60,26 +47,6 @@ public class CompassWindow extends BaseWindow {
 
     @Override
     public void render() {
-    }
-
-    @Override
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    @Override
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    @Override
-    public int getX() {
-        return x;
-    }
-
-    @Override
-    public int getY() {
-        return y;
     }
 
     @Override

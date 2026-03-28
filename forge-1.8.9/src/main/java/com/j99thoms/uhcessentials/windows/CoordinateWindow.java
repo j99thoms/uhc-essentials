@@ -14,14 +14,9 @@ public class CoordinateWindow extends ThemedWindow {
     private static final int DEFAULT_X = 2;
     private static final int DEFAULT_Y = 2;
 
-    private int x = DEFAULT_X;
-    private int y = DEFAULT_Y;
-
     private String direction;
     private String xSign;
     private String zSign;
-
-    private double toggle = 1;
 
     private int width;
     private int height = 30;
@@ -32,6 +27,8 @@ public class CoordinateWindow extends ThemedWindow {
     public CoordinateWindow(HUDGraphics hudGraphics, Minecraft mc, WindowTheme theme) {
         super(hudGraphics, theme);
         this.mc = mc;
+        setX(DEFAULT_X);
+        setY(DEFAULT_Y);
         fileManager = new FileManager("CoordPos", 3);
         load();
     }
@@ -42,20 +39,10 @@ public class CoordinateWindow extends ThemedWindow {
     }
 
     @Override
-    public void toggle() {
-        toggle = toggle == 0 ? 1 : 0;
-    }
-
-    @Override
     public void setToDefault() {
         setX(DEFAULT_X);
         setY(DEFAULT_Y);
         save();
-    }
-
-    @Override
-    public int getToggled() {
-        return (int) toggle;
     }
 
     @Override
@@ -151,26 +138,6 @@ public class CoordinateWindow extends ThemedWindow {
         GlStateManager.disableTexture2D();
         xSign = "";
         zSign = "";
-    }
-
-    @Override
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    @Override
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    @Override
-    public int getX() {
-        return this.x;
-    }
-
-    @Override
-    public int getY() {
-        return this.y;
     }
 
     @Override

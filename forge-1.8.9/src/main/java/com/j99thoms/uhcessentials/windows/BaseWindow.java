@@ -5,11 +5,13 @@ import com.j99thoms.uhcessentials.HUDGraphics;
 public abstract class BaseWindow {
 
     protected final HUDGraphics hudGraphics;
+    protected int x;
+    protected int y;
+    protected double toggle = 1;
 
     protected BaseWindow(HUDGraphics hudGraphics) {
         this.hudGraphics = hudGraphics;
     }
-
 
     public abstract void update();
 
@@ -17,13 +19,13 @@ public abstract class BaseWindow {
 
     public abstract void setToDefault();
 
-    public abstract void setX(int x);
+    public void setX(int x) { this.x = x; }
 
-    public abstract void setY(int y);
+    public void setY(int y) { this.y = y; }
 
-    public abstract int getX();
+    public int getX() { return x; }
 
-    public abstract int getY();
+    public int getY() { return y; }
 
     public abstract int getWidth();
 
@@ -33,9 +35,9 @@ public abstract class BaseWindow {
 
     public abstract void load();
 
-    public abstract void toggle();
+    public void toggle() { toggle = toggle == 0 ? 1 : 0; }
 
-    public abstract int getToggled();
+    public int getToggled() { return (int) toggle; }
 
     public abstract String getToolTip();
 

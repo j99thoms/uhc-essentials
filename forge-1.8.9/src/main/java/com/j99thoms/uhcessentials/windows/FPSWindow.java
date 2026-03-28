@@ -11,9 +11,6 @@ public class FPSWindow extends ThemedWindow {
     private static final int DEFAULT_X = 2;
     private static final int DEFAULT_Y = 34;
 
-    private int x = DEFAULT_X;
-    private int y = DEFAULT_Y;
-
     private int width = 0;
 
     private ArrayList<Double> data = new ArrayList<Double>();
@@ -21,11 +18,11 @@ public class FPSWindow extends ThemedWindow {
 
     private final Minecraft mc;
 
-    private double toggle = 1;
-
     public FPSWindow(HUDGraphics hudGraphics, Minecraft mc, WindowTheme theme) {
         super(hudGraphics, theme);
         this.mc = mc;
+        setX(DEFAULT_X);
+        setY(DEFAULT_Y);
         fileManager = new FileManager("FPSWindow", 3);
         load();
     }
@@ -36,20 +33,10 @@ public class FPSWindow extends ThemedWindow {
     }
 
     @Override
-    public void toggle() {
-        toggle = toggle == 0 ? 1 : 0;
-    }
-
-    @Override
     public void setToDefault() {
         setX(DEFAULT_X);
         setY(DEFAULT_Y);
         save();
-    }
-
-    @Override
-    public int getToggled() {
-        return (int) toggle;
     }
 
     @Override
@@ -70,26 +57,6 @@ public class FPSWindow extends ThemedWindow {
 
     @Override
     public void render() {
-    }
-
-    @Override
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    @Override
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    @Override
-    public int getX() {
-        return x;
-    }
-
-    @Override
-    public int getY() {
-        return y;
     }
 
     @Override

@@ -12,12 +12,7 @@ public class BiomeWindow extends ThemedWindow {
     private static final int DEFAULT_X = 2;
     private static final int DEFAULT_Y = 46;
 
-    private int x = DEFAULT_X;
-    private int y = DEFAULT_Y;
-
     private int width = 0;
-
-    private double toggle = 1;
 
     private ArrayList<Double> data = new ArrayList<Double>();
     private final FileManager fileManager;
@@ -27,6 +22,8 @@ public class BiomeWindow extends ThemedWindow {
     public BiomeWindow(HUDGraphics hudGraphics, Minecraft mc, WindowTheme theme) {
         super(hudGraphics, theme);
         this.mc = mc;
+        setX(DEFAULT_X);
+        setY(DEFAULT_Y);
         fileManager = new FileManager("BiomeWindow", 3);
         load();
     }
@@ -41,16 +38,6 @@ public class BiomeWindow extends ThemedWindow {
         setX(DEFAULT_X);
         setY(DEFAULT_Y);
         save();
-    }
-
-    @Override
-    public void toggle() {
-        toggle = toggle == 0 ? 1 : 0;
-    }
-
-    @Override
-    public int getToggled() {
-        return (int) toggle;
     }
 
     @Override
@@ -73,26 +60,6 @@ public class BiomeWindow extends ThemedWindow {
 
     @Override
     public void render() {
-    }
-
-    @Override
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    @Override
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    @Override
-    public int getX() {
-        return x;
-    }
-
-    @Override
-    public int getY() {
-        return y;
     }
 
     @Override
