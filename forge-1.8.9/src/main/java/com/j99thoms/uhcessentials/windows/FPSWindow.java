@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 
 import com.j99thoms.uhcessentials.BetterHUD;
 
-public class FPSWindow extends BaseWindow {
+public class FPSWindow extends BaseWindow implements Colorizable {
 
     private final BetterHUD betterHUD;
 
@@ -29,11 +29,6 @@ public class FPSWindow extends BaseWindow {
         this.theme = theme;
         fileManager = new FileManager("FPSWindow", 3);
         load();
-    }
-
-    @Override
-    public boolean isThemed() {
-        return true;
     }
 
     @Override

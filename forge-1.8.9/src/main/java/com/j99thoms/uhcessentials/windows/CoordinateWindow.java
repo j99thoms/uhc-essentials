@@ -9,7 +9,7 @@ import net.minecraft.util.MathHelper;
 
 import com.j99thoms.uhcessentials.BetterHUD;
 
-public class CoordinateWindow extends BaseWindow {
+public class CoordinateWindow extends BaseWindow implements Colorizable {
 
     private final BetterHUD betterHUD;
     private final FontRenderer fontRenderer;
@@ -39,11 +39,6 @@ public class CoordinateWindow extends BaseWindow {
         this.theme = theme;
         fileManager = new FileManager("CoordPos", 3);
         load();
-    }
-
-    @Override
-    public boolean isThemed() {
-        return true;
     }
 
     @Override

@@ -14,22 +14,10 @@ public class CompassWindow extends BaseWindow {
     private int x = 1;
     private int y = 68;
 
-    private int fillRed = 69;
-    private int fillGreen = 69;
-    private int fillBlue = 69;
-    private int fillAlpha = 150;
-
-    private int borderRed = 0;
-    private int borderGreen = 0;
-    private int borderBlue = 0;
-    private int borderAlpha = 255;
-
     private int width = 0;
     private int height = 0;
 
     private double toggle = 1;
-
-    private float thickness = .8f;
 
     private ArrayList<Double> data = new ArrayList<Double>();
     private final FileManager fileManager;
@@ -94,63 +82,6 @@ public class CompassWindow extends BaseWindow {
     @Override
     public int getY() {
         return y;
-    }
-
-    @Override
-    public void setRGBA(int red, int green, int blue, int alpha) {
-    }
-
-    @Override
-    public int getR() {
-        return 0;
-    }
-
-    @Override
-    public int getG() {
-        return 0;
-    }
-
-    @Override
-    public int getB() {
-        return 0;
-    }
-
-    @Override
-    public int getA() {
-        return 0;
-    }
-
-    @Override
-    public void setBorderRGB(int red, int green, int blue, int alpha) {
-    }
-
-    @Override
-    public int getBorderR() {
-        return 0;
-    }
-
-    @Override
-    public int getBorderG() {
-        return 0;
-    }
-
-    @Override
-    public int getBorderB() {
-        return 0;
-    }
-
-    @Override
-    public int getBorderA() {
-        return 0;
-    }
-
-    @Override
-    public void setThickness(float thickness) {
-    }
-
-    @Override
-    public double getThickness() {
-        return 0;
     }
 
     @Override

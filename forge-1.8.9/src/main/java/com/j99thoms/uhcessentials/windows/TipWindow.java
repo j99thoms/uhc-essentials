@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.j99thoms.uhcessentials.BetterHUD;
 
-public class TipWindow extends BaseWindow {
+public class TipWindow extends BaseWindow implements Colorizable {
 
     private static final Logger LOGGER = LogManager.getLogger(TipWindow.class);
 
@@ -43,11 +43,6 @@ public class TipWindow extends BaseWindow {
         this.betterHUD = betterHUD;
         this.theme = theme;
         this.tips = new ArrayList<String>();
-    }
-
-    @Override
-    public boolean isThemed() {
-        return true;
     }
 
     @Override

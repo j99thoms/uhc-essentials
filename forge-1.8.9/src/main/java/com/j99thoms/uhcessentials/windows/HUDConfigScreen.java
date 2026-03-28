@@ -317,10 +317,10 @@ public class HUDConfigScreen extends GuiScreen {
                 draggedWindow = windowManager.windows.get(i);
                 if (x < windowManager.windows.get(i).getX() || x > windowManager.windows.get(i).getX() + windowManager.windows.get(i).getWidth()
                         || y < windowManager.windows.get(i).getY() || y > windowManager.windows.get(i).getY() + windowManager.windows.get(i).getHeight()
-                        || !draggedWindow.isThemed())
+                        || !(draggedWindow instanceof Colorizable))
                     continue;
                 if (!on) {
-                    color = new Colorizer(betterHUD, draggedWindow, mc);
+                    color = new Colorizer(betterHUD, (Colorizable) draggedWindow, mc);
                     on = true;
                     break;
                 }
@@ -336,16 +336,16 @@ public class HUDConfigScreen extends GuiScreen {
                 BaseWindow hoveredWindow = windowManager.windows.get(i);
                 if (previewAlpha > 255) {
                     alphaDown = true;
-                } else if (previewAlpha < 0 && hoveredWindow.isThemed()) {
+                } else if (previewAlpha < 0 && hoveredWindow instanceof Colorizable) {
                     alphaDown = false;
                     previewR = random.nextInt(255);
                     previewG = random.nextInt(255);
                     previewB = random.nextInt(255);
-                } else if (previewAlpha < 150 && !hoveredWindow.isThemed()) {
+                } else if (previewAlpha < 150 && !(hoveredWindow instanceof Colorizable)) {
                     alphaDown = false;
                 }
                 int time = 10;
-                if (hoveredWindow.isThemed()) {
+                if (hoveredWindow instanceof Colorizable) {
                     time = 5;
                 }
                 if (System.currentTimeMillis() - lastTime > time) {
@@ -359,7 +359,7 @@ public class HUDConfigScreen extends GuiScreen {
                         if (betterHUD.getFontRenderer().getStringWidth(split[j]) > longestWidth)
                             longestWidth = betterHUD.getFontRenderer().getStringWidth(split[j]);
                     }
-                    if (hoveredWindow.isThemed()) {
+                    if (hoveredWindow instanceof Colorizable) {
                         betterHUD.drawHUDRectWithBorder(x - 1 + 10, y - 1, longestWidth + 2, split.length * 10,
                                 previewR, previewG, previewB, previewAlpha,
                                 theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), previewAlpha,

@@ -7,7 +7,7 @@ import net.minecraft.util.BlockPos;
 
 import com.j99thoms.uhcessentials.BetterHUD;
 
-public class BiomeWindow extends BaseWindow {
+public class BiomeWindow extends BaseWindow implements Colorizable {
 
     private final BetterHUD betterHUD;
 
@@ -31,11 +31,6 @@ public class BiomeWindow extends BaseWindow {
         this.theme = theme;
         fileManager = new FileManager("BiomeWindow", 3);
         load();
-    }
-
-    @Override
-    public boolean isThemed() {
-        return true;
     }
 
     @Override
