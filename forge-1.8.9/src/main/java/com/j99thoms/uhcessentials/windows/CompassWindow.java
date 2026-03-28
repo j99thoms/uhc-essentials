@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
 
-import com.j99thoms.uhcessentials.BetterHUD;
+import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class CompassWindow extends BaseWindow {
-
-    private final BetterHUD betterHUD;
 
     private static final int DEFAULT_X = 1;
     private static final int DEFAULT_Y = 68;
@@ -27,9 +25,9 @@ public class CompassWindow extends BaseWindow {
 
     private final Minecraft mc;
 
-    public CompassWindow(BetterHUD betterHUD, Minecraft mc) {
+    public CompassWindow(HUDGraphics hudGraphics, Minecraft mc) {
+        super(hudGraphics);
         this.mc = mc;
-        this.betterHUD = betterHUD;
         fileManager = new FileManager("Compass", 3);
         load();
     }
@@ -58,7 +56,7 @@ public class CompassWindow extends BaseWindow {
 
     @Override
     public void update() {
-        betterHUD.drawItemSprite(x, y, Items.compass);
+        hudGraphics.drawItemSprite(x, y, Items.compass);
         if ((int) toggle == 0)
             mc.fontRendererObj.drawStringWithShadow("X", x, y, 0xffffffff);
     }

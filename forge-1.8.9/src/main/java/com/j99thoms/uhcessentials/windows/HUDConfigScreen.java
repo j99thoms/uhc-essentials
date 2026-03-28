@@ -13,13 +13,13 @@ import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import com.j99thoms.uhcessentials.BetterHUD;
+import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class HUDConfigScreen extends GuiScreen {
 
     private static boolean[] keyStates;
     private WindowManager windowManager;
-    private BetterHUD betterHUD;
+    private HUDGraphics hudGraphics;
     private Minecraft mc;
     private OptionMenu optionMenu;
     private boolean fullbright = false;
@@ -66,11 +66,11 @@ public class HUDConfigScreen extends GuiScreen {
         guiOpen = false;
     }
 
-    public HUDConfigScreen(WindowManager windowManager, Minecraft mc, BetterHUD betterHUD) {
+    public HUDConfigScreen(WindowManager windowManager, Minecraft mc, HUDGraphics hudGraphics) {
         this.windowManager = windowManager;
         keyStates = new boolean[256];
         this.mc = mc;
-        this.betterHUD = betterHUD;
+        this.hudGraphics = hudGraphics;
         this.theme = windowManager.theme;
         gammaFileManager = new FileManager("Gamma", 1);
         keysFileManager = new FileManager("keys.txt", 2);
@@ -84,7 +84,7 @@ public class HUDConfigScreen extends GuiScreen {
             drag = (int) keysData.get(0).doubleValue();
             bright = (int) keysData.get(1).doubleValue();
         }
-        optionMenu = new OptionMenu(mc, this, betterHUD);
+        optionMenu = new OptionMenu(mc, this, hudGraphics);
         gammaData = gammaFileManager.getArray();
         if (gammaData.size() < 1) {
             gammaData.add((double) mc.gameSettings.gammaSetting);
@@ -109,33 +109,33 @@ public class HUDConfigScreen extends GuiScreen {
         }
         if (mouseFree && !optionsMenu && !on) {
             ScaledResolution scaledRes = new ScaledResolution(mc);
-            betterHUD.drawHUDRectWithBorder(
-                    scaledRes.getScaledWidth() / 2 - betterHUD.getFontRenderer().getStringWidth(options) / 2,
+            hudGraphics.drawHUDRectWithBorder(
+                    scaledRes.getScaledWidth() / 2 - hudGraphics.getStringWidth(options) / 2,
                     scaledRes.getScaledHeight() / 2 - 5,
-                    betterHUD.getFontRenderer().getStringWidth(options) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
-            betterHUD.drawShadowedFont(options,
-                    scaledRes.getScaledWidth() / 2 - betterHUD.getFontRenderer().getStringWidth(options) / 2 + 1,
+                    hudGraphics.getStringWidth(options) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
+            hudGraphics.drawShadowedFont(options,
+                    scaledRes.getScaledWidth() / 2 - hudGraphics.getStringWidth(options) / 2 + 1,
                     scaledRes.getScaledHeight() / 2 - 4, -1);
-            betterHUD.drawHUDRectWithBorder(
-                    scaledRes.getScaledWidth() / 2 - betterHUD.getFontRenderer().getStringWidth(resetAll) / 2,
+            hudGraphics.drawHUDRectWithBorder(
+                    scaledRes.getScaledWidth() / 2 - hudGraphics.getStringWidth(resetAll) / 2,
                     scaledRes.getScaledHeight() / 2 - 5 + 12,
-                    betterHUD.getFontRenderer().getStringWidth(resetAll) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
-            betterHUD.drawShadowedFont(resetAll,
-                    scaledRes.getScaledWidth() / 2 - betterHUD.getFontRenderer().getStringWidth(resetAll) / 2 + 1,
+                    hudGraphics.getStringWidth(resetAll) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
+            hudGraphics.drawShadowedFont(resetAll,
+                    scaledRes.getScaledWidth() / 2 - hudGraphics.getStringWidth(resetAll) / 2 + 1,
                     scaledRes.getScaledHeight() / 2 - 4 + 12, -1);
-            betterHUD.drawHUDRectWithBorder(
-                    scaledRes.getScaledWidth() / 2 - betterHUD.getFontRenderer().getStringWidth(toggleButton) / 2,
+            hudGraphics.drawHUDRectWithBorder(
+                    scaledRes.getScaledWidth() / 2 - hudGraphics.getStringWidth(toggleButton) / 2,
                     scaledRes.getScaledHeight() / 2 - 5 + 24,
-                    betterHUD.getFontRenderer().getStringWidth(toggleButton) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
-            betterHUD.drawShadowedFont(toggleButton,
-                    scaledRes.getScaledWidth() / 2 - betterHUD.getFontRenderer().getStringWidth(toggleButton) / 2 + 1,
+                    hudGraphics.getStringWidth(toggleButton) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
+            hudGraphics.drawShadowedFont(toggleButton,
+                    scaledRes.getScaledWidth() / 2 - hudGraphics.getStringWidth(toggleButton) / 2 + 1,
                     scaledRes.getScaledHeight() / 2 - 4 + 24, -1);
-            betterHUD.drawHUDRectWithBorder(
-                    scaledRes.getScaledWidth() / 2 - betterHUD.getFontRenderer().getStringWidth(copyCoordinates) / 2,
+            hudGraphics.drawHUDRectWithBorder(
+                    scaledRes.getScaledWidth() / 2 - hudGraphics.getStringWidth(copyCoordinates) / 2,
                     scaledRes.getScaledHeight() / 2 - 5 + 36,
-                    betterHUD.getFontRenderer().getStringWidth(copyCoordinates) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
-            betterHUD.drawShadowedFont(copyCoordinates,
-                    scaledRes.getScaledWidth() / 2 - betterHUD.getFontRenderer().getStringWidth(copyCoordinates) / 2 + 1,
+                    hudGraphics.getStringWidth(copyCoordinates) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
+            hudGraphics.drawShadowedFont(copyCoordinates,
+                    scaledRes.getScaledWidth() / 2 - hudGraphics.getStringWidth(copyCoordinates) / 2 + 1,
                     scaledRes.getScaledHeight() / 2 - 4 + 36, -1);
         }
         if (mouseFree && !optionsMenu) {
@@ -238,8 +238,8 @@ public class HUDConfigScreen extends GuiScreen {
         int screenHeight = scaledRes.getScaledHeight();
         if (Mouse.isButtonDown(0) && (!pressed || grabbed) && !optionsMenu) {
             if (!Mouse.isButtonDown(3)) {
-                if (x >= screenWidth / 2 - betterHUD.getFontRenderer().getStringWidth(options) / 2
-                        && x <= screenWidth / 2 + betterHUD.getFontRenderer().getStringWidth(options) / 2
+                if (x >= screenWidth / 2 - hudGraphics.getStringWidth(options) / 2
+                        && x <= screenWidth / 2 + hudGraphics.getStringWidth(options) / 2
                         && y >= screenHeight / 2 - 22 && y <= screenHeight / 2 + 22) {
                     windowManager.reset();
                 }
@@ -256,29 +256,29 @@ public class HUDConfigScreen extends GuiScreen {
                             firstDrag = true;
                             return;
                         }
-                        if (x >= screenWidth / 2 - betterHUD.getFontRenderer().getStringWidth(options) / 2
-                                && x <= screenWidth / 2 + betterHUD.getFontRenderer().getStringWidth(options) / 2
+                        if (x >= screenWidth / 2 - hudGraphics.getStringWidth(options) / 2
+                                && x <= screenWidth / 2 + hudGraphics.getStringWidth(options) / 2
                                 && y >= screenHeight / 2 - 5 && y <= screenHeight / 2 + 5 && !on) {
                             mc.displayGuiScreen(null);
                             optionsMenu = true;
                             return;
                         }
-                        if (x >= screenWidth / 2 - betterHUD.getFontRenderer().getStringWidth(resetAll) / 2
-                                && x <= screenWidth / 2 + betterHUD.getFontRenderer().getStringWidth(resetAll) / 2
+                        if (x >= screenWidth / 2 - hudGraphics.getStringWidth(resetAll) / 2
+                                && x <= screenWidth / 2 + hudGraphics.getStringWidth(resetAll) / 2
                                 && y >= screenHeight / 2 - 5 + 12 && y <= screenHeight / 2 + 5 + 12 && !on) {
                             windowManager.resetAllWindowsPositions();
                             pressed = true;
                             return;
                         }
-                        if (x >= screenWidth / 2 - betterHUD.getFontRenderer().getStringWidth(toggleButton) / 2
-                                && x <= screenWidth / 2 + betterHUD.getFontRenderer().getStringWidth(toggleButton) / 2
+                        if (x >= screenWidth / 2 - hudGraphics.getStringWidth(toggleButton) / 2
+                                && x <= screenWidth / 2 + hudGraphics.getStringWidth(toggleButton) / 2
                                 && y >= screenHeight / 2 - 5 + 24 && y <= screenHeight / 2 + 5 + 24 && !on) {
                             WindowManager.toggled = !WindowManager.toggled;
                             pressed = true;
                             return;
                         }
-                        if (x < screenWidth / 2 - betterHUD.getFontRenderer().getStringWidth(copyCoordinates) / 2
-                                || x > screenWidth / 2 + betterHUD.getFontRenderer().getStringWidth(copyCoordinates) / 2
+                        if (x < screenWidth / 2 - hudGraphics.getStringWidth(copyCoordinates) / 2
+                                || x > screenWidth / 2 + hudGraphics.getStringWidth(copyCoordinates) / 2
                                 || y < screenHeight / 2 - 5 + 36 || y > screenHeight / 2 + 5 + 36 || on)
                             continue;
                         String myString = "x: " + (int) mc.thePlayer.posX
@@ -320,7 +320,7 @@ public class HUDConfigScreen extends GuiScreen {
                         || !(draggedWindow instanceof Colorizable))
                     continue;
                 if (!on) {
-                    color = new Colorizer(betterHUD, (Colorizable) draggedWindow, mc);
+                    color = new Colorizer(hudGraphics, (Colorizable) draggedWindow, mc);
                     on = true;
                     break;
                 }
@@ -356,31 +356,31 @@ public class HUDConfigScreen extends GuiScreen {
                     String[] split = hoveredWindow.getToolTip().split("`");
                     int longestWidth = 0;
                     for (int j = 0; j < split.length; j++) {
-                        if (betterHUD.getFontRenderer().getStringWidth(split[j]) > longestWidth)
-                            longestWidth = betterHUD.getFontRenderer().getStringWidth(split[j]);
+                        if (hudGraphics.getStringWidth(split[j]) > longestWidth)
+                            longestWidth = hudGraphics.getStringWidth(split[j]);
                     }
                     if (hoveredWindow instanceof Colorizable) {
-                        betterHUD.drawHUDRectWithBorder(x - 1 + 10, y - 1, longestWidth + 2, split.length * 10,
+                        hudGraphics.drawHUDRectWithBorder(x - 1 + 10, y - 1, longestWidth + 2, split.length * 10,
                                 previewR, previewG, previewB, previewAlpha,
                                 theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), previewAlpha,
                                 theme.getThickness());
                     } else {
-                        betterHUD.drawHUDRectWithBorder(x - 1 + 10, y - 1, longestWidth + 2, split.length * 10,
+                        hudGraphics.drawHUDRectWithBorder(x - 1 + 10, y - 1, longestWidth + 2, split.length * 10,
                                 theme.getR(), theme.getG(), theme.getB(), previewAlpha,
                                 theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
                                 theme.getThickness());
                     }
                     for (int j = 0; j < split.length; j++) {
-                        betterHUD.drawShadowedFont(split[j], x + 10, y + j * 10, -1);
+                        hudGraphics.drawShadowedFont(split[j], x + 10, y + j * 10, -1);
                     }
                     continue;
                 }
-                int tipWidth = betterHUD.getFontRenderer().getStringWidth(hoveredWindow.getToolTip());
-                betterHUD.drawHUDRectWithBorder(x - 1 + 10, y - 1, tipWidth + 2, 10,
+                int tipWidth = hudGraphics.getStringWidth(hoveredWindow.getToolTip());
+                hudGraphics.drawHUDRectWithBorder(x - 1 + 10, y - 1, tipWidth + 2, 10,
                         theme.getR(), theme.getG(), theme.getB(), previewAlpha,
                         theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
                         theme.getThickness());
-                betterHUD.drawShadowedFont(hoveredWindow.getToolTip(), x + 10, y, -1);
+                hudGraphics.drawShadowedFont(hoveredWindow.getToolTip(), x + 10, y, -1);
             }
         }
     }

@@ -9,13 +9,13 @@ import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import com.j99thoms.uhcessentials.BetterHUD;
+import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class OptionMenu extends GuiScreen {
 
     private Minecraft mc;
     private HUDConfigScreen hudConfigScreen;
-    private BetterHUD betterHUD;
+    private HUDGraphics hudGraphics;
     private FileManager fileManager;
     private ArrayList<Double> data = new ArrayList<Double>();
 
@@ -39,10 +39,10 @@ public class OptionMenu extends GuiScreen {
     String label1 = "Draggable HUD";
     String label2 = "Full Gamma Bright";
 
-    public OptionMenu(Minecraft mc, HUDConfigScreen hudConfigScreen, BetterHUD betterHUD) {
+    public OptionMenu(Minecraft mc, HUDConfigScreen hudConfigScreen, HUDGraphics hudGraphics) {
         this.mc = mc;
         this.hudConfigScreen = hudConfigScreen;
-        this.betterHUD = betterHUD;
+        this.hudGraphics = hudGraphics;
         this.button1Width = 40;
         this.button2Width = 40;
         this.button1Height = 10;
@@ -78,9 +78,9 @@ public class OptionMenu extends GuiScreen {
         button1Y = scaledRes.getScaledHeight() / 2 - button1Height / 2 - 22;
         button2X = scaledRes.getScaledWidth() / 2 - button2Width / 2;
         button2Y = scaledRes.getScaledHeight() / 2 - button2Height / 2 + 22;
-        betterHUD.drawHUDRectWithBorder(button1X, button1Y, button1Width, button1Height, 0, 0, 0, 255, 255, 255, 255, 255, 1.5);
+        hudGraphics.drawHUDRectWithBorder(button1X, button1Y, button1Width, button1Height, 0, 0, 0, 255, 255, 255, 255, 255, 1.5);
         mc.fontRendererObj.drawString(label1, button1X - mc.fontRendererObj.getStringWidth(label1) / 4, button1Y - 12, -1);
-        betterHUD.drawHUDRectWithBorder(button2X, button2Y, button2Width, button2Height, 0, 0, 0, 255, 255, 255, 255, 255, 1.5);
+        hudGraphics.drawHUDRectWithBorder(button2X, button2Y, button2Width, button2Height, 0, 0, 0, 255, 255, 255, 255, 255, 1.5);
         mc.fontRendererObj.drawString(label2, button2X - mc.fontRendererObj.getStringWidth(label2) / 4, button2Y - 12, -1);
         if (!awaitingKey1 && !awaitingKey2) {
             mc.fontRendererObj.drawString(key1Name, button1X + 1, button1Y + 1, -1);

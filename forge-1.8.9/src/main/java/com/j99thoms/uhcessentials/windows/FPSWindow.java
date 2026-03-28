@@ -4,11 +4,9 @@ import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
 
-import com.j99thoms.uhcessentials.BetterHUD;
+import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class FPSWindow extends ThemedWindow {
-
-    private final BetterHUD betterHUD;
 
     private static final int DEFAULT_X = 2;
     private static final int DEFAULT_Y = 34;
@@ -25,10 +23,9 @@ public class FPSWindow extends ThemedWindow {
 
     private double toggle = 1;
 
-    public FPSWindow(BetterHUD betterHUD, Minecraft mc, WindowTheme theme) {
-        super(theme);
+    public FPSWindow(HUDGraphics hudGraphics, Minecraft mc, WindowTheme theme) {
+        super(hudGraphics, theme);
         this.mc = mc;
-        this.betterHUD = betterHUD;
         fileManager = new FileManager("FPSWindow", 3);
         load();
     }
@@ -60,7 +57,7 @@ public class FPSWindow extends ThemedWindow {
         int fpsCount = Minecraft.getDebugFPS();
         String info = fpsCount + " FPS";
         width = mc.fontRendererObj.getStringWidth(info);
-        betterHUD.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
+        hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
                 theme.getR(), theme.getG(), theme.getB(), theme.getA(),
                 theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
                 theme.getThickness());

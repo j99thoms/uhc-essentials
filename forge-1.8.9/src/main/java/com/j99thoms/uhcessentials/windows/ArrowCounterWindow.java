@@ -8,11 +8,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.init.Items;
 
-import com.j99thoms.uhcessentials.BetterHUD;
+import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class ArrowCounterWindow extends BaseWindow {
-
-    private final BetterHUD betterHUD;
 
     private static final int DEFAULT_X = 16;
     private static final int DEFAULT_Y = 68;
@@ -39,9 +37,9 @@ public class ArrowCounterWindow extends BaseWindow {
 
     private double toggle = 1;
 
-    public ArrowCounterWindow(BetterHUD betterHUD, Minecraft mc) {
+    public ArrowCounterWindow(HUDGraphics hudGraphics, Minecraft mc) {
+        super(hudGraphics);
         this.mc = mc;
-        this.betterHUD = betterHUD;
         fileManager = new FileManager("Arrow", 3);
         load();
     }
@@ -92,7 +90,7 @@ public class ArrowCounterWindow extends BaseWindow {
                     lastTime = System.currentTimeMillis();
                     timer++;
                 } else {
-                    betterHUD.drawHUDRectWithBorder(getX() + 2, getY() + 2, getWidth() + 1, getHeight() + 1,
+                    hudGraphics.drawHUDRectWithBorder(getX() + 2, getY() + 2, getWidth() + 1, getHeight() + 1,
                             255, 0, 0, 255, 0, 0, 0, 255, 1.0);
                 }
             } else if (timer >= 3) {
@@ -105,7 +103,7 @@ public class ArrowCounterWindow extends BaseWindow {
             lastTime = System.currentTimeMillis();
         }
 
-        betterHUD.drawItemSprite(x, y, Items.arrow);
+        hudGraphics.drawItemSprite(x, y, Items.arrow);
 
         if (toggle != 2 || count < 64)
             mc.fontRendererObj.drawStringWithShadow(count + "", x + 11, y + 9, 0xffffffff);

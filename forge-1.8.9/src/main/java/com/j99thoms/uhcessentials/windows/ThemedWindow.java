@@ -1,10 +1,13 @@
 package com.j99thoms.uhcessentials.windows;
 
+import com.j99thoms.uhcessentials.HUDGraphics;
+
 public abstract class ThemedWindow extends BaseWindow implements Colorizable {
 
     protected final WindowTheme theme;
 
-    protected ThemedWindow(WindowTheme theme) {
+    protected ThemedWindow(HUDGraphics hudGraphics, WindowTheme theme) {
+        super(hudGraphics);
         this.theme = theme;
     }
 

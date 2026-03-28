@@ -7,11 +7,11 @@ import net.minecraft.client.renderer.GlStateManager;
 
 import org.lwjgl.input.Mouse;
 
-import com.j99thoms.uhcessentials.BetterHUD;
+import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class Colorizer extends GuiScreen {
 
-    private final BetterHUD betterHUD;
+    private final HUDGraphics hudGraphics;
     private final Colorizable window;
     private final Minecraft mc;
 
@@ -52,8 +52,8 @@ public class Colorizer extends GuiScreen {
     private int cooldown = 0;
     private boolean isCooldown = false;
 
-    public Colorizer(BetterHUD betterHUD, Colorizable window, Minecraft mc) {
-        this.betterHUD = betterHUD;
+    public Colorizer(HUDGraphics hudGraphics, Colorizable window, Minecraft mc) {
+        this.hudGraphics = hudGraphics;
         this.window = window;
         this.mc = mc;
         getInts();
@@ -211,7 +211,7 @@ public class Colorizer extends GuiScreen {
             renderSlider(scaledRes.getScaledWidth() / 2 - 127, scaledRes.getScaledHeight() / 2 - 2 + 64, "Alpha");
             renderKnob(alphaKnobX, alphaKnobY, "alpha");
         }
-        betterHUD.drawHUDRectWithBorder(scaledRes.getScaledWidth() / 2 + 150, scaledRes.getScaledHeight() / 2 - 25, 50, 50,
+        hudGraphics.drawHUDRectWithBorder(scaledRes.getScaledWidth() / 2 + 150, scaledRes.getScaledHeight() / 2 - 25, 50, 50,
                 fillRed, fillGreen, fillBlue, fillAlpha,
                 borderRed, borderGreen, borderBlue, borderAlpha, window.getThickness());
         int px = scaledRes.getScaledWidth() / 2 + 150 - 1;
@@ -219,14 +219,14 @@ public class Colorizer extends GuiScreen {
         int pwidth = 13;
         int pheight = 9;
         if (!border) {
-            betterHUD.drawHUDRectWithBorder(px, py, pwidth, pheight, 120, 120, 120, 150, 0, 0, 0, 255, 0.5);
-            betterHUD.drawHUDRectWithBorder(px, py + 10, pwidth + 21, pheight, 69, 69, 69, 150, 0, 0, 0, 255, 0.2f);
+            hudGraphics.drawHUDRectWithBorder(px, py, pwidth, pheight, 120, 120, 120, 150, 0, 0, 0, 255, 0.5);
+            hudGraphics.drawHUDRectWithBorder(px, py + 10, pwidth + 21, pheight, 69, 69, 69, 150, 0, 0, 0, 255, 0.2f);
         } else {
-            betterHUD.drawHUDRectWithBorder(px, py + 10, pwidth + 21, pheight, 120, 120, 120, 150, 0, 0, 0, 255, 0.5);
-            betterHUD.drawHUDRectWithBorder(px, py, pwidth, pheight, 69, 69, 69, 150, 0, 0, 0, 255, 0.2f);
+            hudGraphics.drawHUDRectWithBorder(px, py + 10, pwidth + 21, pheight, 120, 120, 120, 150, 0, 0, 0, 255, 0.5);
+            hudGraphics.drawHUDRectWithBorder(px, py, pwidth, pheight, 69, 69, 69, 150, 0, 0, 0, 255, 0.2f);
         }
-        betterHUD.drawShadowedFont("BG", scaledRes.getScaledWidth() / 2 + 150, scaledRes.getScaledHeight() / 2 - 25 + 60, 0xFFFFFF);
-        betterHUD.drawShadowedFont("Outline", scaledRes.getScaledWidth() / 2 + 150, scaledRes.getScaledHeight() / 2 - 25 + 70, 0xFFFFFF);
+        hudGraphics.drawShadowedFont("BG", scaledRes.getScaledWidth() / 2 + 150, scaledRes.getScaledHeight() / 2 - 25 + 60, 0xFFFFFF);
+        hudGraphics.drawShadowedFont("Outline", scaledRes.getScaledWidth() / 2 + 150, scaledRes.getScaledHeight() / 2 - 25 + 70, 0xFFFFFF);
         GlStateManager.depthMask(true);
         GlStateManager.disableBlend();
         GlStateManager.enableTexture2D();
@@ -243,53 +243,53 @@ public class Colorizer extends GuiScreen {
                     Math.abs(borderBlue <= 255 ? borderBlue : 255), Math.abs(borderAlpha <= 255 ? borderAlpha : 255));
             getInts();
         }
-        betterHUD.drawHUDRectWithBorder(x, y, 255, 5, 69, 69, 69, 180, 0, 0, 0, 255, 0.5);
+        hudGraphics.drawHUDRectWithBorder(x, y, 255, 5, 69, 69, 69, 180, 0, 0, 0, 255, 0.5);
         GlStateManager.enableTexture2D();
         y -= 10;
         if (!border) {
             if (effector.equalsIgnoreCase("Red")) {
-                betterHUD.drawShadowedFont(effector + ": " + fillRed, x, y, -1);
+                hudGraphics.drawShadowedFont(effector + ": " + fillRed, x, y, -1);
             } else if (effector.equalsIgnoreCase("Green")) {
-                betterHUD.drawShadowedFont(effector + ": " + fillGreen, x, y, -1);
+                hudGraphics.drawShadowedFont(effector + ": " + fillGreen, x, y, -1);
             } else if (effector.equalsIgnoreCase("Blue")) {
-                betterHUD.drawShadowedFont(effector + ": " + fillBlue, x, y, -1);
+                hudGraphics.drawShadowedFont(effector + ": " + fillBlue, x, y, -1);
             } else if (effector.equalsIgnoreCase("Alpha")) {
-                betterHUD.drawShadowedFont(effector + ": " + fillAlpha, x, y, -1);
+                hudGraphics.drawShadowedFont(effector + ": " + fillAlpha, x, y, -1);
             }
         } else if (effector.equalsIgnoreCase("Red")) {
-            betterHUD.drawShadowedFont(effector + ": " + borderRed, x, y, -1);
+            hudGraphics.drawShadowedFont(effector + ": " + borderRed, x, y, -1);
         } else if (effector.equalsIgnoreCase("Green")) {
-            betterHUD.drawShadowedFont(effector + ": " + borderGreen, x, y, -1);
+            hudGraphics.drawShadowedFont(effector + ": " + borderGreen, x, y, -1);
         } else if (effector.equalsIgnoreCase("Blue")) {
-            betterHUD.drawShadowedFont(effector + ": " + borderBlue, x, y, -1);
+            hudGraphics.drawShadowedFont(effector + ": " + borderBlue, x, y, -1);
         } else if (effector.equalsIgnoreCase("Alpha")) {
-            betterHUD.drawShadowedFont(effector + ": " + borderAlpha, x, y, -1);
+            hudGraphics.drawShadowedFont(effector + ": " + borderAlpha, x, y, -1);
         } else if (effector.equalsIgnoreCase("Thickness")) {
-            betterHUD.drawShadowedFont(effector + ": " + thickness / 255.0f, x, y, -1);
+            hudGraphics.drawShadowedFont(effector + ": " + thickness / 255.0f, x, y, -1);
         }
     }
 
     private void renderKnob(int x, int y, String color) {
         if (!border) {
             if (color.equalsIgnoreCase("red")) {
-                betterHUD.drawHUDRectWithBorder(x, y - 1, 2, 7, 255, 0, 0, 255, 0, 0, 0, 255, 0.3f);
+                hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 255, 0, 0, 255, 0, 0, 0, 255, 0.3f);
             } else if (color.equalsIgnoreCase("green")) {
-                betterHUD.drawHUDRectWithBorder(x, y - 1, 2, 7, 0, 255, 0, 255, 0, 0, 0, 255, 0.3f);
+                hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 0, 255, 0, 255, 0, 0, 0, 255, 0.3f);
             } else if (color.equalsIgnoreCase("blue")) {
-                betterHUD.drawHUDRectWithBorder(x, y - 1, 2, 7, 0, 0, 255, 255, 0, 0, 0, 255, 0.3f);
+                hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 0, 0, 255, 255, 0, 0, 0, 255, 0.3f);
             } else if (color.equalsIgnoreCase("alpha")) {
-                betterHUD.drawHUDRectWithBorder(x, y - 1, 2, 7, 255, 255, 255, 100, 0, 0, 0, 255, 0.3f);
+                hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 255, 255, 255, 100, 0, 0, 0, 255, 0.3f);
             }
         } else if (color.equalsIgnoreCase("red")) {
-            betterHUD.drawHUDRectWithBorder(x, y - 1, 2, 7, 255, 0, 0, 255, 0, 0, 0, 255, 0.3f);
+            hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 255, 0, 0, 255, 0, 0, 0, 255, 0.3f);
         } else if (color.equalsIgnoreCase("green")) {
-            betterHUD.drawHUDRectWithBorder(x, y - 1, 2, 7, 0, 255, 0, 255, 0, 0, 0, 255, 0.3f);
+            hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 0, 255, 0, 255, 0, 0, 0, 255, 0.3f);
         } else if (color.equalsIgnoreCase("blue")) {
-            betterHUD.drawHUDRectWithBorder(x, y - 1, 2, 7, 0, 0, 255, 255, 0, 0, 0, 255, 0.3f);
+            hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 0, 0, 255, 255, 0, 0, 0, 255, 0.3f);
         } else if (color.equalsIgnoreCase("alpha")) {
-            betterHUD.drawHUDRectWithBorder(x, y - 1, 2, 7, 255, 255, 255, 100, 0, 0, 0, 255, 0.3f);
+            hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 255, 255, 255, 100, 0, 0, 0, 255, 0.3f);
         } else if (color.equalsIgnoreCase("thickness")) {
-            betterHUD.drawHUDRectWithBorder(x, y - 1, 2, 7, 0, 0, 0, 100, 255, 255, 255, 255, 0.3f);
+            hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 0, 0, 0, 100, 255, 255, 255, 255, 0.3f);
         }
     }
 
