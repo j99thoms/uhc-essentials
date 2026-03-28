@@ -20,13 +20,8 @@ public class TipWindow extends ThemedWindow {
     private static final int DEFAULT_X = 2;
     private static final int DEFAULT_Y = 220;
 
-    private int x = DEFAULT_X;
-    private int y = DEFAULT_Y;
-
     private int width = 0;
     private int height = 0;
-
-    private double toggle = 0;
 
     private final Minecraft mc;
 
@@ -39,6 +34,9 @@ public class TipWindow extends ThemedWindow {
     public TipWindow(HUDGraphics hudGraphics, Minecraft mc, WindowTheme theme) {
         super(hudGraphics, theme);
         this.mc = mc;
+        setX(DEFAULT_X);
+        setY(DEFAULT_Y);
+        this.toggle = 0;
         this.tips = new ArrayList<String>();
     }
 
@@ -73,11 +71,6 @@ public class TipWindow extends ThemedWindow {
     public void setToDefault() {
         setX(DEFAULT_X);
         setY(DEFAULT_Y);
-    }
-
-    @Override
-    public int getToggled() {
-        return (int) toggle;
     }
 
     @Override
@@ -130,26 +123,6 @@ public class TipWindow extends ThemedWindow {
 
     @Override
     public void render() {
-    }
-
-    @Override
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    @Override
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    @Override
-    public int getX() {
-        return x;
-    }
-
-    @Override
-    public int getY() {
-        return y;
     }
 
     @Override
