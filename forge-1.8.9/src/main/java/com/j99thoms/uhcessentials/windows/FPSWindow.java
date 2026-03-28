@@ -16,11 +16,8 @@ public class FPSWindow extends ThemedWindow {
     private ArrayList<Double> data = new ArrayList<Double>();
     private final FileManager fileManager;
 
-    private final Minecraft mc;
-
-    public FPSWindow(HUDGraphics hudGraphics, Minecraft mc, WindowTheme theme) {
+    public FPSWindow(HUDGraphics hudGraphics, WindowTheme theme) {
         super(hudGraphics, theme);
-        this.mc = mc;
         setX(DEFAULT_X);
         setY(DEFAULT_Y);
         fileManager = new FileManager("FPSWindow", 3);

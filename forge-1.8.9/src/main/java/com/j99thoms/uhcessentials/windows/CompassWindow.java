@@ -2,7 +2,6 @@ package com.j99thoms.uhcessentials.windows;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
 
 import com.j99thoms.uhcessentials.HUDGraphics;
@@ -15,11 +14,8 @@ public class CompassWindow extends BaseWindow {
     private ArrayList<Double> data = new ArrayList<Double>();
     private final FileManager fileManager;
 
-    private final Minecraft mc;
-
-    public CompassWindow(HUDGraphics hudGraphics, Minecraft mc) {
+    public CompassWindow(HUDGraphics hudGraphics) {
         super(hudGraphics);
-        this.mc = mc;
         setX(DEFAULT_X);
         setY(DEFAULT_Y);
         fileManager = new FileManager("Compass", 3);

@@ -6,7 +6,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,17 +22,14 @@ public class TipWindow extends ThemedWindow {
     private int width = 0;
     private int height = 0;
 
-    private final Minecraft mc;
-
     private ArrayList<String> tips;
     boolean gotTips = false;
     boolean closeTip = true;
     private int currentTipIndex = 0;
     private String tipOfThePage = "";
 
-    public TipWindow(HUDGraphics hudGraphics, Minecraft mc, WindowTheme theme) {
+    public TipWindow(HUDGraphics hudGraphics, WindowTheme theme) {
         super(hudGraphics, theme);
-        this.mc = mc;
         setX(DEFAULT_X);
         setY(DEFAULT_Y);
         this.toggle = 0;
