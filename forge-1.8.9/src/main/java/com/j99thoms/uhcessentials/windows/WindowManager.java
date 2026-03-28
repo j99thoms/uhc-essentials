@@ -61,13 +61,13 @@ public class WindowManager {
         theme = new WindowTheme("Theme"); // One shared theme for all windows
         coordWindow = new CoordinateWindow(betterHUD, mc, theme);
         hudConfigScreen = new HUDConfigScreen(this, mc, betterHUD);
-        compassWindow = new CompassWindow(betterHUD, mc);
+        compassWindow = new CompassWindow(betterHUD);
         biomeWindow = new BiomeWindow(betterHUD, mc, theme);
-        clockWindow = new ClockWindow(betterHUD, mc);
+        clockWindow = new ClockWindow(betterHUD);
         arrowWindow = new ArrowCounterWindow(betterHUD, mc);
-        fpsWindow = new FPSWindow(betterHUD, mc, theme);
+        fpsWindow = new FPSWindow(betterHUD, theme);
         armorWindow = new ArmorWindow(betterHUD, mc, theme);
-        tipWindow = new TipWindow(betterHUD, mc, theme);
+        tipWindow = new TipWindow(betterHUD, theme);
     }
 
     public void update() {
