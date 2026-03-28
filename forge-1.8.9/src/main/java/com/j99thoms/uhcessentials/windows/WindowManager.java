@@ -3,13 +3,11 @@ package com.j99thoms.uhcessentials.windows;
 import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 
 import com.j99thoms.uhcessentials.BetterHUD;
 
 public class WindowManager {
     ArrayList<BaseWindow> windows;
-    private final FontRenderer fontRenderer;
     private final Minecraft mc;
     private final BetterHUD betterHUD;
     private HUDConfigScreen hudConfigScreen;
@@ -24,14 +22,12 @@ public class WindowManager {
     ArmorWindow armorWindow;
     TipWindow tipWindow;
     FPSWindow fpsWindow;
-    // KillCounterWindow kills;  // TODO: uncomment once KillCounterWindow is ported
     static boolean toggled = true;
 
     private int showAllOverride = 0;
 
-    public WindowManager(BetterHUD betterHUD, FontRenderer fontRenderer, Minecraft mc) {
+    public WindowManager(BetterHUD betterHUD, Minecraft mc) {
         init = false;
-        this.fontRenderer = fontRenderer;
         this.mc = mc;
         this.betterHUD = betterHUD;
         windows = new ArrayList<BaseWindow>();
@@ -44,7 +40,6 @@ public class WindowManager {
         windows.add(armorWindow);
         windows.add(tipWindow);
         windows.add(fpsWindow);
-        // windows.add(kills);
         init = true;
     }
 
@@ -73,7 +68,6 @@ public class WindowManager {
         fpsWindow = new FPSWindow(betterHUD, mc, theme);
         armorWindow = new ArmorWindow(betterHUD, mc, theme);
         tipWindow = new TipWindow(betterHUD, mc, theme);
-        // kills = new KillCounterWindow(betterHUD, fontRenderer, mc, theme);
     }
 
     public void update() {
