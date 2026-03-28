@@ -117,7 +117,7 @@ public class ArmorWindow extends BaseWindow {
                     theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
                     theme.getThickness());
             hudGraphics.drawShadowedFont("No Armor", x, y, 0xFFFFFF);
-            if ((int) toggle == 0) {
+            if (getToggled() == 0) {
                 hudGraphics.drawShadowedFont("X", x - 2, y - 2, 0xFFFFFF);
             }
             GlStateManager.depthMask(true);

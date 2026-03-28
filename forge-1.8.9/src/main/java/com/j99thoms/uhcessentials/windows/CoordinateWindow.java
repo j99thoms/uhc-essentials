@@ -25,7 +25,6 @@ public class CoordinateWindow extends ThemedWindow {
 
     private int width;
     private int height = 30;
-    float scale = .75F;
 
     private final FileManager fileManager;
     private ArrayList<Double> data = new ArrayList<Double>();
@@ -203,7 +202,7 @@ public class CoordinateWindow extends ThemedWindow {
         } else {
             x = data.get(0).intValue();
             y = data.get(1).intValue();
-            toggle = data.get(2);
+            toggle = data.get(2).intValue();
         }
     }
 

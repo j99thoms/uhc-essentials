@@ -20,13 +20,11 @@ public class ArrowCounterWindow extends BaseWindow {
 
     private int width = 0;
     private int height = 0;
-    private int flash = 0;
 
     private ArrayList<Double> data = new ArrayList<Double>();
     private final FileManager fileManager;
     private ItemStack[] inventory = new ItemStack[36];
     private Item item;
-    private int nextFlash = 2;
     private boolean shouldFlash = true;
     private int count = 0;
     private int timer = 0;
@@ -99,7 +97,6 @@ public class ArrowCounterWindow extends BaseWindow {
         } else if (count > 5) {
             timer = 0;
             shouldFlash = true;
-            nextFlash = 4;
             lastTime = System.currentTimeMillis();
         }
 
@@ -115,7 +112,7 @@ public class ArrowCounterWindow extends BaseWindow {
         GlStateManager.depthMask(true);
         GlStateManager.disableBlend();
 
-        if ((int) toggle == 0)
+        if (getToggled() == 0)
             hudGraphics.drawShadowedFont("X", x, y, 0xffffffff);
         if ((int) toggle == 1 && HUDConfigScreen.guiOpen)
             hudGraphics.drawShadowedFont("Sum", x, y, 0xffffffff);
