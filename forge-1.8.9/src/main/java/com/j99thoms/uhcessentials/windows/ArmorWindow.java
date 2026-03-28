@@ -12,8 +12,11 @@ public class ArmorWindow extends BaseWindow {
 
     private final BetterHUD betterHUD;
 
-    private int x = 2;
-    private int y = 102;
+    private static final int DEFAULT_X = 2;
+    private static final int DEFAULT_Y = 102;
+
+    private int x = DEFAULT_X;
+    private int y = DEFAULT_Y;
 
     private int width = 0;
     private int height = 0;
@@ -49,8 +52,8 @@ public class ArmorWindow extends BaseWindow {
 
     @Override
     public void setToDefault() {
-        setX(2);
-        setY(102);
+        setX(DEFAULT_X);
+        setY(DEFAULT_Y);
         save();
     }
 
