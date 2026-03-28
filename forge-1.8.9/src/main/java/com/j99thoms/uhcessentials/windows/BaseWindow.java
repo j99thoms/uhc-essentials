@@ -48,8 +48,6 @@ public abstract class BaseWindow {
 
     public abstract void load();
 
-    public abstract String getName();
-
     public abstract void toggle();
 
     public abstract int getToggled();

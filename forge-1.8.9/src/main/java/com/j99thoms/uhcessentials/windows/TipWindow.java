@@ -141,11 +141,6 @@ public class TipWindow extends BaseWindow {
     }
 
     @Override
-    public String getName() {
-        return "Tips";
-    }
-
-    @Override
     public void setX(int x) {
         this.x = x;
     }

@@ -134,11 +134,6 @@ public class ArrowCounterWindow extends BaseWindow {
     }
 
     @Override
-    public String getName() {
-        return "ArrowCounter";
-    }
-
-    @Override
     public void render() {
     }
 

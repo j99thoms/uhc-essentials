@@ -129,11 +129,6 @@ public class ArmorWindow extends BaseWindow {
     }
 
     @Override
-    public String getName() {
-        return "Armor";
-    }
-
-    @Override
     public void setX(int x) {
         this.x = x;
     }
