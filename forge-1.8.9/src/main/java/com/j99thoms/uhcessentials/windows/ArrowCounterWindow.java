@@ -15,9 +15,6 @@ public class ArrowCounterWindow extends BaseWindow {
     private static final int DEFAULT_X = 16;
     private static final int DEFAULT_Y = 68;
 
-    private int width = 0;
-    private int height = 0;
-
     private ArrayList<Double> data = new ArrayList<Double>();
     private final FileManager fileManager;
     private ItemStack[] inventory = new ItemStack[36];
@@ -25,7 +22,6 @@ public class ArrowCounterWindow extends BaseWindow {
     private boolean shouldFlash = true;
     private int count = 0;
     private int timer = 0;
-    private int secondTimer = 0;
     private long lastTime;
 
     private final Minecraft mc;
