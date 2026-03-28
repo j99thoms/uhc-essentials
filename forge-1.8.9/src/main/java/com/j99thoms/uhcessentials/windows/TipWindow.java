@@ -12,13 +12,11 @@ import net.minecraft.client.renderer.GlStateManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.j99thoms.uhcessentials.BetterHUD;
+import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class TipWindow extends ThemedWindow {
 
     private static final Logger LOGGER = LogManager.getLogger(TipWindow.class);
-
-    private final BetterHUD betterHUD;
 
     private static final int DEFAULT_X = 2;
     private static final int DEFAULT_Y = 220;
@@ -39,10 +37,9 @@ public class TipWindow extends ThemedWindow {
     private int currentTipIndex = 0;
     private String tipOfThePage = "";
 
-    public TipWindow(BetterHUD betterHUD, Minecraft mc, WindowTheme theme) {
-        super(theme);
+    public TipWindow(HUDGraphics hudGraphics, Minecraft mc, WindowTheme theme) {
+        super(hudGraphics, theme);
         this.mc = mc;
-        this.betterHUD = betterHUD;
         this.tips = new ArrayList<String>();
     }
 
@@ -91,33 +88,33 @@ public class TipWindow extends ThemedWindow {
 
         if (!gotTips) {
             String tipLoad = "Click me to load the tips!";
-            width = betterHUD.getFontRenderer().getStringWidth(tipLoad);
-            betterHUD.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
+            width = hudGraphics.getStringWidth(tipLoad);
+            hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
                     theme.getR(), theme.getG(), theme.getB(), theme.getA(),
                     theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
                     theme.getThickness());
-            betterHUD.drawShadowedFont(tipLoad, x, y, -1);
+            hudGraphics.drawShadowedFont(tipLoad, x, y, -1);
         } else if (!tipOfThePage.contains("`")) {
-            width = betterHUD.getFontRenderer().getStringWidth(tipOfThePage);
-            betterHUD.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
+            width = hudGraphics.getStringWidth(tipOfThePage);
+            hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
                     theme.getR(), theme.getG(), theme.getB(), theme.getA(),
                     theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
                     theme.getThickness());
-            betterHUD.drawShadowedFont(tipOfThePage, x, y, -1);
+            hudGraphics.drawShadowedFont(tipOfThePage, x, y, -1);
         } else {
             String[] split = tipOfThePage.split("`");
             int longestWidth = 0;
             for (int i = 0; i < split.length; i++) {
-                if (betterHUD.getFontRenderer().getStringWidth(split[i]) > longestWidth)
-                    longestWidth = betterHUD.getFontRenderer().getStringWidth(split[i]);
+                if (hudGraphics.getStringWidth(split[i]) > longestWidth)
+                    longestWidth = hudGraphics.getStringWidth(split[i]);
             }
             width = longestWidth;
-            betterHUD.drawHUDRectWithBorder(x - 1, y - 1, longestWidth + 2, split.length * 10,
+            hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, longestWidth + 2, split.length * 10,
                     theme.getR(), theme.getG(), theme.getB(), theme.getA(),
                     theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
                     theme.getThickness());
             for (int j = 0; j < split.length; j++) {
-                betterHUD.drawShadowedFont(split[j], x, y + j * 10, -1);
+                hudGraphics.drawShadowedFont(split[j], x, y + j * 10, -1);
             }
         }
 

@@ -1,6 +1,15 @@
 package com.j99thoms.uhcessentials.windows;
 
+import com.j99thoms.uhcessentials.HUDGraphics;
+
 public abstract class BaseWindow {
+
+    protected final HUDGraphics hudGraphics;
+
+    protected BaseWindow(HUDGraphics hudGraphics) {
+        this.hudGraphics = hudGraphics;
+    }
+
 
     public abstract void update();
 

@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 
-import com.j99thoms.uhcessentials.BetterHUD;
+import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class BiomeWindow extends ThemedWindow {
-
-    private final BetterHUD betterHUD;
 
     private static final int DEFAULT_X = 2;
     private static final int DEFAULT_Y = 46;
@@ -27,10 +25,9 @@ public class BiomeWindow extends ThemedWindow {
 
     private final Minecraft mc;
 
-    public BiomeWindow(BetterHUD betterHUD, Minecraft mc, WindowTheme theme) {
-        super(theme);
+    public BiomeWindow(HUDGraphics hudGraphics, Minecraft mc, WindowTheme theme) {
+        super(hudGraphics, theme);
         this.mc = mc;
-        this.betterHUD = betterHUD;
         fileManager = new FileManager("BiomeWindow", 3);
         load();
     }
@@ -65,7 +62,7 @@ public class BiomeWindow extends ThemedWindow {
                 new BlockPos(playerX, 64, playerZ)).biomeName;
 
         width = mc.fontRendererObj.getStringWidth(biomeName);
-        betterHUD.drawHUDRectWithBorder(x - 1, y - 1, mc.fontRendererObj.getStringWidth(biomeName) + 1, getHeight(),
+        hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, mc.fontRendererObj.getStringWidth(biomeName) + 1, getHeight(),
                 theme.getR(), theme.getG(), theme.getB(), theme.getA(),
                 theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
                 theme.getThickness());

@@ -7,11 +7,9 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.MathHelper;
 
-import com.j99thoms.uhcessentials.BetterHUD;
+import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class CoordinateWindow extends ThemedWindow {
-
-    private final BetterHUD betterHUD;
     private final FontRenderer fontRenderer;
     private final Minecraft mc;
 
@@ -34,10 +32,9 @@ public class CoordinateWindow extends ThemedWindow {
     private final FileManager fileManager;
     private ArrayList<Double> data = new ArrayList<Double>();
 
-    public CoordinateWindow(BetterHUD betterHUD, FontRenderer fontRenderer, Minecraft mc, WindowTheme theme) {
-        super(theme);
+    public CoordinateWindow(HUDGraphics hudGraphics, FontRenderer fontRenderer, Minecraft mc, WindowTheme theme) {
+        super(hudGraphics, theme);
         this.mc = mc;
-        this.betterHUD = betterHUD;
         this.fontRenderer = fontRenderer;
         fileManager = new FileManager("CoordPos", 3);
         load();
@@ -80,7 +77,7 @@ public class CoordinateWindow extends ThemedWindow {
         GlStateManager.disableBlend();
         GlStateManager.enableTexture2D();
         if (getToggled() == 0) {
-            betterHUD.drawShadowedFont("X", getX() - 3, getY() - 3, 0xFFFFFF);
+            hudGraphics.drawShadowedFont("X", getX() - 3, getY() - 3, 0xFFFFFF);
         }
     }
 
@@ -108,7 +105,7 @@ public class CoordinateWindow extends ThemedWindow {
             width = 86;
 
         this.width = width;
-        betterHUD.drawHUDRectWithBorder(this.x - 1, this.y - 1, width, this.height,
+        hudGraphics.drawHUDRectWithBorder(this.x - 1, this.y - 1, width, this.height,
                 theme.getR(), theme.getG(), theme.getB(), theme.getA(),
                 theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
                 theme.getThickness());

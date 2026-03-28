@@ -6,11 +6,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.Item;
 
-import com.j99thoms.uhcessentials.BetterHUD;
+import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class ArmorWindow extends BaseWindow {
-
-    private final BetterHUD betterHUD;
 
     private static final int DEFAULT_X = 2;
     private static final int DEFAULT_Y = 102;
@@ -32,9 +30,9 @@ public class ArmorWindow extends BaseWindow {
     private final Minecraft mc;
     private final WindowTheme theme;
 
-    public ArmorWindow(BetterHUD betterHUD, Minecraft mc, WindowTheme theme) {
+    public ArmorWindow(HUDGraphics hudGraphics, Minecraft mc, WindowTheme theme) {
+        super(hudGraphics);
         this.mc = mc;
-        this.betterHUD = betterHUD;
         this.theme = theme;
         fileManager = new FileManager("Armor", 3);
         load();
@@ -90,17 +88,17 @@ public class ArmorWindow extends BaseWindow {
             int space = 15;
             int itemX = this.x;
             int itemY = this.y + i * space;
-            betterHUD.drawItemSprite(itemX, itemY, item);
+            hudGraphics.drawItemSprite(itemX, itemY, item);
             if (healthPct == 100) {
                 itemX -= 2;
             } else if (healthPct < 10) {
                 itemX += 3;
             }
-            betterHUD.drawShadowedFont(healthPct + "%", itemX, itemY + 10, 0xFFFFFF);
+            hudGraphics.drawShadowedFont(healthPct + "%", itemX, itemY + 10, 0xFFFFFF);
         }
 
         if ((int) toggle == 0 && armor.size() > 0) {
-            betterHUD.drawShadowedFont("X", x - 2, y - 2, 0xFFFFFF);
+            hudGraphics.drawShadowedFont("X", x - 2, y - 2, 0xFFFFFF);
         }
 
         GlStateManager.depthMask(true);
@@ -112,15 +110,15 @@ public class ArmorWindow extends BaseWindow {
             GlStateManager.enableBlend();
             GlStateManager.depthMask(false);
             GlStateManager.blendFunc(770, 771);
-            width = betterHUD.getFontRenderer().getStringWidth("No Armor");
+            width = hudGraphics.getStringWidth("No Armor");
             height = 10;
-            betterHUD.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
+            hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
                     theme.getR(), theme.getG(), theme.getB(), theme.getA(),
                     theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
                     theme.getThickness());
-            betterHUD.drawShadowedFont("No Armor", x, y, 0xFFFFFF);
+            hudGraphics.drawShadowedFont("No Armor", x, y, 0xFFFFFF);
             if ((int) toggle == 0) {
-                betterHUD.drawShadowedFont("X", x - 2, y - 2, 0xFFFFFF);
+                hudGraphics.drawShadowedFont("X", x - 2, y - 2, 0xFFFFFF);
             }
             GlStateManager.depthMask(true);
             GlStateManager.disableBlend();

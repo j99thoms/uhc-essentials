@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.j99thoms.uhcessentials.windows.WindowManager;
 
-public class BetterHUD {
+public class BetterHUD implements HUDGraphics {
 
     private final FontRenderer fontRenderer;
     private final WindowManager windowManager;
@@ -24,8 +24,9 @@ public class BetterHUD {
         new VersionChecker().check(mc);
     }
 
-    public FontRenderer getFontRenderer() {
-        return fontRenderer;
+    @Override
+    public int getStringWidth(String text) {
+        return fontRenderer.getStringWidth(text);
     }
 
     public void update() {
@@ -43,10 +44,12 @@ public class BetterHUD {
         GlStateManager.enableTexture2D();
     }
 
+    @Override
     public void drawShadowedFont(String text, int x, int y, int color) {
         fontRenderer.drawStringWithShadow(text, x, y, color);
     }
 
+    @Override
     public void drawItemSprite(int xPos, int yPos, Item item) {
         GL11.glPushMatrix();
         RenderHelper.enableGUIStandardItemLighting();
@@ -58,6 +61,7 @@ public class BetterHUD {
     /**
      * Draws a filled rectangle. Colors and alpha range from 0 to 255.
      */
+    @Override
     public void drawHUDRect(double x1, double y1, double width, double height,
             double red, double green, double blue, double alpha) {
         GlStateManager.disableTexture2D();
@@ -88,6 +92,7 @@ public class BetterHUD {
     /**
      * Draws a filled rectangle with a border. Colors and alpha range from 0 to 255.
      */
+    @Override
     public void drawHUDRectWithBorder(double x1, double y1, double width, double height,
             double red, double green, double blue, double alpha,
             double red2, double green2, double blue2, double alpha2,
@@ -185,6 +190,7 @@ public class BetterHUD {
         GlStateManager.enableTexture2D();
     }
 
+    @Override
     public void drawHUDRectWithBorder(double x1, double y1, double width, double height,
             double red, double green, double blue, double alpha,
             double red2, double green2, double blue2, double alpha2, double thickness) {
@@ -193,6 +199,7 @@ public class BetterHUD {
                 thickness, true, true, true, true);
     }
 
+    @Override
     public void drawHUDRectBorder(double x1, double y1, double width, double height,
             double red, double green, double blue, double alpha, double thickness) {
         drawHUDRectWithBorder(x1, y1, width, height,
