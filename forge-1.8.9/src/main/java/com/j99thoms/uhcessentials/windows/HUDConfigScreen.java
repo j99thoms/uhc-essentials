@@ -34,7 +34,6 @@ public class HUDConfigScreen extends GuiScreen {
     private boolean mouseFree = false;
     private boolean grabbed = false;
     private BaseWindow draggedWindow;
-    private boolean moved = false;
     private int drag = 54;
     private int bright = 48;
     private int lastMove;

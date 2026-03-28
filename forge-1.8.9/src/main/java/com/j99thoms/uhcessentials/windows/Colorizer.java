@@ -28,9 +28,7 @@ public class Colorizer extends GuiScreen {
     private int x;
     private int y;
     private int dx;
-    private int dy;
     private int lastX;
-    private int lastY;
 
     private int redKnobX;
     private int redKnobY;
@@ -91,9 +89,7 @@ public class Colorizer extends GuiScreen {
             x = Mouse.getEventX() * this.width / mc.displayWidth;
             y = this.height - Mouse.getEventY() * this.height / mc.displayHeight - 1;
             dx = x - lastX;
-            dy = y - lastY;
             lastX = x;
-            lastY = y;
             if (!border) {
                 fillRed = fillRed <= 0 ? 0 : fillRed;
                 fillRed = fillRed > 255 ? 255 : fillRed;
@@ -166,7 +162,6 @@ public class Colorizer extends GuiScreen {
             grabbedAlpha = false;
             grabbedThickness = false;
             lastX = Mouse.getEventX() * this.width / mc.displayWidth;
-            lastY = this.height - Mouse.getEventY() * this.height / mc.displayHeight - 1;
         }
     }
 
