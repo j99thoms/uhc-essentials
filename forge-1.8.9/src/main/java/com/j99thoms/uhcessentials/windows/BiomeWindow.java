@@ -79,11 +79,6 @@ public class BiomeWindow extends BaseWindow {
     }
 
     @Override
-    public String getName() {
-        return "BiomeWindow";
-    }
-
-    @Override
     public void render() {
     }
 

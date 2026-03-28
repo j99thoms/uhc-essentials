@@ -69,11 +69,6 @@ public class CoordinateWindow extends BaseWindow {
     }
 
     @Override
-    public String getName() {
-        return "Coordinate";
-    }
-
-    @Override
     public void update() {
     }
 

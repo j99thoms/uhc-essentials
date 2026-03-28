@@ -73,11 +73,6 @@ public class CompassWindow extends BaseWindow {
     }
 
     @Override
-    public String getName() {
-        return "Compass";
-    }
-
-    @Override
     public void render() {
     }
 

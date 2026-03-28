@@ -75,11 +75,6 @@ public class FPSWindow extends BaseWindow {
     }
 
     @Override
-    public String getName() {
-        return "FPSWindow";
-    }
-
-    @Override
     public void render() {
     }
 

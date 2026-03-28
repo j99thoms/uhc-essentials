@@ -73,12 +73,6 @@ public class ClockWindow extends BaseWindow {
     }
 
     @Override
-    public String getName() {
-        // Note: original source returns "Compass" here — preserved intentionally
-        return "Compass";
-    }
-
-    @Override
     public void render() {
     }
 
