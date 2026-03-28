@@ -79,18 +79,18 @@ public class OptionMenu extends GuiScreen {
         button2X = scaledRes.getScaledWidth() / 2 - button2Width / 2;
         button2Y = scaledRes.getScaledHeight() / 2 - button2Height / 2 + 22;
         hudGraphics.drawHUDRectWithBorder(button1X, button1Y, button1Width, button1Height, 0, 0, 0, 255, 255, 255, 255, 255, 1.5);
-        mc.fontRendererObj.drawString(label1, button1X - mc.fontRendererObj.getStringWidth(label1) / 4, button1Y - 12, -1);
+        hudGraphics.drawFont(label1, button1X - hudGraphics.getStringWidth(label1) / 4, button1Y - 12, -1);
         hudGraphics.drawHUDRectWithBorder(button2X, button2Y, button2Width, button2Height, 0, 0, 0, 255, 255, 255, 255, 255, 1.5);
-        mc.fontRendererObj.drawString(label2, button2X - mc.fontRendererObj.getStringWidth(label2) / 4, button2Y - 12, -1);
+        hudGraphics.drawFont(label2, button2X - hudGraphics.getStringWidth(label2) / 4, button2Y - 12, -1);
         if (!awaitingKey1 && !awaitingKey2) {
-            mc.fontRendererObj.drawString(key1Name, button1X + 1, button1Y + 1, -1);
-            mc.fontRendererObj.drawString(key2Name, button2X + 1, button2Y + 1, -1);
+            hudGraphics.drawFont(key1Name, button1X + 1, button1Y + 1, -1);
+            hudGraphics.drawFont(key2Name, button2X + 1, button2Y + 1, -1);
         } else if (awaitingKey1) {
-            mc.fontRendererObj.drawString(key1Name, button1X + 1, button1Y + 1, -65536);
-            mc.fontRendererObj.drawString(key2Name, button2X + 1, button2Y + 1, -1);
+            hudGraphics.drawFont(key1Name, button1X + 1, button1Y + 1, -65536);
+            hudGraphics.drawFont(key2Name, button2X + 1, button2Y + 1, -1);
         } else if (awaitingKey2) {
-            mc.fontRendererObj.drawString(key1Name, button1X + 1, button1Y + 1, -1);
-            mc.fontRendererObj.drawString(key2Name, button2X + 1, button2Y + 1, -65536);
+            hudGraphics.drawFont(key1Name, button1X + 1, button1Y + 1, -1);
+            hudGraphics.drawFont(key2Name, button2X + 1, button2Y + 1, -65536);
         }
     }
 

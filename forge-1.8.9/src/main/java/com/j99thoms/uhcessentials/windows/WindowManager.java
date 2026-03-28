@@ -64,7 +64,7 @@ public class WindowManager {
 
     public void init() {
         theme = new WindowTheme("Theme"); // One shared theme for all windows
-        coordWindow = new CoordinateWindow(betterHUD, fontRenderer, mc, theme);
+        coordWindow = new CoordinateWindow(betterHUD, mc, theme);
         hudConfigScreen = new HUDConfigScreen(this, mc, betterHUD);
         compassWindow = new CompassWindow(betterHUD, mc);
         biomeWindow = new BiomeWindow(betterHUD, mc, theme);

@@ -56,15 +56,15 @@ public class FPSWindow extends ThemedWindow {
     public void update() {
         int fpsCount = Minecraft.getDebugFPS();
         String info = fpsCount + " FPS";
-        width = mc.fontRendererObj.getStringWidth(info);
+        width = hudGraphics.getStringWidth(info);
         hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
                 theme.getR(), theme.getG(), theme.getB(), theme.getA(),
                 theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
                 theme.getThickness());
-        mc.fontRendererObj.drawStringWithShadow(info, x, y, 0xffffffff);
+        hudGraphics.drawShadowedFont(info, x, y, 0xffffffff);
 
         if (toggle == 0) {
-            mc.fontRendererObj.drawStringWithShadow("X", x - 5, y - 5, 0xffffffff);
+            hudGraphics.drawShadowedFont("X", x - 5, y - 5, 0xffffffff);
         }
     }
 

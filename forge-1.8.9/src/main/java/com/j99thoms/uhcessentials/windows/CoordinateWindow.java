@@ -3,14 +3,12 @@ package com.j99thoms.uhcessentials.windows;
 import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.MathHelper;
 
 import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class CoordinateWindow extends ThemedWindow {
-    private final FontRenderer fontRenderer;
     private final Minecraft mc;
 
     private static final int DEFAULT_X = 2;
@@ -32,10 +30,9 @@ public class CoordinateWindow extends ThemedWindow {
     private final FileManager fileManager;
     private ArrayList<Double> data = new ArrayList<Double>();
 
-    public CoordinateWindow(HUDGraphics hudGraphics, FontRenderer fontRenderer, Minecraft mc, WindowTheme theme) {
+    public CoordinateWindow(HUDGraphics hudGraphics, Minecraft mc, WindowTheme theme) {
         super(hudGraphics, theme);
         this.mc = mc;
-        this.fontRenderer = fontRenderer;
         fileManager = new FileManager("CoordPos", 3);
         load();
     }
@@ -141,16 +138,16 @@ public class CoordinateWindow extends ThemedWindow {
             this.xSign = "+";
         }
 
-        fontRenderer.drawString("X: " + (int) x, this.x, this.y, 0xffffff);
-        fontRenderer.drawString("Y: " + (int) y, this.x, this.y + 10, 0xffffff);
-        fontRenderer.drawString("Z: " + (int) z, this.x, this.y + 20, 0xffffff);
+        hudGraphics.drawFont("X: " + (int) x, this.x, this.y, 0xffffff);
+        hudGraphics.drawFont("Y: " + (int) y, this.x, this.y + 10, 0xffffff);
+        hudGraphics.drawFont("Z: " + (int) z, this.x, this.y + 20, 0xffffff);
 
         int tempx = getX() + getWidth() - 12;
-        int dLength = mc.fontRendererObj.getStringWidth(this.direction) / 2;
+        int dLength = hudGraphics.getStringWidth(this.direction) / 2;
 
-        fontRenderer.drawString(xSign, tempx, this.y, 0xffffff);
-        fontRenderer.drawString(this.direction, tempx - dLength + 3, this.y + 10, 0xffffff);
-        fontRenderer.drawString(zSign, tempx, this.y + 20, 0xffffff);
+        hudGraphics.drawFont(xSign, tempx, this.y, 0xffffff);
+        hudGraphics.drawFont(this.direction, tempx - dLength + 3, this.y + 10, 0xffffff);
+        hudGraphics.drawFont(zSign, tempx, this.y + 20, 0xffffff);
 
         GlStateManager.disableTexture2D();
         xSign = "";

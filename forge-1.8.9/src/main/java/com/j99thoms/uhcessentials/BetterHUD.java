@@ -45,6 +45,11 @@ public class BetterHUD implements HUDGraphics {
     }
 
     @Override
+    public void drawFont(String text, int x, int y, int color) {
+        fontRenderer.drawString(text, x, y, color);
+    }
+
+    @Override
     public void drawShadowedFont(String text, int x, int y, int color) {
         fontRenderer.drawStringWithShadow(text, x, y, color);
     }
