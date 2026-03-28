@@ -33,6 +33,7 @@ src/main/java/com/j99thoms/uhcessentials/
     BetterHUD.java            - Render helpers
     windows/
         BaseWindow.java       - Abstract base class for all HUD windows
+        Colorizable.java      - Interface for windows that support color/theme customization
         FileManager.java      - Config file I/O (.minecraft/UHC Essentials/configs/)
         WindowManager.java    - Registry of all active windows, delegates update/render
         ...                   - Individual window classes

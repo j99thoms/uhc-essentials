@@ -149,63 +149,6 @@ public class ArmorWindow extends BaseWindow {
     }
 
     @Override
-    public void setRGBA(int red, int green, int blue, int alpha) {
-    }
-
-    @Override
-    public int getR() {
-        return 0;
-    }
-
-    @Override
-    public int getG() {
-        return 0;
-    }
-
-    @Override
-    public int getB() {
-        return 0;
-    }
-
-    @Override
-    public int getA() {
-        return 0;
-    }
-
-    @Override
-    public void setBorderRGB(int red, int green, int blue, int alpha) {
-    }
-
-    @Override
-    public int getBorderR() {
-        return 0;
-    }
-
-    @Override
-    public int getBorderG() {
-        return 0;
-    }
-
-    @Override
-    public int getBorderB() {
-        return 0;
-    }
-
-    @Override
-    public int getBorderA() {
-        return 0;
-    }
-
-    @Override
-    public void setThickness(float thickness) {
-    }
-
-    @Override
-    public double getThickness() {
-        return 0;
-    }
-
-    @Override
     public int getWidth() {
         return width;
     }

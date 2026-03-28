@@ -12,7 +12,7 @@ import com.j99thoms.uhcessentials.BetterHUD;
 public class Colorizer extends GuiScreen {
 
     private final BetterHUD betterHUD;
-    private final BaseWindow window;
+    private final Colorizable window;
     private final Minecraft mc;
 
     private int fillRed;
@@ -52,7 +52,7 @@ public class Colorizer extends GuiScreen {
     private int cooldown = 0;
     private boolean isCooldown = false;
 
-    public Colorizer(BetterHUD betterHUD, BaseWindow window, Minecraft mc) {
+    public Colorizer(BetterHUD betterHUD, Colorizable window, Minecraft mc) {
         this.betterHUD = betterHUD;
         this.window = window;
         this.mc = mc;
