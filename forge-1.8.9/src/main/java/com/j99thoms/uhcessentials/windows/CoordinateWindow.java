@@ -16,8 +16,11 @@ public class CoordinateWindow extends BaseWindow implements Colorizable {
     private final Minecraft mc;
     private final WindowTheme theme;
 
-    private int x = 2;
-    private int y = 2;
+    private static final int DEFAULT_X = 2;
+    private static final int DEFAULT_Y = 2;
+
+    private int x = DEFAULT_X;
+    private int y = DEFAULT_Y;
 
     private String direction;
     private String xSign;
@@ -53,8 +56,8 @@ public class CoordinateWindow extends BaseWindow implements Colorizable {
 
     @Override
     public void setToDefault() {
-        setX(2);
-        setY(2);
+        setX(DEFAULT_X);
+        setY(DEFAULT_Y);
         save();
     }
 

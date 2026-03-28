@@ -14,8 +14,11 @@ public class ArrowCounterWindow extends BaseWindow {
 
     private final BetterHUD betterHUD;
 
-    private int x = 16;
-    private int y = 68;
+    private static final int DEFAULT_X = 16;
+    private static final int DEFAULT_Y = 68;
+
+    private int x = DEFAULT_X;
+    private int y = DEFAULT_Y;
 
     private int width = 0;
     private int height = 0;
@@ -50,8 +53,8 @@ public class ArrowCounterWindow extends BaseWindow {
 
     @Override
     public void setToDefault() {
-        setX(16);
-        setY(68);
+        setX(DEFAULT_X);
+        setY(DEFAULT_Y);
         save();
     }
 
