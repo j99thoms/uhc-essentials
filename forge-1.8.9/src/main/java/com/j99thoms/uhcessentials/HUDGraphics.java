@@ -22,6 +22,8 @@ public interface HUDGraphics {
                            double red, double green, double blue, double alpha,
                            double thickness);
 
+    void drawFont(String text, int x, int y, int color);
+
     void drawShadowedFont(String text, int x, int y, int color);
 
     void drawItemSprite(int xPos, int yPos, Item item);

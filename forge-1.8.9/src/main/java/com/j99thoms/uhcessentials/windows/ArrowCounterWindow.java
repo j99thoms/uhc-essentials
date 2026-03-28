@@ -106,21 +106,21 @@ public class ArrowCounterWindow extends BaseWindow {
         hudGraphics.drawItemSprite(x, y, Items.arrow);
 
         if (toggle != 2 || count < 64)
-            mc.fontRendererObj.drawStringWithShadow(count + "", x + 11, y + 9, 0xffffffff);
+            hudGraphics.drawShadowedFont(count + "", x + 11, y + 9, 0xffffffff);
         else if (count > 64 && count % 64 != 0)
-            mc.fontRendererObj.drawStringWithShadow("[" + (int) Math.floor(count / 64) + "]+" + count % 64, x + 11, y + 9, 0xffffffff);
+            hudGraphics.drawShadowedFont("[" + (int) Math.floor(count / 64) + "]+" + count % 64, x + 11, y + 9, 0xffffffff);
         else if (count >= 64 && count % 64 == 0)
-            mc.fontRendererObj.drawStringWithShadow("[" + (int) Math.floor(count / 64) + "]", x + 11, y + 9, 0xffffffff);
+            hudGraphics.drawShadowedFont("[" + (int) Math.floor(count / 64) + "]", x + 11, y + 9, 0xffffffff);
 
         GlStateManager.depthMask(true);
         GlStateManager.disableBlend();
 
         if ((int) toggle == 0)
-            mc.fontRendererObj.drawStringWithShadow("X", x, y, 0xffffffff);
+            hudGraphics.drawShadowedFont("X", x, y, 0xffffffff);
         if ((int) toggle == 1 && HUDConfigScreen.guiOpen)
-            mc.fontRendererObj.drawStringWithShadow("Sum", x, y, 0xffffffff);
+            hudGraphics.drawShadowedFont("Sum", x, y, 0xffffffff);
         if ((int) toggle == 2 && HUDConfigScreen.guiOpen)
-            mc.fontRendererObj.drawStringWithShadow("Stacks", x, y, 0xffffffff);
+            hudGraphics.drawShadowedFont("Stacks", x, y, 0xffffffff);
     }
 
     @Override

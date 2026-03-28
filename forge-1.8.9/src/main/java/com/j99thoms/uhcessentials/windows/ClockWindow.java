@@ -58,7 +58,7 @@ public class ClockWindow extends BaseWindow {
     public void update() {
         hudGraphics.drawItemSprite(x, y, Items.clock);
         if ((int) toggle == 0)
-            mc.fontRendererObj.drawStringWithShadow("X", x, y, 0xffffffff);
+            hudGraphics.drawShadowedFont("X", x, y, 0xffffffff);
     }
 
     @Override

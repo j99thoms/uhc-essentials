@@ -61,15 +61,15 @@ public class BiomeWindow extends ThemedWindow {
         String biomeName = mc.theWorld.getBiomeGenForCoords(
                 new BlockPos(playerX, 64, playerZ)).biomeName;
 
-        width = mc.fontRendererObj.getStringWidth(biomeName);
-        hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, mc.fontRendererObj.getStringWidth(biomeName) + 1, getHeight(),
+        width = hudGraphics.getStringWidth(biomeName);
+        hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, hudGraphics.getStringWidth(biomeName) + 1, getHeight(),
                 theme.getR(), theme.getG(), theme.getB(), theme.getA(),
                 theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
                 theme.getThickness());
-        mc.fontRendererObj.drawStringWithShadow(biomeName, x, y, 0xffffffff);
+        hudGraphics.drawShadowedFont(biomeName, x, y, 0xffffffff);
 
         if ((int) toggle == 0)
-            mc.fontRendererObj.drawStringWithShadow("X", getX() - 5, getY() - 5, 0xffffffff);
+            hudGraphics.drawShadowedFont("X", getX() - 5, getY() - 5, 0xffffffff);
     }
 
     @Override
