@@ -113,7 +113,7 @@ The other windows share its color theme and cannot be individually colored yet (
 To test the update notification path, temporarily change `CURRENT_VERSION` to `"1.0"` in `VersionChecker.java` (do not commit).
 
 - [ ] No chat message appears on load when `version.txt` matches `CURRENT_VERSION`
-- [ ] Chat message `[UHC Essentials] A new version is available: 1.2.0` appears when versions differ
+- [ ] Chat message `[UHC Essentials] A new version is available: 1.2.1` appears when versions differ
 - [ ] No crash and no chat message when offline - only a warning in the FML log
 
 
@@ -126,9 +126,7 @@ OptiFine cannot be tested via `./gradlew runClient`. Requires a real Minecraft i
 3. Drop the UHC Essentials mod jar into `.minecraft/mods/`
 4. Download OptiFine HD U M5 for 1.8.9 via https://optifine.net/downloads 
 5. Run the OptiFine installer on top of the Forge profile
-6. Download a shader pack and place it in `.minecraft/shaderpacks/`
 
 - [ ] Game launches without errors with OptiFine installed
-- [ ] All HUD windows render correctly with shaders enabled
+- [ ] All HUD windows render correctly when shaders are not enabled
 - [ ] No color glitches or windows rendering behind the world
-- [ ] HUD still visible after toggling shaders on/off mid-session
