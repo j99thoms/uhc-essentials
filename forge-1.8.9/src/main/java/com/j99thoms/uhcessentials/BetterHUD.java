@@ -37,11 +37,11 @@ public class BetterHUD implements HUDGraphics {
     @Override
     public void drawItemSprite(int xPos, int yPos, Item item) {
         GlStateManager.depthMask(false);
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         RenderHelper.enableGUIStandardItemLighting();
         mc.getRenderItem().renderItemIntoGUI(new ItemStack(item), xPos, yPos);
         RenderHelper.disableStandardItemLighting();
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
     /**
