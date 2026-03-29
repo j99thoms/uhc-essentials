@@ -22,8 +22,8 @@ public class TipWindow extends ThemedWindow {
     private int height = 0;
 
     private ArrayList<String> tips;
-    boolean gotTips = false;
-    boolean closeTip = true;
+    private boolean gotTips = false;
+    private boolean closeTip = true;
     private int currentTipIndex = 0;
     private String tipOfThePage = "";
 
@@ -105,6 +105,22 @@ public class TipWindow extends ThemedWindow {
                 hudGraphics.drawShadowedFont(split[j], x, y + j * 10, -1);
             }
         }
+    }
+
+    public boolean hasTips() {
+        return gotTips;
+    }
+
+    public boolean isClosed() {
+        return closeTip;
+    }
+
+    public void close() {
+        closeTip = true;
+    }
+
+    public void open() {
+        closeTip = false;
     }
 
     public void newTip() {
