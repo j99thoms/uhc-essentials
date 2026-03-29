@@ -71,11 +71,12 @@ public class ArrowCounterWindow extends BaseWindow {
             }
         }
 
+        long now = System.currentTimeMillis();
         flashVisible = false;
         if (count <= 5 && shouldFlash) {
-            if (timer < 3 && System.currentTimeMillis() - lastTime >= 500L) {
-                if (System.currentTimeMillis() - lastTime >= 1000L) {
-                    lastTime = System.currentTimeMillis();
+            if (timer < 3 && now - lastTime >= 500L) {
+                if (now - lastTime >= 1000L) {
+                    lastTime = now;
                     timer++;
                 } else {
                     flashVisible = true;
@@ -86,7 +87,7 @@ public class ArrowCounterWindow extends BaseWindow {
         } else if (count > 5) {
             timer = 0;
             shouldFlash = true;
-            lastTime = System.currentTimeMillis();
+            lastTime = now;
         }
     }
 
