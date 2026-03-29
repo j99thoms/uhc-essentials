@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
 
-import com.j99thoms.uhcessentials.BetterHUD;
+import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class WindowManager {
     ArrayList<BaseWindow> windows;
     private final Minecraft mc;
-    private final BetterHUD betterHUD;
+    private final HUDGraphics hudGraphics;
     private HUDConfigScreen hudConfigScreen;
     static boolean init;
 
@@ -26,10 +26,10 @@ public class WindowManager {
 
     private int showAllOverride = 0;
 
-    public WindowManager(BetterHUD betterHUD, Minecraft mc) {
+    public WindowManager(HUDGraphics hudGraphics, Minecraft mc) {
         init = false;
         this.mc = mc;
-        this.betterHUD = betterHUD;
+        this.hudGraphics = hudGraphics;
         windows = new ArrayList<BaseWindow>();
         init();
         windows.add(compassWindow);
@@ -59,15 +59,15 @@ public class WindowManager {
 
     public void init() {
         theme = new WindowTheme("Theme"); // One shared theme for all windows
-        coordWindow = new CoordinateWindow(betterHUD, mc, theme);
-        hudConfigScreen = new HUDConfigScreen(this, mc, betterHUD);
-        compassWindow = new CompassWindow(betterHUD);
-        biomeWindow = new BiomeWindow(betterHUD, mc, theme);
-        clockWindow = new ClockWindow(betterHUD);
-        arrowWindow = new ArrowCounterWindow(betterHUD, mc);
-        fpsWindow = new FPSWindow(betterHUD, theme);
-        armorWindow = new ArmorWindow(betterHUD, mc, theme);
-        tipWindow = new TipWindow(betterHUD, theme);
+        coordWindow = new CoordinateWindow(hudGraphics, mc, theme);
+        hudConfigScreen = new HUDConfigScreen(this, mc, hudGraphics);
+        compassWindow = new CompassWindow(hudGraphics);
+        biomeWindow = new BiomeWindow(hudGraphics, mc, theme);
+        clockWindow = new ClockWindow(hudGraphics);
+        arrowWindow = new ArrowCounterWindow(hudGraphics, mc);
+        fpsWindow = new FPSWindow(hudGraphics, theme);
+        armorWindow = new ArmorWindow(hudGraphics, mc, theme);
+        tipWindow = new TipWindow(hudGraphics, theme);
     }
 
     public void update() {
