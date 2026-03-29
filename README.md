@@ -31,6 +31,10 @@ All windows are draggable, individually toggleable, and fully color-customizable
 - Forge 11.15.1.2318
 - Java 8
 
+## Compatibility
+
+Compatible with OptiFine (performance/FPS use). Shader pack compatibility is not directly supported - results may vary.
+
 ## Original mod
 
 This is a Forge port of the [original UHC Essentials mod by sintinium](https://www.reddit.com/r/ultrahardcore/comments/3mel2w/uhc_essentials_new_download_link/). The original source code and compiled files are preserved in `reference/` for reference.
