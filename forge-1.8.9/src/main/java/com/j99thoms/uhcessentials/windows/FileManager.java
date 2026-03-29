@@ -8,7 +8,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class FileManager {
+
+    private static final Logger LOGGER = LogManager.getLogger(FileManager.class);
     private String fileName;
     private File file;
     private BufferedReader reader;
@@ -83,6 +88,7 @@ public class FileManager {
             reader.close();
             fileReader.close();
         } catch (Exception e) {
+            LOGGER.warn("Could not read config file '{}': {}", fileName, e.toString());
         }
     }
 
