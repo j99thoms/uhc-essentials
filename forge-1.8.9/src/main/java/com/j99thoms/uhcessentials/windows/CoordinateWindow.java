@@ -16,6 +16,9 @@ public class CoordinateWindow extends ThemedWindow {
     private double coordX;
     private double coordY;
     private double coordZ;
+    private String xLine = "X: ";
+    private String yLine = "Y: ";
+    private String zLine = "Z: ";
     private String direction = "";
     private String xSign = "";
     private String zSign = "";
@@ -53,20 +56,13 @@ public class CoordinateWindow extends ThemedWindow {
         coordY = Math.floor(mc.thePlayer.posY);
         coordZ = Math.floor(mc.thePlayer.posZ);
 
-        if (coordX < 1000 && coordY < 1000 && coordZ < 1000 && coordX > -1000 && coordY > -1000 && coordZ > -1000)
-            width = 54;
-        else if (coordX > -10000 && coordY > -10000 && coordZ > -10000 && coordX < 10000 && coordY < 10000 && coordZ < 10000)
-            width = 60;
-        else if (coordX > -100000 && coordY > -100000 && coordZ > -100000 && coordX < 100000 && coordY < 100000 && coordZ < 100000)
-            width = 66;
-        else if (coordX > -1000000 && coordY > -1000000 && coordZ > -1000000 && coordX < 1000000 && coordY < 1000000 && coordZ < 1000000)
-            width = 72;
-        else if (coordX > -10000000 && coordY > -10000000 && coordZ > -10000000 && coordX < 10000000 && coordY < 10000000 && coordZ < 10000000)
-            width = 78;
-        else if (coordX > -100000000 && coordY > -100000000 && coordZ > -100000000 && coordX < 100000000 && coordY < 100000000 && coordZ < 100000000)
-            width = 98;
-        else
-            width = 86;
+        xLine = "X: " + (int) coordX;
+        yLine = "Y: " + (int) coordY;
+        zLine = "Z: " + (int) coordZ;
+        int contentWidth = Math.max(hudGraphics.getStringWidth(xLine),
+                           Math.max(hudGraphics.getStringWidth(yLine),
+                                    hudGraphics.getStringWidth(zLine)));
+        this.width = contentWidth + 30; // +30 for the direction column on the right
 
         double rotation = MathHelper.wrapAngleTo180_float(mc.thePlayer.rotationYaw);
 
@@ -111,9 +107,9 @@ public class CoordinateWindow extends ThemedWindow {
                 getBorderR(), getBorderG(), getBorderB(), getBorderA(),
                 getThickness());
 
-        hudGraphics.drawFont("X: " + (int) coordX, this.x, this.y, 0xffffff);
-        hudGraphics.drawFont("Y: " + (int) coordY, this.x, this.y + 10, 0xffffff);
-        hudGraphics.drawFont("Z: " + (int) coordZ, this.x, this.y + 20, 0xffffff);
+        hudGraphics.drawFont(xLine, this.x, this.y, 0xffffff);
+        hudGraphics.drawFont(yLine, this.x, this.y + 10, 0xffffff);
+        hudGraphics.drawFont(zLine, this.x, this.y + 20, 0xffffff);
 
         int tempx = getX() + getWidth() - 12;
         int dLength = hudGraphics.getStringWidth(direction) / 2;
