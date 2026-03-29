@@ -5,7 +5,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
-@Mod(modid = UHCEssentialsMod.MODID, name = "UHC Essentials", version = "1.2.0")
+@Mod(modid = UHCEssentialsMod.MODID, name = "UHC Essentials", version = "1.2.1")
 public class UHCEssentialsMod {
 
     public static final String MODID = "uhcessentials";

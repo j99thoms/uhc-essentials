@@ -19,7 +19,7 @@ Minecraft 1.8.9 + Forge port of UHC Essentials.
 # Launch the game in a dev environment
 ./gradlew runClient
 
-# Build a distributable jar (output: build/libs/uhc-essentials-1.2.0.jar)
+# Build a distributable jar (output: build/libs/uhc-essentials-1.2.1.jar)
 ./gradlew build
 ```
 

@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 public class VersionChecker {
 
     private static final Logger LOGGER = LogManager.getLogger(UHCEssentialsMod.MODID);
-    private static final String CURRENT_VERSION = "1.2.0";
+    private static final String CURRENT_VERSION = "1.2.1";
     private static final String VERSION_URL =
             "https://raw.githubusercontent.com/j99thoms/uhc-essentials/main/forge-1.8.9/version.txt";
 
