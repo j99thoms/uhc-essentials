@@ -140,12 +140,12 @@ public class HUDConfigScreen extends GuiScreen {
         if (mouseFree && !optionsMenu) {
             windowManager.armorWindow.updateInGUI();
             drag();
-            if (windowManager.tipWindow.closeTip && windowManager.tipWindow.gotTips) {
+            if (windowManager.tipWindow.isClosed() && windowManager.tipWindow.hasTips()) {
                 windowManager.tipWindow.newTip();
-                windowManager.tipWindow.closeTip = false;
+                windowManager.tipWindow.open();
             }
         } else {
-            windowManager.tipWindow.closeTip = true;
+            windowManager.tipWindow.close();
         }
         if (optionsMenu) {
             if (mc.currentScreen == null) {
