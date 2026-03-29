@@ -21,6 +21,7 @@ public class HUDEventHandler {
         if (betterHUD == null) {
             LOGGER.info("UHC Essentials loaded successfully.");
             betterHUD = new BetterHUD(mc.fontRendererObj, mc);
+            new VersionChecker().check(mc);
         }
 
         betterHUD.update();
