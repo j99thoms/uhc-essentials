@@ -47,7 +47,7 @@ public class FPSWindow extends ThemedWindow {
 
     @Override
     public void render() {
-        hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
+        hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, getWidth() + 2, getHeight() + 2,
                 getR(), getG(), getB(), getA(),
                 getBorderR(), getBorderG(), getBorderB(), getBorderA(),
                 getThickness());
