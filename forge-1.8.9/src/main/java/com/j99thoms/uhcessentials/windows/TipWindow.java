@@ -6,7 +6,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import net.minecraft.client.renderer.GlStateManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -71,23 +70,24 @@ public class TipWindow extends ThemedWindow {
 
     @Override
     public void update() {
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(770, 771);
+    }
 
+    @Override
+    public void render() {
         if (!gotTips) {
             String tipLoad = "Click me to load the tips!";
             width = hudGraphics.getStringWidth(tipLoad);
             hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
-                    theme.getR(), theme.getG(), theme.getB(), theme.getA(),
-                    theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
-                    theme.getThickness());
+                    getR(), getG(), getB(), getA(),
+                    getBorderR(), getBorderG(), getBorderB(), getBorderA(),
+                    getThickness());
             hudGraphics.drawShadowedFont(tipLoad, x, y, -1);
         } else if (!tipOfThePage.contains("`")) {
             width = hudGraphics.getStringWidth(tipOfThePage);
             hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
-                    theme.getR(), theme.getG(), theme.getB(), theme.getA(),
-                    theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
-                    theme.getThickness());
+                    getR(), getG(), getB(), getA(),
+                    getBorderR(), getBorderG(), getBorderB(), getBorderA(),
+                    getThickness());
             hudGraphics.drawShadowedFont(tipOfThePage, x, y, -1);
         } else {
             String[] split = tipOfThePage.split("`");
@@ -98,15 +98,13 @@ public class TipWindow extends ThemedWindow {
             }
             width = longestWidth;
             hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, longestWidth + 2, split.length * 10,
-                    theme.getR(), theme.getG(), theme.getB(), theme.getA(),
-                    theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
-                    theme.getThickness());
+                    getR(), getG(), getB(), getA(),
+                    getBorderR(), getBorderG(), getBorderB(), getBorderA(),
+                    getThickness());
             for (int j = 0; j < split.length; j++) {
                 hudGraphics.drawShadowedFont(split[j], x, y + j * 10, -1);
             }
         }
-
-        GlStateManager.disableBlend();
     }
 
     public void newTip() {
@@ -115,10 +113,6 @@ public class TipWindow extends ThemedWindow {
         if (currentTipIndex >= tips.size()) {
             currentTipIndex = 0;
         }
-    }
-
-    @Override
-    public void render() {
     }
 
     @Override

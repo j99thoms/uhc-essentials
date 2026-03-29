@@ -36,13 +36,13 @@ public class ClockWindow extends BaseWindow {
 
     @Override
     public void update() {
-        hudGraphics.drawItemSprite(x, y, Items.clock);
-        if (getToggled() == 0)
-            hudGraphics.drawShadowedFont("X", x, y, 0xffffffff);
     }
 
     @Override
     public void render() {
+        hudGraphics.drawItemSprite(x, y, Items.clock);
+        if (getToggled() == 0)
+            hudGraphics.drawShadowedFont("X", x, y, 0xffffffff);
     }
 
     @Override

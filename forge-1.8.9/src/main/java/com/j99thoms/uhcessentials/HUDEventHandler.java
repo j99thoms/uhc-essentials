@@ -22,6 +22,8 @@ public class HUDEventHandler {
             LOGGER.info("UHC Essentials loaded successfully.");
             betterHUD = new BetterHUD(mc.fontRendererObj, mc);
         }
+
+        betterHUD.update();
     }
 
     @SubscribeEvent
@@ -29,7 +31,6 @@ public class HUDEventHandler {
         if (event.type != RenderGameOverlayEvent.ElementType.ALL) return;
         if (betterHUD == null) return;
 
-        betterHUD.update();
         betterHUD.render();
     }
 }

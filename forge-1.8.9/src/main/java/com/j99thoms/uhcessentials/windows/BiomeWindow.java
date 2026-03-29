@@ -12,6 +12,7 @@ public class BiomeWindow extends ThemedWindow {
     private static final int DEFAULT_X = 2;
     private static final int DEFAULT_Y = 46;
 
+    private String biomeName = "";
     private int width = 0;
 
     private ArrayList<Double> data = new ArrayList<Double>();
@@ -44,22 +45,21 @@ public class BiomeWindow extends ThemedWindow {
     public void update() {
         int playerX = (int) Math.floor(mc.thePlayer.posX);
         int playerZ = (int) Math.floor(mc.thePlayer.posZ);
-        String biomeName = mc.theWorld.getBiomeGenForCoords(
+        biomeName = mc.theWorld.getBiomeGenForCoords(
                 new BlockPos(playerX, 64, playerZ)).biomeName;
-
         width = hudGraphics.getStringWidth(biomeName);
-        hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, hudGraphics.getStringWidth(biomeName) + 1, getHeight(),
-                theme.getR(), theme.getG(), theme.getB(), theme.getA(),
-                theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
-                theme.getThickness());
-        hudGraphics.drawShadowedFont(biomeName, x, y, 0xffffffff);
-
-        if (getToggled() == 0)
-            hudGraphics.drawShadowedFont("X", getX() - 5, getY() - 5, 0xffffffff);
     }
 
     @Override
     public void render() {
+        hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, width + 1, getHeight(),
+                getR(), getG(), getB(), getA(),
+                getBorderR(), getBorderG(), getBorderB(), getBorderA(),
+                getThickness());
+        hudGraphics.drawShadowedFont(biomeName, x, y, 0xffffffff);
+
+        if (getToggled() == 0)
+            hudGraphics.drawShadowedFont("X", getX() - 5, getY() - 5, 0xffffffff);
     }
 
     @Override

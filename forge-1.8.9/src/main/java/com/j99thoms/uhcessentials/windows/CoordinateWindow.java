@@ -3,7 +3,6 @@ package com.j99thoms.uhcessentials.windows;
 import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.MathHelper;
 
 import com.j99thoms.uhcessentials.HUDGraphics;
@@ -14,9 +13,12 @@ public class CoordinateWindow extends ThemedWindow {
     private static final int DEFAULT_X = 2;
     private static final int DEFAULT_Y = 2;
 
-    private String direction;
-    private String xSign;
-    private String zSign;
+    private double coordX;
+    private double coordY;
+    private double coordZ;
+    private String direction = "";
+    private String xSign = "";
+    private String zSign = "";
 
     private int width;
     private int height = 30;
@@ -47,97 +49,82 @@ public class CoordinateWindow extends ThemedWindow {
 
     @Override
     public void update() {
-    }
+        coordX = Math.floor(mc.thePlayer.posX);
+        coordY = Math.floor(mc.thePlayer.posY);
+        coordZ = Math.floor(mc.thePlayer.posZ);
 
-    @Override
-    public void render() {
-        GlStateManager.disableTexture2D();
-        GlStateManager.enableBlend();
-        GlStateManager.depthMask(false);
-        GlStateManager.blendFunc(770, 771);
-        drawCoordPane();
-        GlStateManager.depthMask(true);
-        GlStateManager.disableBlend();
-        GlStateManager.enableTexture2D();
-        if (getToggled() == 0) {
-            hudGraphics.drawShadowedFont("X", getX() - 3, getY() - 3, 0xFFFFFF);
-        }
-    }
-
-    private void drawCoordPane() {
-        double x = Math.floor(mc.thePlayer.posX);
-        double y = Math.floor(mc.thePlayer.posY);
-        double z = Math.floor(mc.thePlayer.posZ);
-
-        double rotation = MathHelper.wrapAngleTo180_float(mc.thePlayer.rotationYaw);
-
-        int width;
-        if (x < 1000 && y < 1000 && z < 1000 && x > -1000 && y > -1000 && z > -1000)
+        if (coordX < 1000 && coordY < 1000 && coordZ < 1000 && coordX > -1000 && coordY > -1000 && coordZ > -1000)
             width = 54;
-        else if (x > -10000 && y > -10000 && z > -10000 && x < 10000 && y < 10000 && z < 10000)
+        else if (coordX > -10000 && coordY > -10000 && coordZ > -10000 && coordX < 10000 && coordY < 10000 && coordZ < 10000)
             width = 60;
-        else if (x > -100000 && y > -100000 && z > -100000 && x < 100000 && y < 100000 && z < 100000)
+        else if (coordX > -100000 && coordY > -100000 && coordZ > -100000 && coordX < 100000 && coordY < 100000 && coordZ < 100000)
             width = 66;
-        else if (x > -1000000 && y > -1000000 && z > -1000000 && x < 1000000 && y < 1000000 && z < 1000000)
+        else if (coordX > -1000000 && coordY > -1000000 && coordZ > -1000000 && coordX < 1000000 && coordY < 1000000 && coordZ < 1000000)
             width = 72;
-        else if (x > -10000000 && y > -10000000 && z > -10000000 && x < 10000000 && y < 10000000 && z < 10000000)
+        else if (coordX > -10000000 && coordY > -10000000 && coordZ > -10000000 && coordX < 10000000 && coordY < 10000000 && coordZ < 10000000)
             width = 78;
-        else if (x > -100000000 && y > -100000000 && z > -100000000 && x < 100000000 && y < 100000000 && z < 100000000)
+        else if (coordX > -100000000 && coordY > -100000000 && coordZ > -100000000 && coordX < 100000000 && coordY < 100000000 && coordZ < 100000000)
             width = 98;
         else
             width = 86;
 
-        this.width = width;
-        hudGraphics.drawHUDRectWithBorder(this.x - 1, this.y - 1, width, this.height,
-                theme.getR(), theme.getG(), theme.getB(), theme.getA(),
-                theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
-                theme.getThickness());
-        GlStateManager.enableTexture2D();
+        double rotation = MathHelper.wrapAngleTo180_float(mc.thePlayer.rotationYaw);
 
-        if (rotation > -22.5 && rotation <= 22.5) {
-            this.direction = "S";
-            this.zSign = "+";
-        } else if (rotation > 22.5 && rotation <= 67.5) {
-            this.direction = "SW";
-            this.zSign = "+";
-            this.xSign = "-";
-        } else if (rotation > 67.5 && rotation <= 112.5) {
-            this.direction = "W";
-            this.xSign = "-";
-        } else if (rotation > 112.5 && rotation <= 157.5) {
-            this.direction = "NW";
-            this.zSign = "-";
-            this.xSign = "-";
-        } else if ((rotation > 157.5 && rotation <= 202.5) || (rotation > -180 && rotation <= -157.5)) {
-            this.direction = "N";
-            this.zSign = "-";
-        } else if (rotation > -157.5 && rotation <= -112.5) {
-            this.direction = "NE";
-            this.zSign = "-";
-            this.xSign = "+";
-        } else if (rotation > -112.5 && rotation <= -67.5) {
-            this.direction = "E";
-            this.xSign = "+";
-        } else if (rotation > -67.5 && rotation <= -22.5) {
-            this.direction = "SE";
-            this.zSign = "+";
-            this.xSign = "+";
-        }
-
-        hudGraphics.drawFont("X: " + (int) x, this.x, this.y, 0xffffff);
-        hudGraphics.drawFont("Y: " + (int) y, this.x, this.y + 10, 0xffffff);
-        hudGraphics.drawFont("Z: " + (int) z, this.x, this.y + 20, 0xffffff);
-
-        int tempx = getX() + getWidth() - 12;
-        int dLength = hudGraphics.getStringWidth(this.direction) / 2;
-
-        hudGraphics.drawFont(xSign, tempx, this.y, 0xffffff);
-        hudGraphics.drawFont(this.direction, tempx - dLength + 3, this.y + 10, 0xffffff);
-        hudGraphics.drawFont(zSign, tempx, this.y + 20, 0xffffff);
-
-        GlStateManager.disableTexture2D();
         xSign = "";
         zSign = "";
+        
+        if (rotation > -22.5 && rotation <= 22.5) {
+            direction = "S";
+            zSign = "+";
+        } else if (rotation > 22.5 && rotation <= 67.5) {
+            direction = "SW";
+            zSign = "+";
+            xSign = "-";
+        } else if (rotation > 67.5 && rotation <= 112.5) {
+            direction = "W";
+            xSign = "-";
+        } else if (rotation > 112.5 && rotation <= 157.5) {
+            direction = "NW";
+            zSign = "-";
+            xSign = "-";
+        } else if ((rotation > 157.5 && rotation <= 202.5) || (rotation > -180 && rotation <= -157.5)) {
+            direction = "N";
+            zSign = "-";
+        } else if (rotation > -157.5 && rotation <= -112.5) {
+            direction = "NE";
+            zSign = "-";
+            xSign = "+";
+        } else if (rotation > -112.5 && rotation <= -67.5) {
+            direction = "E";
+            xSign = "+";
+        } else if (rotation > -67.5 && rotation <= -22.5) {
+            direction = "SE";
+            zSign = "+";
+            xSign = "+";
+        }
+    }
+
+    @Override
+    public void render() {
+        hudGraphics.drawHUDRectWithBorder(this.x - 1, this.y - 1, width, this.height,
+                getR(), getG(), getB(), getA(),
+                getBorderR(), getBorderG(), getBorderB(), getBorderA(),
+                getThickness());
+
+        hudGraphics.drawFont("X: " + (int) coordX, this.x, this.y, 0xffffff);
+        hudGraphics.drawFont("Y: " + (int) coordY, this.x, this.y + 10, 0xffffff);
+        hudGraphics.drawFont("Z: " + (int) coordZ, this.x, this.y + 20, 0xffffff);
+
+        int tempx = getX() + getWidth() - 12;
+        int dLength = hudGraphics.getStringWidth(direction) / 2;
+
+        hudGraphics.drawFont(xSign, tempx, this.y, 0xffffff);
+        hudGraphics.drawFont(direction, tempx - dLength + 3, this.y + 10, 0xffffff);
+        hudGraphics.drawFont(zSign, tempx, this.y + 20, 0xffffff);
+
+        if (getToggled() == 0) {
+            hudGraphics.drawShadowedFont("X", getX() - 3, getY() - 3, 0xFFFFFF);
+        }
     }
 
     @Override

@@ -77,11 +77,6 @@ public class WindowManager {
                     windows.get(i).update();
             }
         }
-        // hudConfigScreen.update() runs regardless of toggled state so the config GUI
-        // remains responsive even when HUD windows are hidden
-        if (init) {
-            hudConfigScreen.update();
-        }
     }
 
     public void render() {
@@ -90,6 +85,12 @@ public class WindowManager {
                 if (windows.get(i).getToggled() == 1 || showAllOverride == 1)
                     windows.get(i).render();
             }
+        }
+        // hudConfigScreen.update() runs regardless of toggled state so the config GUI
+        // remains responsive even when HUD windows are hidden.
+        // Called from render() (not update()) so its GL drawing calls run on the render thread.
+        if (init) {
+            hudConfigScreen.update();
         }
     }
 }
