@@ -2,7 +2,7 @@
 
 A port of [UHC Essentials](https://github.com/abandonedaccount6235/UHC-Essentials) by sintinium to Minecraft 1.8.9 via Forge.
 
-> **Latest release:** [v1.2.0](https://github.com/j99thoms/uhc-essentials/releases/tag/v1.2.0) - Initial Forge 1.8.9 port
+> **Latest release:** [v1.2.1](https://github.com/j99thoms/uhc-essentials/releases/tag/v1.2.1)
 
 ## Features
 
