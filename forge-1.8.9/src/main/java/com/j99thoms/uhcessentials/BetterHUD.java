@@ -9,31 +9,19 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
-import com.j99thoms.uhcessentials.windows.WindowManager;
-
 public class BetterHUD implements HUDGraphics {
 
     private final FontRenderer fontRenderer;
-    private final WindowManager windowManager;
     private final Minecraft mc;
 
     public BetterHUD(FontRenderer fontRenderer, Minecraft mc) {
         this.fontRenderer = fontRenderer;
         this.mc = mc;
-        windowManager = new WindowManager(this, mc);
     }
 
     @Override
     public int getStringWidth(String text) {
         return fontRenderer.getStringWidth(text);
-    }
-
-    public void update() {
-        windowManager.update();
-    }
-
-    public void render() {
-        windowManager.render();
     }
 
     @Override
