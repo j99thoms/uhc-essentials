@@ -3,7 +3,6 @@ package com.j99thoms.uhcessentials.windows;
 import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.init.Items;
@@ -20,6 +19,7 @@ public class ArrowCounterWindow extends BaseWindow {
     private ItemStack[] inventory = new ItemStack[36];
     private Item item;
     private boolean shouldFlash = true;
+    private boolean flashVisible = false;
     private int count = 0;
     private int timer = 0;
     private long lastTime;
@@ -71,18 +71,14 @@ public class ArrowCounterWindow extends BaseWindow {
             }
         }
 
-        GlStateManager.enableBlend();
-        GlStateManager.depthMask(false);
-        GlStateManager.blendFunc(770, 771);
-
+        flashVisible = false;
         if (count <= 5 && shouldFlash) {
             if (timer < 3 && System.currentTimeMillis() - lastTime >= 500L) {
                 if (System.currentTimeMillis() - lastTime >= 1000L) {
                     lastTime = System.currentTimeMillis();
                     timer++;
                 } else {
-                    hudGraphics.drawHUDRectWithBorder(getX() + 2, getY() + 2, getWidth() + 1, getHeight() + 1,
-                            255, 0, 0, 255, 0, 0, 0, 255, 1.0);
+                    flashVisible = true;
                 }
             } else if (timer >= 3) {
                 shouldFlash = false;
@@ -92,29 +88,33 @@ public class ArrowCounterWindow extends BaseWindow {
             shouldFlash = true;
             lastTime = System.currentTimeMillis();
         }
-
-        hudGraphics.drawItemSprite(x, y, Items.arrow);
-
-        if (toggle != 2 || count < 64)
-            hudGraphics.drawShadowedFont(count + "", x + 11, y + 9, 0xffffffff);
-        else if (count > 64 && count % 64 != 0)
-            hudGraphics.drawShadowedFont("[" + (int) Math.floor(count / 64) + "]+" + count % 64, x + 11, y + 9, 0xffffffff);
-        else if (count >= 64 && count % 64 == 0)
-            hudGraphics.drawShadowedFont("[" + (int) Math.floor(count / 64) + "]", x + 11, y + 9, 0xffffffff);
-
-        GlStateManager.depthMask(true);
-        GlStateManager.disableBlend();
-
-        if (getToggled() == 0)
-            hudGraphics.drawShadowedFont("X", x, y, 0xffffffff);
-        if ((int) toggle == 1 && HUDConfigScreen.guiOpen)
-            hudGraphics.drawShadowedFont("Sum", x, y, 0xffffffff);
-        if ((int) toggle == 2 && HUDConfigScreen.guiOpen)
-            hudGraphics.drawShadowedFont("Stacks", x, y, 0xffffffff);
     }
 
     @Override
     public void render() {
+        hudGraphics.drawItemSprite(x, y, Items.arrow);
+
+        if ((int) toggle != 2 || count < 64)
+            hudGraphics.drawShadowedFont(count + "", x + 11, y + 9, 0xffffffff);
+        else {
+            int stacks = (count / 64);
+            int remainder = count - stacks * 64;
+            String remainderInfo = remainder == 0 ? "" : "+" + remainder;
+            hudGraphics.drawShadowedFont("[" + stacks + "]" + remainderInfo, x + 11, y + 9, 0xffffffff);
+        }
+
+        if (flashVisible)
+            hudGraphics.drawHUDRectWithBorder(getX() + 2, getY() + 2, getWidth() + 1, getHeight() + 1,
+                255, 0, 0, 150,
+                0, 0, 0, 100,
+                .5);
+
+        if (getToggled() == 0)
+            hudGraphics.drawShadowedFont("X", x, y, 0xffffffff);
+        else if (HUDConfigScreen.guiOpen) {
+            String mode = (int) toggle == 1 ? "Sum" : "Stacks";
+            hudGraphics.drawShadowedFont(mode, x, y, 0xffffffff);
+        }
     }
 
     @Override

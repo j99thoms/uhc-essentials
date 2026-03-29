@@ -34,14 +34,7 @@ public class BetterHUD implements HUDGraphics {
     }
 
     public void render() {
-        GlStateManager.disableTexture2D();
-        GlStateManager.enableBlend();
-        GlStateManager.depthMask(false);
-        GlStateManager.blendFunc(770, 771);
         windowManager.render();
-        GlStateManager.depthMask(true);
-        GlStateManager.disableBlend();
-        GlStateManager.enableTexture2D();
     }
 
     @Override
@@ -56,6 +49,7 @@ public class BetterHUD implements HUDGraphics {
 
     @Override
     public void drawItemSprite(int xPos, int yPos, Item item) {
+        GlStateManager.depthMask(false);
         GL11.glPushMatrix();
         RenderHelper.enableGUIStandardItemLighting();
         mc.getRenderItem().renderItemIntoGUI(new ItemStack(item), xPos, yPos);

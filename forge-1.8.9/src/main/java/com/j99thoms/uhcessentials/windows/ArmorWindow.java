@@ -13,8 +13,7 @@ public class ArmorWindow extends BaseWindow {
     private static final int DEFAULT_X = 2;
     private static final int DEFAULT_Y = 102;
 
-    private int width = 0;
-    private int height = 0;
+    private int width = 14;
 
     private ArrayList<Item> armor = new ArrayList<Item>();
     private ArrayList<Float> armorDamage = new ArrayList<Float>();
@@ -49,12 +48,6 @@ public class ArmorWindow extends BaseWindow {
 
     @Override
     public void update() {
-        GlStateManager.enableBlend();
-        GlStateManager.depthMask(false);
-        GlStateManager.blendFunc(770, 771);
-
-        width = 14;
-        height = 0;
         armor.clear();
         armorDamage.clear();
 
@@ -67,7 +60,10 @@ public class ArmorWindow extends BaseWindow {
             float damageFraction = (float) (damage / (float) armorItem.getMaxDamage());
             armorDamage.add(damageFraction);
         }
+    }
 
+    @Override
+    public void render() {
         for (int i = 0; i < armor.size(); i++) {
             Item item = armor.get(i);
             float damage = armorDamage.get(i);
@@ -87,9 +83,6 @@ public class ArmorWindow extends BaseWindow {
         if ((int) toggle == 0 && armor.size() > 0) {
             hudGraphics.drawShadowedFont("X", x - 2, y - 2, 0xFFFFFF);
         }
-
-        GlStateManager.depthMask(true);
-        GlStateManager.disableBlend();
     }
 
     public void updateInGUI() {
@@ -97,9 +90,8 @@ public class ArmorWindow extends BaseWindow {
             GlStateManager.enableBlend();
             GlStateManager.depthMask(false);
             GlStateManager.blendFunc(770, 771);
-            width = hudGraphics.getStringWidth("No Armor");
-            height = 10;
-            hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, width + 2, getHeight() + 2,
+            int noArmorWidth = hudGraphics.getStringWidth("No Armor");
+            hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, noArmorWidth + 2, 12,
                     theme.getR(), theme.getG(), theme.getB(), theme.getA(),
                     theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
                     theme.getThickness());
@@ -113,17 +105,13 @@ public class ArmorWindow extends BaseWindow {
     }
 
     @Override
-    public void render() {
-    }
-
-    @Override
     public int getWidth() {
         return width;
     }
 
     @Override
     public int getHeight() {
-        return armor.size() * 14 + height;
+        return armor.size() * 14;
     }
 
     @Override
