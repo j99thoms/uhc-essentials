@@ -101,7 +101,7 @@ public class HUDConfigScreen extends GuiScreen {
         gammaFileManager.setArray(gammaData);
     }
 
-    public void update() {
+    public void render() {
         checkKeys();
         if (color != null && on) {
             color.update();
