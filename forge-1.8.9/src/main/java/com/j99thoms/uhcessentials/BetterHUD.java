@@ -21,7 +21,6 @@ public class BetterHUD implements HUDGraphics {
         this.fontRenderer = fontRenderer;
         this.mc = mc;
         windowManager = new WindowManager(this, mc);
-        new VersionChecker().check(mc);
     }
 
     @Override
