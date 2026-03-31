@@ -1,6 +1,6 @@
 # UHC Essentials: Forge 1.8.9
 
-A port of [UHC Essentials](https://github.com/abandonedaccount6235/UHC-Essentials) by sintinium to Minecraft 1.8.9 via Forge.
+A port of [UHC Essentials](https://github.com/abandonedaccount6235/UHC-Essentials) by Sintinium to Minecraft 1.8.9 via Forge.
 
 > **Latest release:** [v1.2.1](https://github.com/j99thoms/uhc-essentials/releases/tag/v1.2.1)
 
@@ -35,6 +35,13 @@ All windows are draggable, individually toggleable, and fully color-customizable
 
 Compatible with OptiFine (performance/FPS use). Shader pack compatibility is not directly supported - results may vary.
 
-## Original mod
+## Credits
 
-This is a Forge port of the [original UHC Essentials mod by sintinium](https://www.reddit.com/r/ultrahardcore/comments/3mel2w/uhc_essentials_new_download_link/). The original source code and compiled files are preserved in `reference/` for reference.
+The original [UHC Essentials](https://github.com/abandonedaccount6235/UHC-Essentials) mod was created by Sintinium ([Reddit announcement](https://www.reddit.com/r/ultrahardcore/comments/3mel2w/uhc_essentials_new_download_link/)). The original source code and compiled files are preserved in `reference/` for reference.
+
+This repository hosts a Forge port for Minecraft 1.8.9 in the `forge-1.8.9` directory.
+All porting, refactoring, and new features were written by j99thoms.
+
+## License
+
+Licensed under the [MIT License](LICENSE).
