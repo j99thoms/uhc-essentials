@@ -9,12 +9,12 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
-public class BetterHUD implements HUDGraphics {
+public class ForgeHUDGraphics implements HUDGraphics {
 
     private final FontRenderer fontRenderer;
     private final Minecraft mc;
 
-    public BetterHUD(FontRenderer fontRenderer, Minecraft mc) {
+    public ForgeHUDGraphics(FontRenderer fontRenderer, Minecraft mc) {
         this.fontRenderer = fontRenderer;
         this.mc = mc;
     }
@@ -130,15 +130,15 @@ public class BetterHUD implements HUDGraphics {
             // Draw right border
             if (right && !bottom) {
                 GL11.glBegin(GL11.GL_QUADS);
-                GL11.glVertex2d(x1 + width,           y1 - thickness);
-                GL11.glVertex2d(x1 + width,           y1 + height);
+                GL11.glVertex2d(x1 + width,             y1 - thickness);
+                GL11.glVertex2d(x1 + width,             y1 + height);
                 GL11.glVertex2d(x1 + width + thickness, y1 + height);
                 GL11.glVertex2d(x1 + width + thickness, y1 - thickness);
                 GL11.glEnd();
             } else if (right) {
                 GL11.glBegin(GL11.GL_QUADS);
-                GL11.glVertex2d(x1 + width,           y1 - thickness);
-                GL11.glVertex2d(x1 + width,           y1 + height + thickness);
+                GL11.glVertex2d(x1 + width,             y1 - thickness);
+                GL11.glVertex2d(x1 + width,             y1 + height + thickness);
                 GL11.glVertex2d(x1 + width + thickness, y1 + height + thickness);
                 GL11.glVertex2d(x1 + width + thickness, y1 - thickness);
                 GL11.glEnd();

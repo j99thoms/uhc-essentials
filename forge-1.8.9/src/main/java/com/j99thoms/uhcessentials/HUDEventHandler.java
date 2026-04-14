@@ -22,8 +22,8 @@ public class HUDEventHandler {
 
         if (windowManager == null) {
             LOGGER.info("UHC Essentials loaded successfully.");
-            HUDGraphics betterHUD = new BetterHUD(mc.fontRendererObj, mc);
-            windowManager = new WindowManager(betterHUD, mc);
+            HUDGraphics hudGraphics = new ForgeHUDGraphics(mc.fontRendererObj, mc);
+            windowManager = new WindowManager(hudGraphics, mc);
             new VersionChecker().check(mc);
         }
 

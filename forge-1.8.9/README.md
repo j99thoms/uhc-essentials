@@ -30,8 +30,8 @@ src/main/java/com/j99thoms/uhcessentials/
     UHCEssentialsMod.java     - @Mod entry point, registers event handler
     HUDEventHandler.java      - Forge event subscriptions (tick + render overlay)
     VersionChecker.java       - Background version check against forge-1.8.9/version.txt
-    HUDGraphics.java          - Interface for HUD drawing operations (implemented by BetterHUD)
-    BetterHUD.java            - Render helpers (implements HUDGraphics)
+    HUDGraphics.java          - Interface for HUD drawing operations (implemented by ForgeHUDGraphics)
+    ForgeHUDGraphics.java     - Forge render helpers (implements HUDGraphics)
     windows/
         BaseWindow.java       - Abstract base class for all HUD windows
         Colorizable.java      - Interface for windows that support color/theme customization
