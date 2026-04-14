@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
 
+import com.j99thoms.uhcessentials.GameContext;
 import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class WindowManager {
     ArrayList<BaseWindow> windows;
     private final Minecraft mc;
     private final HUDGraphics hudGraphics;
+    private final GameContext gameContext;
     private HUDConfigScreen hudConfigScreen;
     static boolean init;
 
@@ -26,10 +28,11 @@ public class WindowManager {
 
     private int showAllOverride = 0;
 
-    public WindowManager(HUDGraphics hudGraphics, Minecraft mc) {
+    public WindowManager(HUDGraphics hudGraphics, GameContext gameContext, Minecraft mc) {
         init = false;
         this.mc = mc;
         this.hudGraphics = hudGraphics;
+        this.gameContext = gameContext;
         windows = new ArrayList<BaseWindow>();
         init();
         windows.add(compassWindow);
