@@ -1,4 +1,4 @@
-package com.j99thoms.uhcessentials.windows;
+package com.j99thoms.uhcessentials.gui;
 
 import java.util.ArrayList;
 
@@ -10,11 +10,11 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import com.j99thoms.uhcessentials.HUDGraphics;
+import com.j99thoms.uhcessentials.windows.FileManager;
 
 public class OptionMenu extends GuiScreen {
 
     private Minecraft mc;
-    private HUDConfigScreen hudConfigScreen;
     private HUDGraphics hudGraphics;
     private FileManager fileManager;
     private ArrayList<Double> data = new ArrayList<Double>();
@@ -39,9 +39,8 @@ public class OptionMenu extends GuiScreen {
     String label1 = "Draggable HUD";
     String label2 = "Full Gamma Bright";
 
-    public OptionMenu(Minecraft mc, HUDConfigScreen hudConfigScreen, HUDGraphics hudGraphics) {
+    public OptionMenu(Minecraft mc, HUDGraphics hudGraphics) {
         this.mc = mc;
-        this.hudConfigScreen = hudConfigScreen;
         this.hudGraphics = hudGraphics;
         this.button1Width = 40;
         this.button2Width = 40;

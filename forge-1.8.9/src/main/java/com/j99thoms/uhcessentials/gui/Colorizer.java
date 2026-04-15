@@ -1,4 +1,4 @@
-package com.j99thoms.uhcessentials.windows;
+package com.j99thoms.uhcessentials.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Mouse;
 
 import com.j99thoms.uhcessentials.HUDGraphics;
+import com.j99thoms.uhcessentials.windows.Colorizable;
 
 public class Colorizer extends GuiScreen {
 

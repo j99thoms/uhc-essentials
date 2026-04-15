@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.j99thoms.uhcessentials.windows.HUDConfigScreen;
+import com.j99thoms.uhcessentials.gui.HUDConfigScreen;
 import com.j99thoms.uhcessentials.windows.WindowManager;
 
 public class HUDEventHandler {

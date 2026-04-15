@@ -1,4 +1,4 @@
-package com.j99thoms.uhcessentials.windows;
+package com.j99thoms.uhcessentials.gui;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -14,6 +14,11 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import com.j99thoms.uhcessentials.HUDGraphics;
+import com.j99thoms.uhcessentials.windows.BaseWindow;
+import com.j99thoms.uhcessentials.windows.Colorizable;
+import com.j99thoms.uhcessentials.windows.FileManager;
+import com.j99thoms.uhcessentials.windows.WindowManager;
+import com.j99thoms.uhcessentials.windows.WindowTheme;
 
 public class HUDConfigScreen extends GuiScreen {
 
@@ -78,7 +83,7 @@ public class HUDConfigScreen extends GuiScreen {
             drag = (int) keysData.get(0).doubleValue();
             bright = (int) keysData.get(1).doubleValue();
         }
-        optionMenu = new OptionMenu(mc, this, hudGraphics);
+        optionMenu = new OptionMenu(mc, hudGraphics);
         gammaData = gammaFileManager.getArray();
         if (gammaData.size() < 1) {
             gammaData.add((double) mc.gameSettings.gammaSetting);
