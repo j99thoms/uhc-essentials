@@ -1,19 +1,15 @@
 package com.j99thoms.uhcessentials.windows;
 
 import java.util.ArrayList;
-
-import net.minecraft.client.Minecraft;
+import java.util.List;
 
 import com.j99thoms.uhcessentials.GameContext;
 import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class WindowManager {
-    ArrayList<BaseWindow> windows;
-    private final Minecraft mc;
+    private ArrayList<BaseWindow> windows;
     private final HUDGraphics hudGraphics;
     private final GameContext gameContext;
-    private HUDConfigScreen hudConfigScreen;
-    static boolean init;
 
     WindowTheme theme;
     CoordinateWindow coordWindow;
@@ -25,12 +21,11 @@ public class WindowManager {
     TipWindow tipWindow;
     FPSWindow fpsWindow;
     static boolean toggled = true;
+    public static boolean configScreenOpen = false;
 
     private int showAllOverride = 0;
 
-    public WindowManager(HUDGraphics hudGraphics, GameContext gameContext, Minecraft mc) {
-        init = false;
-        this.mc = mc;
+    public WindowManager(HUDGraphics hudGraphics, GameContext gameContext) {
         this.hudGraphics = hudGraphics;
         this.gameContext = gameContext;
         windows = new ArrayList<BaseWindow>();
@@ -43,7 +38,6 @@ public class WindowManager {
         windows.add(armorWindow);
         windows.add(tipWindow);
         windows.add(fpsWindow);
-        init = true;
     }
 
     public void reset() {
@@ -63,7 +57,6 @@ public class WindowManager {
     public void init() {
         theme = new WindowTheme("Theme"); // One shared theme for all windows
         coordWindow = new CoordinateWindow(hudGraphics, gameContext, theme);
-        hudConfigScreen = new HUDConfigScreen(this, mc, hudGraphics);
         compassWindow = new CompassWindow(hudGraphics);
         biomeWindow = new BiomeWindow(hudGraphics, gameContext, theme);
         clockWindow = new ClockWindow(hudGraphics);
@@ -89,10 +82,11 @@ public class WindowManager {
                     windows.get(i).render();
             }
         }
-        // hudConfigScreen.render() runs regardless of toggled state so the config GUI
-        // remains responsive even when HUD windows are hidden.
-        if (init) {
-            hudConfigScreen.render();
-        }
     }
+
+    public List<BaseWindow> getWindows()     { return windows; }
+    public TipWindow getTipWindow()          { return tipWindow; }
+    public WindowTheme getTheme()            { return theme; }
+    public static boolean isToggled()        { return toggled; }
+    public static void setToggled(boolean t) { toggled = t; }
 }

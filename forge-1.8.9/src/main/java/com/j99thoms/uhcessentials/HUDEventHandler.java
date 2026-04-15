@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.j99thoms.uhcessentials.windows.HUDConfigScreen;
 import com.j99thoms.uhcessentials.windows.WindowManager;
 
 public class HUDEventHandler {
@@ -14,6 +15,7 @@ public class HUDEventHandler {
     private static final Logger LOGGER = LogManager.getLogger(UHCEssentialsMod.MODID);
     private final Minecraft mc = Minecraft.getMinecraft();
     private WindowManager windowManager;
+    private HUDConfigScreen hudConfigScreen;
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
@@ -24,7 +26,8 @@ public class HUDEventHandler {
             LOGGER.info("UHC Essentials loaded successfully.");
             HUDGraphics hudGraphics = new ForgeHUDGraphics(mc.fontRendererObj, mc);
             GameContext gameContext = new ForgeGameContext(mc);
-            windowManager = new WindowManager(hudGraphics, gameContext, mc);
+            windowManager = new WindowManager(hudGraphics, gameContext);
+            hudConfigScreen = new HUDConfigScreen(windowManager, mc, hudGraphics);
             new VersionChecker().check(mc);
         }
 
@@ -37,5 +40,6 @@ public class HUDEventHandler {
         if (windowManager == null) return;
 
         windowManager.render();
+        hudConfigScreen.render();
     }
 }

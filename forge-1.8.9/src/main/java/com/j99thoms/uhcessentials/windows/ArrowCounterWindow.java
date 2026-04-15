@@ -99,7 +99,7 @@ public class ArrowCounterWindow extends BaseWindow {
 
         if (getToggled() == 0)
             hudGraphics.drawShadowedFont("X", x, y, 0xffffffff);
-        else if (HUDConfigScreen.guiOpen) {
+        else if (WindowManager.configScreenOpen) {
             String mode = (int) toggle == 1 ? "Sum" : "Stacks";
             hudGraphics.drawShadowedFont(mode, x, y, 0xffffffff);
         }

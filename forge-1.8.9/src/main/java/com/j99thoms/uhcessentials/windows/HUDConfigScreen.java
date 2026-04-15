@@ -52,7 +52,6 @@ public class HUDConfigScreen extends GuiScreen {
     private boolean alphaDown = true;
     private Random random = new Random();
     public long lastTime;
-    public static boolean guiOpen;
     private boolean optionsMenu = false;
     private WindowTheme theme;
 
@@ -61,16 +60,12 @@ public class HUDConfigScreen extends GuiScreen {
     private String copyCoordinates = "Copy coordinates to clipboard(or press NumPad7)";
     String options = "Options";
 
-    static {
-        guiOpen = false;
-    }
-
     public HUDConfigScreen(WindowManager windowManager, Minecraft mc, HUDGraphics hudGraphics) {
         this.windowManager = windowManager;
         keyStates = new boolean[256];
         this.mc = mc;
         this.hudGraphics = hudGraphics;
-        this.theme = windowManager.theme;
+        this.theme = windowManager.getTheme();
         gammaFileManager = new FileManager("Gamma", 1);
         keysFileManager = new FileManager("keys.txt", 2);
         keysData = keysFileManager.getArray();
@@ -138,14 +133,13 @@ public class HUDConfigScreen extends GuiScreen {
                     scaledRes.getScaledHeight() / 2 - 4 + 36, -1);
         }
         if (mouseFree && !optionsMenu) {
-            windowManager.armorWindow.updateInGUI();
             drag();
-            if (windowManager.tipWindow.isClosed() && windowManager.tipWindow.hasTips()) {
-                windowManager.tipWindow.newTip();
-                windowManager.tipWindow.open();
+            if (windowManager.getTipWindow().isClosed() && windowManager.getTipWindow().hasTips()) {
+                windowManager.getTipWindow().newTip();
+                windowManager.getTipWindow().open();
             }
         } else {
-            windowManager.tipWindow.close();
+            windowManager.getTipWindow().close();
         }
         if (optionsMenu) {
             if (mc.currentScreen == null) {
@@ -189,7 +183,7 @@ public class HUDConfigScreen extends GuiScreen {
         }
         if (mc.currentScreen == null && !optionsMenu) {
             if (checkKey(drag)) {
-                guiOpen = true;
+                WindowManager.configScreenOpen = true;
                 windowManager.showAll();
                 mouseFree = true;
                 mc.displayGuiScreen(this);
@@ -208,7 +202,7 @@ public class HUDConfigScreen extends GuiScreen {
         }
         if (checkKey(1)) {
             // ESC — close config GUI
-            guiOpen = false;
+            WindowManager.configScreenOpen = false;
             optionsMenu = false;
             mouseFree = false;
             optionMenu.reset();
@@ -246,11 +240,11 @@ public class HUDConfigScreen extends GuiScreen {
                     lastMove = 0;
                 }
                 if (!grabbed) {
-                    for (int i = 0; i < windowManager.windows.size(); i++) {
-                        if (x >= windowManager.windows.get(i).getX() && x <= windowManager.windows.get(i).getX() + windowManager.windows.get(i).getWidth()) {
-                            if (y < windowManager.windows.get(i).getY() || y > windowManager.windows.get(i).getY() + windowManager.windows.get(i).getHeight())
+                    for (int i = 0; i < windowManager.getWindows().size(); i++) {
+                        if (x >= windowManager.getWindows().get(i).getX() && x <= windowManager.getWindows().get(i).getX() + windowManager.getWindows().get(i).getWidth()) {
+                            if (y < windowManager.getWindows().get(i).getY() || y > windowManager.getWindows().get(i).getY() + windowManager.getWindows().get(i).getHeight())
                                 continue;
-                            draggedWindow = windowManager.windows.get(i);
+                            draggedWindow = windowManager.getWindows().get(i);
                             grabbed = true;
                             firstDrag = true;
                             return;
@@ -272,7 +266,7 @@ public class HUDConfigScreen extends GuiScreen {
                         if (x >= screenWidth / 2 - hudGraphics.getStringWidth(toggleButton) / 2
                                 && x <= screenWidth / 2 + hudGraphics.getStringWidth(toggleButton) / 2
                                 && y >= screenHeight / 2 - 5 + 24 && y <= screenHeight / 2 + 5 + 24 && !on) {
-                            WindowManager.toggled = !WindowManager.toggled;
+                            WindowManager.setToggled(!WindowManager.isToggled());
                             pressed = true;
                             return;
                         }
@@ -312,10 +306,10 @@ public class HUDConfigScreen extends GuiScreen {
         }
         if (Mouse.isButtonDown(1) && !pressed) {
             pressed = true;
-            for (int i = 0; i < windowManager.windows.size(); i++) {
-                draggedWindow = windowManager.windows.get(i);
-                if (x < windowManager.windows.get(i).getX() || x > windowManager.windows.get(i).getX() + windowManager.windows.get(i).getWidth()
-                        || y < windowManager.windows.get(i).getY() || y > windowManager.windows.get(i).getY() + windowManager.windows.get(i).getHeight()
+            for (int i = 0; i < windowManager.getWindows().size(); i++) {
+                draggedWindow = windowManager.getWindows().get(i);
+                if (x < windowManager.getWindows().get(i).getX() || x > windowManager.getWindows().get(i).getX() + windowManager.getWindows().get(i).getWidth()
+                        || y < windowManager.getWindows().get(i).getY() || y > windowManager.getWindows().get(i).getY() + windowManager.getWindows().get(i).getHeight()
                         || !(draggedWindow instanceof Colorizable))
                     continue;
                 if (!on) {
@@ -328,11 +322,11 @@ public class HUDConfigScreen extends GuiScreen {
             }
         }
         if (!(Mouse.isButtonDown(0) || Mouse.isButtonDown(1) || (pressed && !grabbed) || optionsMenu)) {
-            for (int i = 0; i < windowManager.windows.size(); i++) {
-                if (x < windowManager.windows.get(i).getX() || x > windowManager.windows.get(i).getX() + windowManager.windows.get(i).getWidth()
-                        || y < windowManager.windows.get(i).getY() || y > windowManager.windows.get(i).getY() + windowManager.windows.get(i).getHeight())
+            for (int i = 0; i < windowManager.getWindows().size(); i++) {
+                if (x < windowManager.getWindows().get(i).getX() || x > windowManager.getWindows().get(i).getX() + windowManager.getWindows().get(i).getWidth()
+                        || y < windowManager.getWindows().get(i).getY() || y > windowManager.getWindows().get(i).getY() + windowManager.getWindows().get(i).getHeight())
                     continue;
-                BaseWindow hoveredWindow = windowManager.windows.get(i);
+                BaseWindow hoveredWindow = windowManager.getWindows().get(i);
                 if (previewAlpha > 255) {
                     alphaDown = true;
                 } else if (previewAlpha < 0 && hoveredWindow instanceof Colorizable) {

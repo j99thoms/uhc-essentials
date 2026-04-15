@@ -3,8 +3,6 @@ package com.j99thoms.uhcessentials.windows;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.renderer.GlStateManager;
-
 import com.j99thoms.uhcessentials.GameContext;
 import com.j99thoms.uhcessentials.HUDGraphics;
 
@@ -70,27 +68,17 @@ public class ArmorWindow extends BaseWindow {
             hudGraphics.drawShadowedFont(healthPct + "%", itemX, itemY + 10, 0xFFFFFF);
         }
 
-        if ((int) toggle == 0 && armorNames.size() > 0) {
-            hudGraphics.drawShadowedFont("X", x - 2, y - 2, 0xFFFFFF);
-        }
-    }
-
-    public void updateInGUI() {
-        if (armorNames.size() < 1) {
-            GlStateManager.enableBlend();
-            GlStateManager.depthMask(false);
-            GlStateManager.blendFunc(770, 771);
+        if (WindowManager.configScreenOpen && armorNames.isEmpty()) {
             int noArmorWidth = hudGraphics.getStringWidth("No Armor");
             hudGraphics.drawHUDRectWithBorder(x - 1, y - 1, noArmorWidth + 2, 12,
                     theme.getR(), theme.getG(), theme.getB(), theme.getA(),
                     theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
                     theme.getThickness());
             hudGraphics.drawShadowedFont("No Armor", x, y, 0xFFFFFF);
-            if (getToggled() == 0) {
-                hudGraphics.drawShadowedFont("X", x - 2, y - 2, 0xFFFFFF);
-            }
-            GlStateManager.depthMask(true);
-            GlStateManager.disableBlend();
+        }
+
+        if (getToggled() == 0) {
+            hudGraphics.drawShadowedFont("X", x - 2, y - 2, 0xFFFFFF);
         }
     }
 
