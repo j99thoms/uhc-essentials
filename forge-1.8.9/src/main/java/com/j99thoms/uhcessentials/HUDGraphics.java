@@ -1,7 +1,5 @@
 package com.j99thoms.uhcessentials;
 
-import net.minecraft.item.Item;
-
 public interface HUDGraphics {
 
     void drawHUDRect(double x, double y, double width, double height,
@@ -26,7 +24,7 @@ public interface HUDGraphics {
 
     void drawShadowedFont(String text, int x, int y, int color);
 
-    void drawItemSprite(int xPos, int yPos, Item item);
+    void drawItemSprite(int xPos, int yPos, String resourceLocation);
 
     int getStringWidth(String text);
 }

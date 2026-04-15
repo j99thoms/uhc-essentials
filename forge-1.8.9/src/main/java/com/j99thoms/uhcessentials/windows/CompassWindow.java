@@ -2,8 +2,6 @@ package com.j99thoms.uhcessentials.windows;
 
 import java.util.ArrayList;
 
-import net.minecraft.init.Items;
-
 import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class CompassWindow extends BaseWindow {
@@ -40,7 +38,7 @@ public class CompassWindow extends BaseWindow {
 
     @Override
     public void render() {
-        hudGraphics.drawItemSprite(x, y, Items.compass);
+        hudGraphics.drawItemSprite(x, y, "minecraft:compass");
         if (getToggled() == 0)
             hudGraphics.drawShadowedFont("X", x, y, 0xffffffff);
     }

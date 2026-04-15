@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
@@ -35,7 +36,8 @@ public class ForgeHUDGraphics implements HUDGraphics {
     }
 
     @Override
-    public void drawItemSprite(int xPos, int yPos, Item item) {
+    public void drawItemSprite(int xPos, int yPos, String resourceLocation) {
+        Item item = (Item) Item.itemRegistry.getObject(new ResourceLocation(resourceLocation));
         GlStateManager.depthMask(false);
         GlStateManager.pushMatrix();
         RenderHelper.enableGUIStandardItemLighting();

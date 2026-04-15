@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 
 import com.j99thoms.uhcessentials.GameContext;
 import com.j99thoms.uhcessentials.HUDGraphics;
@@ -57,13 +55,13 @@ public class ArmorWindow extends BaseWindow {
     @Override
     public void render() {
         for (int i = 0; i < armorNames.size(); i++) {
-            Item item = (Item) Item.itemRegistry.getObject(new ResourceLocation(armorNames.get(i)));
+            String itemName = armorNames.get(i);
             float damage = armorDurabilityFractions.get(i);
             int healthPct = (int) Math.round(100.0 - damage * 100.0);
             int space = 15;
             int itemX = this.x;
             int itemY = this.y + i * space;
-            hudGraphics.drawItemSprite(itemX, itemY, item);
+            hudGraphics.drawItemSprite(itemX, itemY, itemName);
             if (healthPct == 100) {
                 itemX -= 2;
             } else if (healthPct < 10) {

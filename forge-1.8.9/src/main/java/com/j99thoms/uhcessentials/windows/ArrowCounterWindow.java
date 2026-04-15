@@ -2,8 +2,6 @@ package com.j99thoms.uhcessentials.windows;
 
 import java.util.ArrayList;
 
-import net.minecraft.init.Items;
-
 import com.j99thoms.uhcessentials.GameContext;
 import com.j99thoms.uhcessentials.HUDGraphics;
 
@@ -82,7 +80,7 @@ public class ArrowCounterWindow extends BaseWindow {
 
     @Override
     public void render() {
-        hudGraphics.drawItemSprite(x, y, Items.arrow);
+        hudGraphics.drawItemSprite(x, y, "minecraft:arrow");
 
         if ((int) toggle != 2 || count < 64)
             hudGraphics.drawShadowedFont(count + "", x + 11, y + 9, 0xffffffff);
