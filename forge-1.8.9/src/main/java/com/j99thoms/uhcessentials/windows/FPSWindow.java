@@ -2,8 +2,7 @@ package com.j99thoms.uhcessentials.windows;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.Minecraft;
-
+import com.j99thoms.uhcessentials.GameContext;
 import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class FPSWindow extends ThemedWindow {
@@ -17,9 +16,11 @@ public class FPSWindow extends ThemedWindow {
 
     private ArrayList<Double> data = new ArrayList<Double>();
     private final FileManager fileManager;
+    private final GameContext gameContext;
 
-    public FPSWindow(HUDGraphics hudGraphics, WindowTheme theme) {
+    public FPSWindow(HUDGraphics hudGraphics, GameContext gameContext, WindowTheme theme) {
         super(hudGraphics, theme);
+        this.gameContext = gameContext;
         setX(DEFAULT_X);
         setY(DEFAULT_Y);
         fileManager = new FileManager("FPSWindow", 3);
@@ -40,7 +41,7 @@ public class FPSWindow extends ThemedWindow {
 
     @Override
     public void update() {
-        fps = Minecraft.getDebugFPS();
+        fps = gameContext.getFPS();
         fpsInfo = fps + " FPS";
         width = hudGraphics.getStringWidth(fpsInfo);
     }

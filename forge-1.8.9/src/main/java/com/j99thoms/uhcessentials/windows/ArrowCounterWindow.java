@@ -2,11 +2,9 @@ package com.j99thoms.uhcessentials.windows;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.init.Items;
 
+import com.j99thoms.uhcessentials.GameContext;
 import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class ArrowCounterWindow extends BaseWindow {
@@ -16,19 +14,17 @@ public class ArrowCounterWindow extends BaseWindow {
 
     private ArrayList<Double> data = new ArrayList<Double>();
     private final FileManager fileManager;
-    private ItemStack[] inventory = new ItemStack[36];
-    private Item item;
     private boolean shouldFlash = true;
     private boolean flashVisible = false;
     private int count = 0;
     private int timer = 0;
     private long lastTime;
 
-    private final Minecraft mc;
+    private final GameContext gameContext;
 
-    public ArrowCounterWindow(HUDGraphics hudGraphics, Minecraft mc) {
+    public ArrowCounterWindow(HUDGraphics hudGraphics, GameContext gameContext) {
         super(hudGraphics);
-        this.mc = mc;
+        this.gameContext = gameContext;
         setX(DEFAULT_X);
         setY(DEFAULT_Y);
         fileManager = new FileManager("Arrow", 3);
@@ -62,14 +58,7 @@ public class ArrowCounterWindow extends BaseWindow {
 
     @Override
     public void update() {
-        count = 0;
-        inventory = mc.thePlayer.inventory.mainInventory;
-        for (int i = 0; i < inventory.length; i++) {
-            if (inventory[i] != null) {
-                if (inventory[i].getItem() == Items.arrow)
-                    count += inventory[i].stackSize;
-            }
-        }
+        count = gameContext.getArrowCount();
 
         long now = System.currentTimeMillis();
         flashVisible = false;

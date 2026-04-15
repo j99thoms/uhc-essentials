@@ -1,11 +1,13 @@
 package com.j99thoms.uhcessentials.windows;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 
+import com.j99thoms.uhcessentials.GameContext;
 import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class ArmorWindow extends BaseWindow {
@@ -15,18 +17,18 @@ public class ArmorWindow extends BaseWindow {
 
     private int width = 14;
 
-    private ArrayList<Item> armor = new ArrayList<Item>();
-    private ArrayList<Float> armorDamage = new ArrayList<Float>();
+    private List<String> armorNames = new ArrayList<String>();
+    private List<Float> armorDurabilityFractions = new ArrayList<Float>();
 
     private ArrayList<Double> data = new ArrayList<Double>();
     private final FileManager fileManager;
 
-    private final Minecraft mc;
+    private final GameContext gameContext;
     private final WindowTheme theme;
 
-    public ArmorWindow(HUDGraphics hudGraphics, Minecraft mc, WindowTheme theme) {
+    public ArmorWindow(HUDGraphics hudGraphics, GameContext gameContext, WindowTheme theme) {
         super(hudGraphics);
-        this.mc = mc;
+        this.gameContext = gameContext;
         this.theme = theme;
         setX(DEFAULT_X);
         setY(DEFAULT_Y);
@@ -48,25 +50,15 @@ public class ArmorWindow extends BaseWindow {
 
     @Override
     public void update() {
-        armor.clear();
-        armorDamage.clear();
-
-        for (int i = 0; i < mc.thePlayer.inventory.armorInventory.length; i++) {
-            int armorIdx = mc.thePlayer.inventory.armorInventory.length - i - 1;
-            if (mc.thePlayer.inventory.armorInventory[armorIdx] == null) continue;
-            Item armorItem = mc.thePlayer.inventory.armorInventory[armorIdx].getItem();
-            int damage = mc.thePlayer.inventory.armorInventory[armorIdx].getItemDamage();
-            armor.add(armorItem);
-            float damageFraction = (float) (damage / (float) armorItem.getMaxDamage());
-            armorDamage.add(damageFraction);
-        }
+        armorNames = gameContext.getArmorItemNames();
+        armorDurabilityFractions = gameContext.getArmorDurabilityFractions();
     }
 
     @Override
     public void render() {
-        for (int i = 0; i < armor.size(); i++) {
-            Item item = armor.get(i);
-            float damage = armorDamage.get(i);
+        for (int i = 0; i < armorNames.size(); i++) {
+            Item item = (Item) Item.itemRegistry.getObject(new ResourceLocation(armorNames.get(i)));
+            float damage = armorDurabilityFractions.get(i);
             int healthPct = (int) Math.round(100.0 - damage * 100.0);
             int space = 15;
             int itemX = this.x;
@@ -80,13 +72,13 @@ public class ArmorWindow extends BaseWindow {
             hudGraphics.drawShadowedFont(healthPct + "%", itemX, itemY + 10, 0xFFFFFF);
         }
 
-        if ((int) toggle == 0 && armor.size() > 0) {
+        if ((int) toggle == 0 && armorNames.size() > 0) {
             hudGraphics.drawShadowedFont("X", x - 2, y - 2, 0xFFFFFF);
         }
     }
 
     public void updateInGUI() {
-        if (armor.size() < 1) {
+        if (armorNames.size() < 1) {
             GlStateManager.enableBlend();
             GlStateManager.depthMask(false);
             GlStateManager.blendFunc(770, 771);
@@ -111,7 +103,7 @@ public class ArmorWindow extends BaseWindow {
 
     @Override
     public int getHeight() {
-        return armor.size() * 14;
+        return armorNames.size() * 14;
     }
 
     @Override

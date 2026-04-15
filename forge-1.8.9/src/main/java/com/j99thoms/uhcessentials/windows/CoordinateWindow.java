@@ -2,13 +2,11 @@ package com.j99thoms.uhcessentials.windows;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.MathHelper;
-
+import com.j99thoms.uhcessentials.GameContext;
 import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class CoordinateWindow extends ThemedWindow {
-    private final Minecraft mc;
+    private final GameContext gameContext;
 
     private static final int DEFAULT_X = 2;
     private static final int DEFAULT_Y = 2;
@@ -29,9 +27,9 @@ public class CoordinateWindow extends ThemedWindow {
     private final FileManager fileManager;
     private ArrayList<Double> data = new ArrayList<Double>();
 
-    public CoordinateWindow(HUDGraphics hudGraphics, Minecraft mc, WindowTheme theme) {
+    public CoordinateWindow(HUDGraphics hudGraphics, GameContext gameContext, WindowTheme theme) {
         super(hudGraphics, theme);
-        this.mc = mc;
+        this.gameContext = gameContext;
         setX(DEFAULT_X);
         setY(DEFAULT_Y);
         fileManager = new FileManager("CoordPos", 3);
@@ -52,9 +50,9 @@ public class CoordinateWindow extends ThemedWindow {
 
     @Override
     public void update() {
-        coordX = Math.floor(mc.thePlayer.posX);
-        coordY = Math.floor(mc.thePlayer.posY);
-        coordZ = Math.floor(mc.thePlayer.posZ);
+        coordX = Math.floor(gameContext.getPlayerX());
+        coordY = Math.floor(gameContext.getPlayerY());
+        coordZ = Math.floor(gameContext.getPlayerZ());
 
         xLine = "X: " + (int) coordX;
         yLine = "Y: " + (int) coordY;
@@ -64,7 +62,7 @@ public class CoordinateWindow extends ThemedWindow {
                                     hudGraphics.getStringWidth(zLine)));
         this.width = contentWidth + 30; // +30 for the direction column on the right
 
-        double rotation = MathHelper.wrapAngleTo180_float(mc.thePlayer.rotationYaw);
+        double rotation = gameContext.getPlayerFacingYaw();
 
         xSign = "";
         zSign = "";

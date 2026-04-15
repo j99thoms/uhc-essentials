@@ -62,14 +62,14 @@ public class WindowManager {
 
     public void init() {
         theme = new WindowTheme("Theme"); // One shared theme for all windows
-        coordWindow = new CoordinateWindow(hudGraphics, mc, theme);
+        coordWindow = new CoordinateWindow(hudGraphics, gameContext, theme);
         hudConfigScreen = new HUDConfigScreen(this, mc, hudGraphics);
         compassWindow = new CompassWindow(hudGraphics);
-        biomeWindow = new BiomeWindow(hudGraphics, mc, theme);
+        biomeWindow = new BiomeWindow(hudGraphics, gameContext, theme);
         clockWindow = new ClockWindow(hudGraphics);
-        arrowWindow = new ArrowCounterWindow(hudGraphics, mc);
-        fpsWindow = new FPSWindow(hudGraphics, theme);
-        armorWindow = new ArmorWindow(hudGraphics, mc, theme);
+        arrowWindow = new ArrowCounterWindow(hudGraphics, gameContext);
+        fpsWindow = new FPSWindow(hudGraphics, gameContext, theme);
+        armorWindow = new ArmorWindow(hudGraphics, gameContext, theme);
         tipWindow = new TipWindow(hudGraphics, theme);
     }
 

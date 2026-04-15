@@ -2,9 +2,7 @@ package com.j99thoms.uhcessentials.windows;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.BlockPos;
-
+import com.j99thoms.uhcessentials.GameContext;
 import com.j99thoms.uhcessentials.HUDGraphics;
 
 public class BiomeWindow extends ThemedWindow {
@@ -18,11 +16,11 @@ public class BiomeWindow extends ThemedWindow {
     private ArrayList<Double> data = new ArrayList<Double>();
     private final FileManager fileManager;
 
-    private final Minecraft mc;
+    private final GameContext gameContext;
 
-    public BiomeWindow(HUDGraphics hudGraphics, Minecraft mc, WindowTheme theme) {
+    public BiomeWindow(HUDGraphics hudGraphics, GameContext gameContext, WindowTheme theme) {
         super(hudGraphics, theme);
-        this.mc = mc;
+        this.gameContext = gameContext;
         setX(DEFAULT_X);
         setY(DEFAULT_Y);
         fileManager = new FileManager("BiomeWindow", 3);
@@ -43,10 +41,7 @@ public class BiomeWindow extends ThemedWindow {
 
     @Override
     public void update() {
-        int playerX = (int) Math.floor(mc.thePlayer.posX);
-        int playerZ = (int) Math.floor(mc.thePlayer.posZ);
-        biomeName = mc.theWorld.getBiomeGenForCoords(
-                new BlockPos(playerX, 64, playerZ)).biomeName;
+        biomeName = gameContext.getBiomeName();
         width = hudGraphics.getStringWidth(biomeName);
     }
 
