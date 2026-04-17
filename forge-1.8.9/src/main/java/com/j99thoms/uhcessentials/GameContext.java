@@ -16,4 +16,7 @@ public interface GameContext {
 
     int getArrowCount();
     int getFPS();
+
+    float getGamma();
+    void setGamma(float gamma);
 }

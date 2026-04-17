@@ -6,13 +6,8 @@ import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 import java.util.Random;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-
+import com.j99thoms.uhcessentials.GameContext;
+import com.j99thoms.uhcessentials.GuiContext;
 import com.j99thoms.uhcessentials.HUDGraphics;
 import com.j99thoms.uhcessentials.windows.BaseWindow;
 import com.j99thoms.uhcessentials.windows.Colorizable;
@@ -20,12 +15,13 @@ import com.j99thoms.uhcessentials.windows.FileManager;
 import com.j99thoms.uhcessentials.windows.WindowManager;
 import com.j99thoms.uhcessentials.windows.WindowTheme;
 
-public class HUDConfigScreen extends GuiScreen {
+public class HUDConfigScreen {
 
-    private static boolean[] keyStates;
-    private WindowManager windowManager;
-    private HUDGraphics hudGraphics;
-    private Minecraft mc;
+    private boolean[] keyStates;
+    private final WindowManager windowManager;
+    private final HUDGraphics hudGraphics;
+    private final GuiContext guiContext;
+    private final GameContext gameContext;
     private OptionMenu optionMenu;
     private boolean fullbright = false;
     private boolean shouldChange = false;
@@ -44,7 +40,7 @@ public class HUDConfigScreen extends GuiScreen {
     private int lastMove;
     private boolean firstDrag = false;
     private boolean on = false;
-    private Colorizer color;
+    private Colorizer colorizer;
     private FileManager gammaFileManager;
     private FileManager keysFileManager;
     private ArrayList<Double> gammaData;
@@ -65,10 +61,11 @@ public class HUDConfigScreen extends GuiScreen {
     private String copyCoordinates = "Copy coordinates to clipboard(or press NumPad7)";
     String options = "Options";
 
-    public HUDConfigScreen(WindowManager windowManager, Minecraft mc, HUDGraphics hudGraphics) {
+    public HUDConfigScreen(WindowManager windowManager, HUDGraphics hudGraphics, GuiContext guiContext, GameContext gameContext) {
         this.windowManager = windowManager;
+        this.guiContext = guiContext;
+        this.gameContext = gameContext;
         keyStates = new boolean[256];
-        this.mc = mc;
         this.hudGraphics = hudGraphics;
         this.theme = windowManager.getTheme();
         gammaFileManager = new FileManager("Gamma", 1);
@@ -83,16 +80,24 @@ public class HUDConfigScreen extends GuiScreen {
             drag = (int) keysData.get(0).doubleValue();
             bright = (int) keysData.get(1).doubleValue();
         }
-        optionMenu = new OptionMenu(mc, hudGraphics);
+        optionMenu = new OptionMenu(hudGraphics, guiContext);
         gammaData = gammaFileManager.getArray();
         if (gammaData.size() < 1) {
-            gammaData.add((double) mc.gameSettings.gammaSetting);
+            gammaData.add((double) gameContext.getGamma());
             gammaFileManager.setArray(gammaData);
             gammaData.clear();
         } else {
             gamma = gammaData.get(0);
-            mc.gameSettings.gammaSetting = (float) gamma;
+            gameContext.setGamma((float) gamma);
         }
+    }
+
+    public OptionMenu getOptionMenu() {
+        return optionMenu;
+    }
+
+    public Colorizer getColorizer() {
+        return colorizer;
     }
 
     public void save() {
@@ -101,44 +106,49 @@ public class HUDConfigScreen extends GuiScreen {
         gammaFileManager.setArray(gammaData);
     }
 
-    public void render() {
-        checkKeys();
-        if (color != null && on) {
-            color.update();
+    public ScreenRequest render() {
+        ScreenRequest request = checkKeys();
+        if (request != ScreenRequest.NONE) {
+            return request;
+        }
+        if (colorizer != null && on) {
+            colorizer.update();
         }
         if (mouseFree && !optionsMenu && !on) {
-            ScaledResolution scaledRes = new ScaledResolution(mc);
             hudGraphics.drawHUDRectWithBorder(
-                    scaledRes.getScaledWidth() / 2 - hudGraphics.getStringWidth(options) / 2,
-                    scaledRes.getScaledHeight() / 2 - 5,
+                    guiContext.getScreenWidth() / 2 - hudGraphics.getStringWidth(options) / 2,
+                    guiContext.getScreenHeight() / 2 - 5,
                     hudGraphics.getStringWidth(options) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
             hudGraphics.drawShadowedFont(options,
-                    scaledRes.getScaledWidth() / 2 - hudGraphics.getStringWidth(options) / 2 + 1,
-                    scaledRes.getScaledHeight() / 2 - 4, -1);
+                    guiContext.getScreenWidth() / 2 - hudGraphics.getStringWidth(options) / 2 + 1,
+                    guiContext.getScreenHeight() / 2 - 4, -1);
             hudGraphics.drawHUDRectWithBorder(
-                    scaledRes.getScaledWidth() / 2 - hudGraphics.getStringWidth(resetAll) / 2,
-                    scaledRes.getScaledHeight() / 2 - 5 + 12,
+                    guiContext.getScreenWidth() / 2 - hudGraphics.getStringWidth(resetAll) / 2,
+                    guiContext.getScreenHeight() / 2 - 5 + 12,
                     hudGraphics.getStringWidth(resetAll) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
             hudGraphics.drawShadowedFont(resetAll,
-                    scaledRes.getScaledWidth() / 2 - hudGraphics.getStringWidth(resetAll) / 2 + 1,
-                    scaledRes.getScaledHeight() / 2 - 4 + 12, -1);
+                    guiContext.getScreenWidth() / 2 - hudGraphics.getStringWidth(resetAll) / 2 + 1,
+                    guiContext.getScreenHeight() / 2 - 4 + 12, -1);
             hudGraphics.drawHUDRectWithBorder(
-                    scaledRes.getScaledWidth() / 2 - hudGraphics.getStringWidth(toggleButton) / 2,
-                    scaledRes.getScaledHeight() / 2 - 5 + 24,
+                    guiContext.getScreenWidth() / 2 - hudGraphics.getStringWidth(toggleButton) / 2,
+                    guiContext.getScreenHeight() / 2 - 5 + 24,
                     hudGraphics.getStringWidth(toggleButton) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
             hudGraphics.drawShadowedFont(toggleButton,
-                    scaledRes.getScaledWidth() / 2 - hudGraphics.getStringWidth(toggleButton) / 2 + 1,
-                    scaledRes.getScaledHeight() / 2 - 4 + 24, -1);
+                    guiContext.getScreenWidth() / 2 - hudGraphics.getStringWidth(toggleButton) / 2 + 1,
+                    guiContext.getScreenHeight() / 2 - 4 + 24, -1);
             hudGraphics.drawHUDRectWithBorder(
-                    scaledRes.getScaledWidth() / 2 - hudGraphics.getStringWidth(copyCoordinates) / 2,
-                    scaledRes.getScaledHeight() / 2 - 5 + 36,
+                    guiContext.getScreenWidth() / 2 - hudGraphics.getStringWidth(copyCoordinates) / 2,
+                    guiContext.getScreenHeight() / 2 - 5 + 36,
                     hudGraphics.getStringWidth(copyCoordinates) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
             hudGraphics.drawShadowedFont(copyCoordinates,
-                    scaledRes.getScaledWidth() / 2 - hudGraphics.getStringWidth(copyCoordinates) / 2 + 1,
-                    scaledRes.getScaledHeight() / 2 - 4 + 36, -1);
+                    guiContext.getScreenWidth() / 2 - hudGraphics.getStringWidth(copyCoordinates) / 2 + 1,
+                    guiContext.getScreenHeight() / 2 - 4 + 36, -1);
         }
         if (mouseFree && !optionsMenu) {
-            drag();
+            ScreenRequest dragRequest = drag();
+            if (dragRequest != ScreenRequest.NONE) {
+                return dragRequest;
+            }
             if (windowManager.getTipWindow().isClosed() && windowManager.getTipWindow().hasTips()) {
                 windowManager.getTipWindow().newTip();
                 windowManager.getTipWindow().open();
@@ -147,33 +157,31 @@ public class HUDConfigScreen extends GuiScreen {
             windowManager.getTipWindow().close();
         }
         if (optionsMenu) {
-            if (mc.currentScreen == null) {
-                mc.displayGuiScreen(optionMenu);
-            }
             optionMenu.render();
         }
         if (fullbright) {
-            mc.gameSettings.gammaSetting = 2000.0f;
+            gameContext.setGamma(2000.0f);
         } else if (shouldChange) {
-            mc.gameSettings.gammaSetting = (float) gamma;
+            gameContext.setGamma((float) gamma);
             shouldChange = false;
             save();
-        } else if (gamma != mc.gameSettings.gammaSetting) {
-            gamma = mc.gameSettings.gammaSetting;
+        } else if (gamma != gameContext.getGamma()) {
+            gamma = gameContext.getGamma();
             save();
         }
+        return ScreenRequest.NONE;
     }
 
-    public static boolean checkKey(int i) {
-        if (Keyboard.isKeyDown(i) != keyStates[i]) {
+    public boolean checkKey(int i) {
+        if (guiContext.isKeyDown(i) != keyStates[i]) {
             keyStates[i] = !keyStates[i];
             return keyStates[i];
         }
         return false;
     }
 
-    public void checkKeys() {
-        if (Keyboard.getEventKeyState()) {
+    public ScreenRequest checkKeys() {
+        if (guiContext.getEventKeyState()) {
             keysFileManager = new FileManager("keys.txt", 2);
             keysData = keysFileManager.getArray();
             if (keysData.size() < 2) {
@@ -186,20 +194,20 @@ public class HUDConfigScreen extends GuiScreen {
                 bright = (int) keysData.get(1).doubleValue();
             }
         }
-        if (mc.currentScreen == null && !optionsMenu) {
+        if (!guiContext.isScreenOpen() && !optionsMenu) {
             if (checkKey(drag)) {
                 WindowManager.configScreenOpen = true;
                 windowManager.showAll();
                 mouseFree = true;
-                mc.displayGuiScreen(this);
+                return ScreenRequest.OPEN_CONFIG;
             } else if (checkKey(bright)) {
                 fullbright = !fullbright;
                 shouldChange = true;
             } else if (checkKey(71)) {
                 // NumPad7 — copy coordinates to clipboard
-                String myString = "x: " + (int) mc.thePlayer.posX
-                        + " y: " + (int) Math.floor(mc.thePlayer.posY)
-                        + " z: " + (int) mc.thePlayer.posZ;
+                String myString = "x: " + (int) gameContext.getPlayerX()
+                        + " y: " + (int) Math.floor(gameContext.getPlayerY())
+                        + " z: " + (int) gameContext.getPlayerZ();
                 StringSelection stringSelection = new StringSelection(myString);
                 Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
                 clpbrd.setContents(stringSelection, null);
@@ -218,24 +226,22 @@ public class HUDConfigScreen extends GuiScreen {
             dx = 0;
             dy = 0;
             grabbed = false;
-            color = null;
+            colorizer = null;
         }
+        return ScreenRequest.NONE;
     }
 
-    public void drag() {
-        x = Mouse.getX();
-        y = Mouse.getY();
-        x = Mouse.getEventX() * this.width / mc.displayWidth;
-        y = this.height - Mouse.getEventY() * this.height / mc.displayHeight - 1;
+    public ScreenRequest drag() {
+        x = guiContext.getMouseX();
+        y = guiContext.getMouseY();
         dx = x - lastX;
         dy = y - lastY;
         lastX = x;
         lastY = y;
-        ScaledResolution scaledRes = new ScaledResolution(mc);
-        int screenWidth = scaledRes.getScaledWidth();
-        int screenHeight = scaledRes.getScaledHeight();
-        if (Mouse.isButtonDown(0) && (!pressed || grabbed) && !optionsMenu) {
-            if (!Mouse.isButtonDown(3)) {
+        int screenWidth = guiContext.getScreenWidth();
+        int screenHeight = guiContext.getScreenHeight();
+        if (guiContext.isMouseButtonDown(0) && (!pressed || grabbed) && !optionsMenu) {
+            if (!guiContext.isMouseButtonDown(3)) {
                 if (x >= screenWidth / 2 - hudGraphics.getStringWidth(options) / 2
                         && x <= screenWidth / 2 + hudGraphics.getStringWidth(options) / 2
                         && y >= screenHeight / 2 - 22 && y <= screenHeight / 2 + 22) {
@@ -252,41 +258,40 @@ public class HUDConfigScreen extends GuiScreen {
                             draggedWindow = windowManager.getWindows().get(i);
                             grabbed = true;
                             firstDrag = true;
-                            return;
+                            return ScreenRequest.NONE;
                         }
                         if (x >= screenWidth / 2 - hudGraphics.getStringWidth(options) / 2
                                 && x <= screenWidth / 2 + hudGraphics.getStringWidth(options) / 2
                                 && y >= screenHeight / 2 - 5 && y <= screenHeight / 2 + 5 && !on) {
-                            mc.displayGuiScreen(null);
                             optionsMenu = true;
-                            return;
+                            return ScreenRequest.OPEN_OPTIONS;
                         }
                         if (x >= screenWidth / 2 - hudGraphics.getStringWidth(resetAll) / 2
                                 && x <= screenWidth / 2 + hudGraphics.getStringWidth(resetAll) / 2
                                 && y >= screenHeight / 2 - 5 + 12 && y <= screenHeight / 2 + 5 + 12 && !on) {
                             windowManager.resetAllWindowsPositions();
                             pressed = true;
-                            return;
+                            return ScreenRequest.NONE;
                         }
                         if (x >= screenWidth / 2 - hudGraphics.getStringWidth(toggleButton) / 2
                                 && x <= screenWidth / 2 + hudGraphics.getStringWidth(toggleButton) / 2
                                 && y >= screenHeight / 2 - 5 + 24 && y <= screenHeight / 2 + 5 + 24 && !on) {
                             WindowManager.setToggled(!WindowManager.isToggled());
                             pressed = true;
-                            return;
+                            return ScreenRequest.NONE;
                         }
                         if (x < screenWidth / 2 - hudGraphics.getStringWidth(copyCoordinates) / 2
                                 || x > screenWidth / 2 + hudGraphics.getStringWidth(copyCoordinates) / 2
                                 || y < screenHeight / 2 - 5 + 36 || y > screenHeight / 2 + 5 + 36 || on)
                             continue;
-                        String myString = "x: " + (int) mc.thePlayer.posX
-                                + " y: " + (int) Math.floor(mc.thePlayer.posY)
-                                + " z: " + (int) mc.thePlayer.posZ;
+                        String myString = "x: " + (int) gameContext.getPlayerX()
+                                + " y: " + (int) Math.floor(gameContext.getPlayerY())
+                                + " z: " + (int) gameContext.getPlayerZ();
                         StringSelection stringSelection = new StringSelection(myString);
                         Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
                         clpbrd.setContents(stringSelection, null);
                         pressed = true;
-                        return;
+                        return ScreenRequest.NONE;
                     }
                 } else {
                     lastMove += dx + dy;
@@ -306,10 +311,10 @@ public class HUDConfigScreen extends GuiScreen {
             lastY = y;
             grabbed = false;
         }
-        if (!Mouse.isButtonDown(0) && !Mouse.isButtonDown(1)) {
+        if (!guiContext.isMouseButtonDown(0) && !guiContext.isMouseButtonDown(1)) {
             pressed = false;
         }
-        if (Mouse.isButtonDown(1) && !pressed) {
+        if (guiContext.isMouseButtonDown(1) && !pressed) {
             pressed = true;
             for (int i = 0; i < windowManager.getWindows().size(); i++) {
                 draggedWindow = windowManager.getWindows().get(i);
@@ -318,15 +323,15 @@ public class HUDConfigScreen extends GuiScreen {
                         || !(draggedWindow instanceof Colorizable))
                     continue;
                 if (!on) {
-                    color = new Colorizer(hudGraphics, (Colorizable) draggedWindow, mc);
+                    colorizer = new Colorizer(hudGraphics, (Colorizable) draggedWindow, guiContext);
                     on = true;
-                    break;
+                    return ScreenRequest.OPEN_COLORIZER;
                 }
-                color = null;
+                colorizer = null;
                 on = false;
             }
         }
-        if (!(Mouse.isButtonDown(0) || Mouse.isButtonDown(1) || (pressed && !grabbed) || optionsMenu)) {
+        if (!(guiContext.isMouseButtonDown(0) || guiContext.isMouseButtonDown(1) || (pressed && !grabbed) || optionsMenu)) {
             for (int i = 0; i < windowManager.getWindows().size(); i++) {
                 if (x < windowManager.getWindows().get(i).getX() || x > windowManager.getWindows().get(i).getX() + windowManager.getWindows().get(i).getWidth()
                         || y < windowManager.getWindows().get(i).getY() || y > windowManager.getWindows().get(i).getY() + windowManager.getWindows().get(i).getHeight())
@@ -381,10 +386,6 @@ public class HUDConfigScreen extends GuiScreen {
                 hudGraphics.drawShadowedFont(hoveredWindow.getToolTip(), x + 10, y, -1);
             }
         }
-    }
-
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
+        return ScreenRequest.NONE;
     }
 }

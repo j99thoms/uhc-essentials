@@ -93,4 +93,14 @@ public class ForgeGameContext implements GameContext {
     public int getFPS() {
         return Minecraft.getDebugFPS();
     }
+
+    @Override
+    public float getGamma() {
+        return mc.gameSettings.gammaSetting;
+    }
+
+    @Override
+    public void setGamma(float gamma) {
+        mc.gameSettings.gammaSetting = gamma;
+    }
 }

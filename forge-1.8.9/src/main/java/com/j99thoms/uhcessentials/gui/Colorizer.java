@@ -1,20 +1,14 @@
 package com.j99thoms.uhcessentials.gui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
-
-import org.lwjgl.input.Mouse;
-
+import com.j99thoms.uhcessentials.GuiContext;
 import com.j99thoms.uhcessentials.HUDGraphics;
 import com.j99thoms.uhcessentials.windows.Colorizable;
 
-public class Colorizer extends GuiScreen {
+public class Colorizer {
 
     private final HUDGraphics hudGraphics;
     private final Colorizable window;
-    private final Minecraft mc;
+    private final GuiContext guiContext;
 
     private int fillRed;
     private int fillGreen;
@@ -51,13 +45,12 @@ public class Colorizer extends GuiScreen {
     private int cooldown = 0;
     private boolean isCooldown = false;
 
-    public Colorizer(HUDGraphics hudGraphics, Colorizable window, Minecraft mc) {
+    public Colorizer(HUDGraphics hudGraphics, Colorizable window, GuiContext guiContext) {
         this.hudGraphics = hudGraphics;
         this.window = window;
-        this.mc = mc;
+        this.guiContext = guiContext;
         getInts();
         this.thickness = (float) window.getThickness();
-        mc.displayGuiScreen(this);
     }
 
     public void update() {
@@ -85,10 +78,9 @@ public class Colorizer extends GuiScreen {
         if (cooldown % 2 == 0 && isCooldown) {
             isCooldown = false;
         }
-        if (Mouse.isButtonDown(0)) {
-            ScaledResolution scaledRes = new ScaledResolution(mc);
-            x = Mouse.getEventX() * this.width / mc.displayWidth;
-            y = this.height - Mouse.getEventY() * this.height / mc.displayHeight - 1;
+        if (guiContext.isMouseButtonDown(0)) {
+            x = guiContext.getMouseX();
+            y = guiContext.getMouseY();
             dx = x - lastX;
             lastX = x;
             if (!border) {
@@ -112,11 +104,11 @@ public class Colorizer extends GuiScreen {
                 } else if ((y < alphaKnobY + 7 && y >= alphaKnobY && x < alphaKnobX + 5 && x >= alphaKnobX) || grabbedAlpha) {
                     grabbedAlpha = true;
                     window.setRGBA(fillRed, fillGreen, fillBlue, fillAlpha + dx);
-                } else if (x <= scaledRes.getScaledWidth() / 2 + 150 + 12 && x >= scaledRes.getScaledWidth() / 2 + 150
-                        && y <= scaledRes.getScaledHeight() / 2 - 25 + 60 + 9 && y >= scaledRes.getScaledHeight() / 2 - 25 + 60) {
+                } else if (x <= guiContext.getScreenWidth() / 2 + 150 + 12 && x >= guiContext.getScreenWidth() / 2 + 150
+                        && y <= guiContext.getScreenHeight() / 2 - 25 + 60 + 9 && y >= guiContext.getScreenHeight() / 2 - 25 + 60) {
                     border = false;
-                } else if (x <= scaledRes.getScaledWidth() / 2 + 150 + 12 + 21 && x >= scaledRes.getScaledWidth() / 2 + 150
-                        && y <= scaledRes.getScaledHeight() / 2 - 25 + 70 + 9 && y >= scaledRes.getScaledHeight() / 2 - 25 + 70) {
+                } else if (x <= guiContext.getScreenWidth() / 2 + 150 + 12 + 21 && x >= guiContext.getScreenWidth() / 2 + 150
+                        && y <= guiContext.getScreenHeight() / 2 - 25 + 70 + 9 && y >= guiContext.getScreenHeight() / 2 - 25 + 70) {
                     border = true;
                 }
             } else {
@@ -145,11 +137,11 @@ public class Colorizer extends GuiScreen {
                 } else if ((y < thicknessKnobY + 7 && y >= thicknessKnobY && x < thicknessKnobX + 5 && x >= thicknessKnobX) || grabbedThickness) {
                     window.setThickness(thickness / 255.0f + (float) (dx / 255));
                     grabbedThickness = true;
-                } else if (x <= scaledRes.getScaledWidth() / 2 + 150 + 12 && x >= scaledRes.getScaledWidth() / 2 + 150
-                        && y <= scaledRes.getScaledHeight() / 2 - 25 + 60 + 9 && y >= scaledRes.getScaledHeight() / 2 - 25 + 60) {
+                } else if (x <= guiContext.getScreenWidth() / 2 + 150 + 12 && x >= guiContext.getScreenWidth() / 2 + 150
+                        && y <= guiContext.getScreenHeight() / 2 - 25 + 60 + 9 && y >= guiContext.getScreenHeight() / 2 - 25 + 60) {
                     border = false;
-                } else if (x <= scaledRes.getScaledWidth() / 2 + 150 + 12 + 21 && x >= scaledRes.getScaledWidth() / 2 + 150
-                        && y <= scaledRes.getScaledHeight() / 2 - 25 + 70 + 9 && y >= scaledRes.getScaledHeight() / 2 - 25 + 70) {
+                } else if (x <= guiContext.getScreenWidth() / 2 + 150 + 12 + 21 && x >= guiContext.getScreenWidth() / 2 + 150
+                        && y <= guiContext.getScreenHeight() / 2 - 25 + 70 + 9 && y >= guiContext.getScreenHeight() / 2 - 25 + 70) {
                     border = true;
                 }
             }
@@ -162,56 +154,51 @@ public class Colorizer extends GuiScreen {
             grabbedBlue = false;
             grabbedAlpha = false;
             grabbedThickness = false;
-            lastX = Mouse.getEventX() * this.width / mc.displayWidth;
+            lastX = guiContext.getMouseX();
         }
     }
 
     private void render() {
-        GlStateManager.disableTexture2D();
-        GlStateManager.enableBlend();
-        GlStateManager.depthMask(false);
-        GlStateManager.blendFunc(770, 771);
-        ScaledResolution scaledRes = new ScaledResolution(mc);
         if (!border) {
-            redKnobX = scaledRes.getScaledWidth() / 2 - 127 + fillRed;
-            redKnobY = scaledRes.getScaledHeight() / 2 - 2 - 32;
-            renderSlider(scaledRes.getScaledWidth() / 2 - 127, scaledRes.getScaledHeight() / 2 - 2 - 32, "Red");
+            redKnobX = guiContext.getScreenWidth() / 2 - 127 + fillRed;
+            redKnobY = guiContext.getScreenHeight() / 2 - 2 - 32;
+            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 - 32, "Red");
             renderKnob(redKnobX, redKnobY, "red");
-            greenKnobX = scaledRes.getScaledWidth() / 2 - 127 + fillGreen;
-            greenKnobY = scaledRes.getScaledHeight() / 2 - 2;
-            renderSlider(scaledRes.getScaledWidth() / 2 - 127, scaledRes.getScaledHeight() / 2 - 2, "Green");
+            greenKnobX = guiContext.getScreenWidth() / 2 - 127 + fillGreen;
+            greenKnobY = guiContext.getScreenHeight() / 2 - 2;
+            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2, "Green");
             renderKnob(greenKnobX, greenKnobY, "green");
-            blueKnobX = scaledRes.getScaledWidth() / 2 - 127 + fillBlue;
-            blueKnobY = scaledRes.getScaledHeight() / 2 - 2 + 32;
-            renderSlider(scaledRes.getScaledWidth() / 2 - 127, scaledRes.getScaledHeight() / 2 - 2 + 32, "Blue");
+            blueKnobX = guiContext.getScreenWidth() / 2 - 127 + fillBlue;
+            blueKnobY = guiContext.getScreenHeight() / 2 - 2 + 32;
+            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 + 32, "Blue");
             renderKnob(blueKnobX, blueKnobY, "blue");
-            alphaKnobX = scaledRes.getScaledWidth() / 2 - 127 + fillAlpha;
-            alphaKnobY = scaledRes.getScaledHeight() / 2 - 2 + 64;
-            renderSlider(scaledRes.getScaledWidth() / 2 - 127, scaledRes.getScaledHeight() / 2 - 2 + 64, "Alpha");
+            alphaKnobX = guiContext.getScreenWidth() / 2 - 127 + fillAlpha;
+            alphaKnobY = guiContext.getScreenHeight() / 2 - 2 + 64;
+            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 + 64, "Alpha");
             renderKnob(alphaKnobX, alphaKnobY, "alpha");
         } else {
-            redKnobX = scaledRes.getScaledWidth() / 2 - 127 + borderRed;
-            redKnobY = scaledRes.getScaledHeight() / 2 - 2 - 32;
-            renderSlider(scaledRes.getScaledWidth() / 2 - 127, scaledRes.getScaledHeight() / 2 - 2 - 32, "Red");
+            redKnobX = guiContext.getScreenWidth() / 2 - 127 + borderRed;
+            redKnobY = guiContext.getScreenHeight() / 2 - 2 - 32;
+            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 - 32, "Red");
             renderKnob(redKnobX, redKnobY, "red");
-            greenKnobX = scaledRes.getScaledWidth() / 2 - 127 + borderGreen;
-            greenKnobY = scaledRes.getScaledHeight() / 2 - 2;
-            renderSlider(scaledRes.getScaledWidth() / 2 - 127, scaledRes.getScaledHeight() / 2 - 2, "Green");
+            greenKnobX = guiContext.getScreenWidth() / 2 - 127 + borderGreen;
+            greenKnobY = guiContext.getScreenHeight() / 2 - 2;
+            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2, "Green");
             renderKnob(greenKnobX, greenKnobY, "green");
-            blueKnobX = scaledRes.getScaledWidth() / 2 - 127 + borderBlue;
-            blueKnobY = scaledRes.getScaledHeight() / 2 - 2 + 32;
-            renderSlider(scaledRes.getScaledWidth() / 2 - 127, scaledRes.getScaledHeight() / 2 - 2 + 32, "Blue");
+            blueKnobX = guiContext.getScreenWidth() / 2 - 127 + borderBlue;
+            blueKnobY = guiContext.getScreenHeight() / 2 - 2 + 32;
+            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 + 32, "Blue");
             renderKnob(blueKnobX, blueKnobY, "blue");
-            alphaKnobX = scaledRes.getScaledWidth() / 2 - 127 + borderAlpha;
-            alphaKnobY = scaledRes.getScaledHeight() / 2 - 2 + 64;
-            renderSlider(scaledRes.getScaledWidth() / 2 - 127, scaledRes.getScaledHeight() / 2 - 2 + 64, "Alpha");
+            alphaKnobX = guiContext.getScreenWidth() / 2 - 127 + borderAlpha;
+            alphaKnobY = guiContext.getScreenHeight() / 2 - 2 + 64;
+            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 + 64, "Alpha");
             renderKnob(alphaKnobX, alphaKnobY, "alpha");
         }
-        hudGraphics.drawHUDRectWithBorder(scaledRes.getScaledWidth() / 2 + 150, scaledRes.getScaledHeight() / 2 - 25, 50, 50,
+        hudGraphics.drawHUDRectWithBorder(guiContext.getScreenWidth() / 2 + 150, guiContext.getScreenHeight() / 2 - 25, 50, 50,
                 fillRed, fillGreen, fillBlue, fillAlpha,
                 borderRed, borderGreen, borderBlue, borderAlpha, window.getThickness());
-        int px = scaledRes.getScaledWidth() / 2 + 150 - 1;
-        int py = scaledRes.getScaledHeight() / 2 - 25 + 60;
+        int px = guiContext.getScreenWidth() / 2 + 150 - 1;
+        int py = guiContext.getScreenHeight() / 2 - 25 + 60;
         int pwidth = 13;
         int pheight = 9;
         if (!border) {
@@ -221,11 +208,8 @@ public class Colorizer extends GuiScreen {
             hudGraphics.drawHUDRectWithBorder(px, py + 10, pwidth + 21, pheight, 120, 120, 120, 150, 0, 0, 0, 255, 0.5);
             hudGraphics.drawHUDRectWithBorder(px, py, pwidth, pheight, 69, 69, 69, 150, 0, 0, 0, 255, 0.2f);
         }
-        hudGraphics.drawShadowedFont("BG", scaledRes.getScaledWidth() / 2 + 150, scaledRes.getScaledHeight() / 2 - 25 + 60, 0xFFFFFF);
-        hudGraphics.drawShadowedFont("Outline", scaledRes.getScaledWidth() / 2 + 150, scaledRes.getScaledHeight() / 2 - 25 + 70, 0xFFFFFF);
-        GlStateManager.depthMask(true);
-        GlStateManager.disableBlend();
-        GlStateManager.enableTexture2D();
+        hudGraphics.drawShadowedFont("BG", guiContext.getScreenWidth() / 2 + 150, guiContext.getScreenHeight() / 2 - 25 + 60, 0xFFFFFF);
+        hudGraphics.drawShadowedFont("Outline", guiContext.getScreenWidth() / 2 + 150, guiContext.getScreenHeight() / 2 - 25 + 70, 0xFFFFFF);
     }
 
     private void renderSlider(int x, int y, String effector) {
@@ -240,7 +224,6 @@ public class Colorizer extends GuiScreen {
             getInts();
         }
         hudGraphics.drawHUDRectWithBorder(x, y, 255, 5, 69, 69, 69, 180, 0, 0, 0, 255, 0.5);
-        GlStateManager.enableTexture2D();
         y -= 10;
         if (!border) {
             if (effector.equalsIgnoreCase("Red")) {
@@ -287,10 +270,5 @@ public class Colorizer extends GuiScreen {
         } else if (color.equalsIgnoreCase("thickness")) {
             hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 0, 0, 0, 100, 255, 255, 255, 255, 0.3f);
         }
-    }
-
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
     }
 }

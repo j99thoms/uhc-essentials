@@ -2,20 +2,14 @@ package com.j99thoms.uhcessentials.gui;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-
+import com.j99thoms.uhcessentials.GuiContext;
 import com.j99thoms.uhcessentials.HUDGraphics;
 import com.j99thoms.uhcessentials.windows.FileManager;
 
-public class OptionMenu extends GuiScreen {
+public class OptionMenu {
 
-    private Minecraft mc;
-    private HUDGraphics hudGraphics;
+    private final HUDGraphics hudGraphics;
+    private final GuiContext guiContext;
     private FileManager fileManager;
     private ArrayList<Double> data = new ArrayList<Double>();
 
@@ -39,9 +33,9 @@ public class OptionMenu extends GuiScreen {
     String label1 = "Draggable HUD";
     String label2 = "Full Gamma Bright";
 
-    public OptionMenu(Minecraft mc, HUDGraphics hudGraphics) {
-        this.mc = mc;
+    public OptionMenu(HUDGraphics hudGraphics, GuiContext guiContext) {
         this.hudGraphics = hudGraphics;
+        this.guiContext = guiContext;
         this.button1Width = 40;
         this.button2Width = 40;
         this.button1Height = 10;
@@ -50,33 +44,32 @@ public class OptionMenu extends GuiScreen {
         data = fileManager.getArray();
         drag = (int) data.get(0).doubleValue();
         bright = (int) data.get(1).doubleValue();
-        key1Name = Keyboard.getKeyName((int) drag);
-        key2Name = Keyboard.getKeyName((int) bright);
+        key1Name = guiContext.getKeyName((int) drag);
+        key2Name = guiContext.getKeyName((int) bright);
     }
 
     public void render() {
-        if (Mouse.isButtonDown(0) && !awaitingKey1 && !awaitingKey2) {
+        if (guiContext.isMouseButtonDown(0) && !awaitingKey1 && !awaitingKey2) {
             mouse();
         } else if (awaitingKey1) {
-            if (Keyboard.getEventKeyState()) {
-                keyCode1 = Keyboard.getEventKey();
-                key1Name = Keyboard.getKeyName((int) keyCode1);
+            if (guiContext.getEventKeyState()) {
+                keyCode1 = guiContext.getEventKey();
+                key1Name = guiContext.getKeyName((int) keyCode1);
                 awaitingKey1 = false;
                 data.set(0, keyCode1);
                 save();
             }
-        } else if (awaitingKey2 && Keyboard.getEventKeyState()) {
-            keyCode2 = Keyboard.getEventKey();
-            key2Name = Keyboard.getKeyName((int) keyCode2);
+        } else if (awaitingKey2 && guiContext.getEventKeyState()) {
+            keyCode2 = guiContext.getEventKey();
+            key2Name = guiContext.getKeyName((int) keyCode2);
             awaitingKey2 = false;
             data.set(1, keyCode2);
             save();
         }
-        ScaledResolution scaledRes = new ScaledResolution(mc);
-        button1X = scaledRes.getScaledWidth() / 2 - button1Width / 2;
-        button1Y = scaledRes.getScaledHeight() / 2 - button1Height / 2 - 22;
-        button2X = scaledRes.getScaledWidth() / 2 - button2Width / 2;
-        button2Y = scaledRes.getScaledHeight() / 2 - button2Height / 2 + 22;
+        button1X = guiContext.getScreenWidth() / 2 - button1Width / 2;
+        button1Y = guiContext.getScreenHeight() / 2 - button1Height / 2 - 22;
+        button2X = guiContext.getScreenWidth() / 2 - button2Width / 2;
+        button2Y = guiContext.getScreenHeight() / 2 - button2Height / 2 + 22;
         hudGraphics.drawHUDRectWithBorder(button1X, button1Y, button1Width, button1Height, 0, 0, 0, 255, 255, 255, 255, 255, 1.5);
         hudGraphics.drawFont(label1, button1X - hudGraphics.getStringWidth(label1) / 4, button1Y - 12, -1);
         hudGraphics.drawHUDRectWithBorder(button2X, button2Y, button2Width, button2Height, 0, 0, 0, 255, 255, 255, 255, 255, 1.5);
@@ -103,18 +96,13 @@ public class OptionMenu extends GuiScreen {
     }
 
     public void mouse() {
-        int x = Mouse.getEventX() * this.width / mc.displayWidth;
-        int y = this.height - Mouse.getEventY() * this.height / mc.displayHeight - 1;
+        int x = guiContext.getMouseX();
+        int y = guiContext.getMouseY();
         if (x >= button1X && x <= button1X + button1Width && y >= button1Y && y <= button1Y + button1Height) {
             awaitingKey1 = true;
         }
         if (x >= button2X && x <= button2X + button2Width && y >= button2Y && y <= button2Y + button2Height) {
             awaitingKey2 = true;
         }
-    }
-
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
     }
 }
