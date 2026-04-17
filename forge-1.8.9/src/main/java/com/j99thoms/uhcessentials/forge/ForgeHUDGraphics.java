@@ -1,6 +1,8 @@
-package com.j99thoms.uhcessentials;
+package com.j99thoms.uhcessentials.forge;
 
 import net.minecraft.client.Minecraft;
+
+import com.j99thoms.uhcessentials.api.HUDGraphics;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;

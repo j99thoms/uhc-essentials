@@ -3,8 +3,8 @@ package com.j99thoms.uhcessentials.windows;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.j99thoms.uhcessentials.GameContext;
-import com.j99thoms.uhcessentials.HUDGraphics;
+import com.j99thoms.uhcessentials.api.GameContext;
+import com.j99thoms.uhcessentials.api.HUDGraphics;
 
 public class WindowManager {
     private ArrayList<BaseWindow> windows;

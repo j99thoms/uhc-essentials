@@ -1,7 +1,7 @@
 package com.j99thoms.uhcessentials.gui;
 
-import com.j99thoms.uhcessentials.GuiContext;
-import com.j99thoms.uhcessentials.HUDGraphics;
+import com.j99thoms.uhcessentials.api.GuiContext;
+import com.j99thoms.uhcessentials.api.HUDGraphics;
 import com.j99thoms.uhcessentials.windows.Colorizable;
 
 public class Colorizer {

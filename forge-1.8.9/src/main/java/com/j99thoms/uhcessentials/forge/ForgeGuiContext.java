@@ -1,6 +1,8 @@
-package com.j99thoms.uhcessentials;
+package com.j99thoms.uhcessentials.forge;
 
 import net.minecraft.client.Minecraft;
+
+import com.j99thoms.uhcessentials.api.GuiContext;
 import net.minecraft.client.gui.ScaledResolution;
 
 import org.lwjgl.input.Keyboard;

@@ -1,13 +1,16 @@
-package com.j99thoms.uhcessentials;
+package com.j99thoms.uhcessentials.forge;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.j99thoms.uhcessentials.gui.ForgeHUDConfigScreen;
+import com.j99thoms.uhcessentials.api.GameContext;
+import com.j99thoms.uhcessentials.api.GuiContext;
+import com.j99thoms.uhcessentials.api.HUDGraphics;
 import com.j99thoms.uhcessentials.windows.WindowManager;
 
 public class HUDEventHandler {

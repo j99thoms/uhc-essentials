@@ -1,6 +1,6 @@
 package com.j99thoms.uhcessentials.windows;
 
-import com.j99thoms.uhcessentials.HUDGraphics;
+import com.j99thoms.uhcessentials.api.HUDGraphics;
 
 public abstract class BaseWindow {
 

@@ -1,4 +1,4 @@
-package com.j99thoms.uhcessentials;
+package com.j99thoms.uhcessentials.api;
 
 import java.util.List;
 

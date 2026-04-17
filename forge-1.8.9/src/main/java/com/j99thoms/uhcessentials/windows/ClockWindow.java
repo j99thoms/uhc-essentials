@@ -2,7 +2,8 @@ package com.j99thoms.uhcessentials.windows;
 
 import java.util.ArrayList;
 
-import com.j99thoms.uhcessentials.HUDGraphics;
+import com.j99thoms.uhcessentials.api.HUDGraphics;
+import com.j99thoms.uhcessentials.util.FileManager;
 
 public class ClockWindow extends BaseWindow {
 

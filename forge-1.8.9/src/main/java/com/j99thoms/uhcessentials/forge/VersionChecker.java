@@ -1,4 +1,4 @@
-package com.j99thoms.uhcessentials;
+package com.j99thoms.uhcessentials.forge;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -12,10 +12,9 @@ import org.apache.logging.log4j.Logger;
 
 public class VersionChecker {
 
-    private static final Logger LOGGER = LogManager.getLogger(UHCEssentialsMod.MODID);
+    private static final Logger LOGGER = LogManager.getLogger(VersionChecker.class);
     private static final String CURRENT_VERSION = "1.2.1";
-    private static final String VERSION_URL =
-            "https://raw.githubusercontent.com/j99thoms/uhc-essentials/main/forge-1.8.9/version.txt";
+    private static final String VERSION_URL = "https://raw.githubusercontent.com/j99thoms/uhc-essentials/main/forge-1.8.9/version.txt";
 
     public void check(final Minecraft mc) {
         Thread thread = new Thread(new Runnable() {

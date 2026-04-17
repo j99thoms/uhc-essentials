@@ -2,9 +2,9 @@ package com.j99thoms.uhcessentials.gui;
 
 import java.util.ArrayList;
 
-import com.j99thoms.uhcessentials.GuiContext;
-import com.j99thoms.uhcessentials.HUDGraphics;
-import com.j99thoms.uhcessentials.windows.FileManager;
+import com.j99thoms.uhcessentials.api.GuiContext;
+import com.j99thoms.uhcessentials.api.HUDGraphics;
+import com.j99thoms.uhcessentials.util.FileManager;
 
 public class OptionMenu {
 

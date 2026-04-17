@@ -1,9 +1,11 @@
-package com.j99thoms.uhcessentials;
+package com.j99thoms.uhcessentials.forge;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+
+import com.j99thoms.uhcessentials.api.GameContext;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

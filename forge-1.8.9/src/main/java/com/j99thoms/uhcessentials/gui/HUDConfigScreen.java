@@ -6,12 +6,12 @@ import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.j99thoms.uhcessentials.GameContext;
-import com.j99thoms.uhcessentials.GuiContext;
-import com.j99thoms.uhcessentials.HUDGraphics;
+import com.j99thoms.uhcessentials.api.GameContext;
+import com.j99thoms.uhcessentials.api.GuiContext;
+import com.j99thoms.uhcessentials.api.HUDGraphics;
+import com.j99thoms.uhcessentials.util.FileManager;
 import com.j99thoms.uhcessentials.windows.BaseWindow;
 import com.j99thoms.uhcessentials.windows.Colorizable;
-import com.j99thoms.uhcessentials.windows.FileManager;
 import com.j99thoms.uhcessentials.windows.WindowManager;
 import com.j99thoms.uhcessentials.windows.WindowTheme;
 

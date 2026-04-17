@@ -1,4 +1,4 @@
-package com.j99thoms.uhcessentials.windows;
+package com.j99thoms.uhcessentials.util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

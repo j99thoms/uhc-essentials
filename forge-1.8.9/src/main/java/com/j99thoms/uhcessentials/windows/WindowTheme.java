@@ -2,6 +2,8 @@ package com.j99thoms.uhcessentials.windows;
 
 import java.util.ArrayList;
 
+import com.j99thoms.uhcessentials.util.FileManager;
+
 public class WindowTheme {
 
     private int fillRed = 69;

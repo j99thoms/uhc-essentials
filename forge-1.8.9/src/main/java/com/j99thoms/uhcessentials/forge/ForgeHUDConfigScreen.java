@@ -1,11 +1,13 @@
-package com.j99thoms.uhcessentials.gui;
+package com.j99thoms.uhcessentials.forge;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 
-import com.j99thoms.uhcessentials.GameContext;
-import com.j99thoms.uhcessentials.GuiContext;
-import com.j99thoms.uhcessentials.HUDGraphics;
+import com.j99thoms.uhcessentials.api.GameContext;
+import com.j99thoms.uhcessentials.api.GuiContext;
+import com.j99thoms.uhcessentials.api.HUDGraphics;
+import com.j99thoms.uhcessentials.gui.HUDConfigScreen;
+import com.j99thoms.uhcessentials.gui.ScreenRequest;
 import com.j99thoms.uhcessentials.windows.WindowManager;
 
 public class ForgeHUDConfigScreen extends GuiScreen {
