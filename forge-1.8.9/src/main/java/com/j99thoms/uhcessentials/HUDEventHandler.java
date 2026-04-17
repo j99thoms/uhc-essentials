@@ -16,19 +16,27 @@ public class HUDEventHandler {
     private final Minecraft mc = Minecraft.getMinecraft();
     private WindowManager windowManager;
     private ForgeHUDConfigScreen hudConfigScreen;
+    private boolean initialized = false;
+
+    private void init() {
+        HUDGraphics hudGraphics = new ForgeHUDGraphics(mc.fontRendererObj, mc);
+        GameContext gameContext = new ForgeGameContext(mc);
+        GuiContext guiContext = new ForgeGuiContext(mc);
+
+        windowManager = new WindowManager(hudGraphics, gameContext);
+        hudConfigScreen = new ForgeHUDConfigScreen(windowManager, mc, hudGraphics, guiContext, gameContext);
+
+        initialized = true;
+        LOGGER.info("UHC Essentials loaded successfully.");
+    }
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
         if (mc.thePlayer == null || mc.theWorld == null) return;
 
-        if (windowManager == null) {
-            LOGGER.info("UHC Essentials loaded successfully.");
-            HUDGraphics hudGraphics = new ForgeHUDGraphics(mc.fontRendererObj, mc);
-            GameContext gameContext = new ForgeGameContext(mc);
-            GuiContext guiContext = new ForgeGuiContext(mc);
-            windowManager = new WindowManager(hudGraphics, gameContext);
-            hudConfigScreen = new ForgeHUDConfigScreen(windowManager, mc, hudGraphics, guiContext, gameContext);
+        if (!initialized) {
+            init();
             new VersionChecker().check(mc);
         }
 
@@ -38,7 +46,7 @@ public class HUDEventHandler {
     @SubscribeEvent
     public void onRenderOverlay(RenderGameOverlayEvent.Post event) {
         if (event.type != RenderGameOverlayEvent.ElementType.ALL) return;
-        if (windowManager == null) return;
+        if (!initialized) return;
 
         windowManager.render();
         hudConfigScreen.render();
