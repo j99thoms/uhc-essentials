@@ -34,7 +34,6 @@ src/main/java/com/j99thoms/uhcessentials/
     forge/
         UHCEssentialsMod.java      - @Mod entry point, registers event handler
         HUDEventHandler.java       - Forge event subscriptions (tick + render overlay)
-        VersionChecker.java        - Background version check against forge-1.8.9/version.txt
         ForgeGameContext.java      - Forge implementation of GameContext
         ForgeGuiContext.java       - Forge implementation of GuiContext
         ForgeHUDGraphics.java      - Forge implementation of HUDGraphics
@@ -48,6 +47,7 @@ src/main/java/com/j99thoms/uhcessentials/
         Colorizer.java        - Per-window color/theme editor logic (pure Java, no Minecraft imports)
     util/
         FileManager.java      - Config file I/O (.minecraft/UHC Essentials/configs/)
+        VersionChecker.java   - Background version check (pure Java, no Minecraft imports)
     windows/
         BaseWindow.java       - Abstract base class for all HUD windows
         Colorizable.java      - Interface for windows that support color/theme customization
