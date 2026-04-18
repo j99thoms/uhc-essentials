@@ -27,9 +27,6 @@ public class Colorizer {
     private int borderBlue;
     private int borderAlpha;
 
-    private int x;
-    private int y;
-    private int dx;
     private int lastX;
 
     private int redKnobX;
@@ -81,9 +78,9 @@ public class Colorizer {
 
     private void mouse() {
         if (guiContext.isMouseButtonDown(0)) {
-            x = guiContext.getMouseX();
-            y = guiContext.getMouseY();
-            dx = x - lastX;
+            int x = guiContext.getMouseX();
+            int y = guiContext.getMouseY();
+            int dx = x - lastX;
             lastX = x;
 
             int previewX = guiContext.getScreenWidth() / 2 + PREVIEW_X_OFFSET;
