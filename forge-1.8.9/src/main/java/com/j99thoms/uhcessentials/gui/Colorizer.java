@@ -18,8 +18,6 @@ public class Colorizer {
     private int borderGreen;
     private int borderBlue;
     private int borderAlpha;
-    private float thickness;
-
     private int x;
     private int y;
     private int dx;
@@ -33,14 +31,10 @@ public class Colorizer {
     private int blueKnobY;
     private int alphaKnobX;
     private int alphaKnobY;
-    private int thicknessKnobX;
-    private int thicknessKnobY;
-
     private boolean grabbedRed = false;
     private boolean grabbedGreen = false;
     private boolean grabbedBlue = false;
     private boolean grabbedAlpha = false;
-    private boolean grabbedThickness = false;
     private boolean border = false;
     private int cooldown = 0;
     private boolean isCooldown = false;
@@ -71,7 +65,6 @@ public class Colorizer {
         borderGreen = window.getBorderG();
         borderBlue = window.getBorderB();
         borderAlpha = window.getBorderA();
-        thickness = (float) window.getThickness();
     }
 
     private void mouse() {
@@ -119,9 +112,6 @@ public class Colorizer {
                 } else if ((y < alphaKnobY + 7 && y >= alphaKnobY && x < alphaKnobX + 5 && x >= alphaKnobX) || grabbedAlpha) {
                     grabbedAlpha = true;
                     window.setBorderRGB(borderRed, borderGreen, borderBlue, clamp(borderAlpha + dx));
-                } else if ((y < thicknessKnobY + 7 && y >= thicknessKnobY && x < thicknessKnobX + 5 && x >= thicknessKnobX) || grabbedThickness) {
-                    window.setThickness(thickness / 255.0f + (float) (dx / 255));
-                    grabbedThickness = true;
                 } else if (x <= guiContext.getScreenWidth() / 2 + 150 + 12 && x >= guiContext.getScreenWidth() / 2 + 150
                         && y <= guiContext.getScreenHeight() / 2 - 25 + 60 + 9 && y >= guiContext.getScreenHeight() / 2 - 25 + 60) {
                     border = false;
@@ -130,7 +120,6 @@ public class Colorizer {
                     border = true;
                 }
             }
-            window.setThickness(0.5f);
             window.save();
         } else {
             cooldown = 0;
@@ -138,7 +127,6 @@ public class Colorizer {
             grabbedGreen = false;
             grabbedBlue = false;
             grabbedAlpha = false;
-            grabbedThickness = false;
             lastX = guiContext.getMouseX();
         }
     }
@@ -228,8 +216,6 @@ public class Colorizer {
             hudGraphics.drawShadowedFont(effector + ": " + borderBlue, x, y, -1);
         } else if (effector.equalsIgnoreCase("Alpha")) {
             hudGraphics.drawShadowedFont(effector + ": " + borderAlpha, x, y, -1);
-        } else if (effector.equalsIgnoreCase("Thickness")) {
-            hudGraphics.drawShadowedFont(effector + ": " + thickness / 255.0f, x, y, -1);
         }
     }
 
@@ -252,8 +238,6 @@ public class Colorizer {
             hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 0, 0, 255, 255, 0, 0, 0, 255, 0.3f);
         } else if (color.equalsIgnoreCase("alpha")) {
             hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 255, 255, 255, 100, 0, 0, 0, 255, 0.3f);
-        } else if (color.equalsIgnoreCase("thickness")) {
-            hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 0, 0, 0, 100, 255, 255, 255, 255, 0.3f);
         }
     }
 }
