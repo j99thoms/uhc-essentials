@@ -6,6 +6,14 @@ import com.j99thoms.uhcessentials.windows.ThemedWindow;
 
 public class Colorizer {
 
+    private static final int PREVIEW_X_OFFSET = 150;
+    private static final int PREVIEW_Y_OFFSET = 25;
+    private static final int SLIDER_SPACING   = 32;
+    private static final int KNOB_WIDTH       = 2;
+    private static final int KNOB_HEIGHT      = 7;
+    private static final int KNOB_HIT_WIDTH   = 5;
+    private static final int BUTTON_Y_OFFSET  = 60;
+
     private final HUDGraphics hudGraphics;
     private final ThemedWindow window;
     private final GuiContext guiContext;
@@ -18,6 +26,7 @@ public class Colorizer {
     private int borderGreen;
     private int borderBlue;
     private int borderAlpha;
+
     private int x;
     private int y;
     private int dx;
@@ -77,29 +86,31 @@ public class Colorizer {
             dx = x - lastX;
             lastX = x;
 
-            int previewX = guiContext.getScreenWidth() / 2 + 150;
-            int previewY = guiContext.getScreenHeight() / 2 - 25;
+            int previewX = guiContext.getScreenWidth() / 2 + PREVIEW_X_OFFSET;
+            int previewY = guiContext.getScreenHeight() / 2 - PREVIEW_Y_OFFSET;
 
             int r = border ? borderRed   : fillRed;
             int g = border ? borderGreen : fillGreen;
             int b = border ? borderBlue  : fillBlue;
             int a = border ? borderAlpha : fillAlpha;
 
-            if ((y < redKnobY + 7 && y >= redKnobY && x < redKnobX + 5 && x >= redKnobX) || grabbedRed) {
+            if ((y < redKnobY + KNOB_HEIGHT && y >= redKnobY && x < redKnobX + KNOB_HIT_WIDTH && x >= redKnobX) || grabbedRed) {
                 grabbedRed = true;
                 setActiveRGBA(clamp(r + dx), g, b, a);
-            } else if ((y < greenKnobY + 7 && y >= greenKnobY && x < greenKnobX + 5 && x >= greenKnobX) || grabbedGreen) {
+            } else if ((y < greenKnobY + KNOB_HEIGHT && y >= greenKnobY && x < greenKnobX + KNOB_HIT_WIDTH && x >= greenKnobX) || grabbedGreen) {
                 grabbedGreen = true;
                 setActiveRGBA(r, clamp(g + dx), b, a);
-            } else if ((y < blueKnobY + 7 && y >= blueKnobY && x < blueKnobX + 5 && x >= blueKnobX) || grabbedBlue) {
+            } else if ((y < blueKnobY + KNOB_HEIGHT && y >= blueKnobY && x < blueKnobX + KNOB_HIT_WIDTH && x >= blueKnobX) || grabbedBlue) {
                 grabbedBlue = true;
                 setActiveRGBA(r, g, clamp(b + dx), a);
-            } else if ((y < alphaKnobY + 7 && y >= alphaKnobY && x < alphaKnobX + 5 && x >= alphaKnobX) || grabbedAlpha) {
+            } else if ((y < alphaKnobY + KNOB_HEIGHT && y >= alphaKnobY && x < alphaKnobX + KNOB_HIT_WIDTH && x >= alphaKnobX) || grabbedAlpha) {
                 grabbedAlpha = true;
                 setActiveRGBA(r, g, b, clamp(a + dx));
-            } else if (x <= previewX + 12 && x >= previewX && y <= previewY + 69 && y >= previewY + 60) {
+            } else if (x <= previewX + 12 && x >= previewX
+                    && y <= previewY + BUTTON_Y_OFFSET + 9 && y >= previewY + BUTTON_Y_OFFSET) {
                 border = false;
-            } else if (x <= previewX + 33 && x >= previewX && y <= previewY + 79 && y >= previewY + 70) {
+            } else if (x <= previewX + 33 && x >= previewX
+                    && y <= previewY + BUTTON_Y_OFFSET + 19 && y >= previewY + BUTTON_Y_OFFSET + 10) {
                 border = true;
             }
             window.save();
@@ -113,6 +124,8 @@ public class Colorizer {
     }
 
     private void render() {
+        int previewX = guiContext.getScreenWidth() / 2 + PREVIEW_X_OFFSET;
+        int previewY = guiContext.getScreenHeight() / 2 - PREVIEW_Y_OFFSET;
         int sliderBaseX = guiContext.getScreenWidth() / 2 - 127;
         int sliderMidY = guiContext.getScreenHeight() / 2 - 2;
 
@@ -126,10 +139,10 @@ public class Colorizer {
         blueKnobX  = sliderBaseX + activeBlue;
         alphaKnobX = sliderBaseX + activeAlpha;
 
-        redKnobY   = sliderMidY - 32;
+        redKnobY   = sliderMidY - SLIDER_SPACING;
         greenKnobY = sliderMidY;
-        blueKnobY  = sliderMidY + 32;
-        alphaKnobY = sliderMidY + 64;
+        blueKnobY  = sliderMidY + SLIDER_SPACING;
+        alphaKnobY = sliderMidY + 2 * SLIDER_SPACING;
 
         renderSlider(sliderBaseX, redKnobY,   "Red",   activeRed);
         renderKnob(redKnobX, redKnobY, "red");
@@ -140,22 +153,20 @@ public class Colorizer {
         renderSlider(sliderBaseX, alphaKnobY, "Alpha", activeAlpha);
         renderKnob(alphaKnobX, alphaKnobY, "alpha");
 
-        hudGraphics.drawHUDRectWithBorder(guiContext.getScreenWidth() / 2 + 150, guiContext.getScreenHeight() / 2 - 25, 50, 50,
+        hudGraphics.drawHUDRectWithBorder(previewX, previewY, 50, 50,
                 fillRed, fillGreen, fillBlue, fillAlpha,
                 borderRed, borderGreen, borderBlue, borderAlpha, window.getThickness());
-        int px = guiContext.getScreenWidth() / 2 + 150 - 1;
-        int py = guiContext.getScreenHeight() / 2 - 25 + 60;
-        int pwidth = 13;
-        int pheight = 9;
+        int px = previewX - 1;
+        int py = previewY + BUTTON_Y_OFFSET;
         if (!border) {
-            hudGraphics.drawHUDRectWithBorder(px, py, pwidth, pheight, 120, 120, 120, 150, 0, 0, 0, 255, 0.5);
-            hudGraphics.drawHUDRectWithBorder(px, py + 10, pwidth + 21, pheight, 69, 69, 69, 150, 0, 0, 0, 255, 0.2f);
+            hudGraphics.drawHUDRectWithBorder(px, py, 13, 9, 120, 120, 120, 150, 0, 0, 0, 255, 0.5);
+            hudGraphics.drawHUDRectWithBorder(px, py + 10, 34, 9, 69, 69, 69, 150, 0, 0, 0, 255, 0.2f);
         } else {
-            hudGraphics.drawHUDRectWithBorder(px, py + 10, pwidth + 21, pheight, 120, 120, 120, 150, 0, 0, 0, 255, 0.5);
-            hudGraphics.drawHUDRectWithBorder(px, py, pwidth, pheight, 69, 69, 69, 150, 0, 0, 0, 255, 0.2f);
+            hudGraphics.drawHUDRectWithBorder(px, py + 10, 34, 9, 120, 120, 120, 150, 0, 0, 0, 255, 0.5);
+            hudGraphics.drawHUDRectWithBorder(px, py, 13, 9, 69, 69, 69, 150, 0, 0, 0, 255, 0.2f);
         }
-        hudGraphics.drawShadowedFont("BG", guiContext.getScreenWidth() / 2 + 150, guiContext.getScreenHeight() / 2 - 25 + 60, 0xFFFFFF);
-        hudGraphics.drawShadowedFont("Outline", guiContext.getScreenWidth() / 2 + 150, guiContext.getScreenHeight() / 2 - 25 + 70, 0xFFFFFF);
+        hudGraphics.drawShadowedFont("BG", previewX, py, 0xFFFFFF);
+        hudGraphics.drawShadowedFont("Outline", previewX, py + 10, 0xFFFFFF);
     }
 
     private void renderSlider(int x, int y, String label, int value) {
@@ -165,13 +176,13 @@ public class Colorizer {
 
     private void renderKnob(int x, int y, String color) {
         if (color.equalsIgnoreCase("red")) {
-            hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 255, 0, 0, 255, 0, 0, 0, 255, 0.3f);
+            hudGraphics.drawHUDRectWithBorder(x, y - 1, KNOB_WIDTH, KNOB_HEIGHT, 255, 0, 0, 255, 0, 0, 0, 255, 0.3f);
         } else if (color.equalsIgnoreCase("green")) {
-            hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 0, 255, 0, 255, 0, 0, 0, 255, 0.3f);
+            hudGraphics.drawHUDRectWithBorder(x, y - 1, KNOB_WIDTH, KNOB_HEIGHT, 0, 255, 0, 255, 0, 0, 0, 255, 0.3f);
         } else if (color.equalsIgnoreCase("blue")) {
-            hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 0, 0, 255, 255, 0, 0, 0, 255, 0.3f);
+            hudGraphics.drawHUDRectWithBorder(x, y - 1, KNOB_WIDTH, KNOB_HEIGHT, 0, 0, 255, 255, 0, 0, 0, 255, 0.3f);
         } else if (color.equalsIgnoreCase("alpha")) {
-            hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 255, 255, 255, 100, 0, 0, 0, 255, 0.3f);
+            hudGraphics.drawHUDRectWithBorder(x, y - 1, KNOB_WIDTH, KNOB_HEIGHT, 255, 255, 255, 100, 0, 0, 0, 255, 0.3f);
         }
     }
 }
