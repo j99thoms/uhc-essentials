@@ -58,6 +58,10 @@ public class Colorizer {
         render();
     }
 
+    private static int clamp(int value) {
+        return Math.max(0, Math.min(255, value));
+    }
+
     private void getInts() {
         fillRed = window.getR();
         fillGreen = window.getG();
@@ -83,26 +87,18 @@ public class Colorizer {
             dx = x - lastX;
             lastX = x;
             if (!border) {
-                fillRed = fillRed <= 0 ? 0 : fillRed;
-                fillRed = fillRed > 255 ? 255 : fillRed;
-                fillGreen = fillGreen <= 0 ? 0 : fillGreen;
-                fillGreen = fillGreen > 255 ? 255 : fillGreen;
-                fillBlue = fillBlue <= 0 ? 0 : fillBlue;
-                fillBlue = fillBlue > 255 ? 255 : fillBlue;
-                fillAlpha = fillAlpha < 0 ? 0 : fillAlpha;
-                fillAlpha = fillAlpha > 255 ? 255 : fillAlpha;
                 if ((y < redKnobY + 7 && y >= redKnobY && x < redKnobX + 5 && x >= redKnobX) || grabbedRed) {
                     grabbedRed = true;
-                    window.setRGBA(fillRed + dx, fillGreen, fillBlue, fillAlpha);
+                    window.setRGBA(clamp(fillRed + dx), fillGreen, fillBlue, fillAlpha);
                 } else if ((y < greenKnobY + 7 && y >= greenKnobY && x < greenKnobX + 5 && x >= greenKnobX) || grabbedGreen) {
                     grabbedGreen = true;
-                    window.setRGBA(fillRed, fillGreen + dx, fillBlue, fillAlpha);
+                    window.setRGBA(fillRed, clamp(fillGreen + dx), fillBlue, fillAlpha);
                 } else if ((y < blueKnobY + 7 && y >= blueKnobY && x < blueKnobX + 5 && x >= blueKnobX) || grabbedBlue) {
                     grabbedBlue = true;
-                    window.setRGBA(fillRed, fillGreen, fillBlue + dx, fillAlpha);
+                    window.setRGBA(fillRed, fillGreen, clamp(fillBlue + dx), fillAlpha);
                 } else if ((y < alphaKnobY + 7 && y >= alphaKnobY && x < alphaKnobX + 5 && x >= alphaKnobX) || grabbedAlpha) {
                     grabbedAlpha = true;
-                    window.setRGBA(fillRed, fillGreen, fillBlue, fillAlpha + dx);
+                    window.setRGBA(fillRed, fillGreen, fillBlue, clamp(fillAlpha + dx));
                 } else if (x <= guiContext.getScreenWidth() / 2 + 150 + 12 && x >= guiContext.getScreenWidth() / 2 + 150
                         && y <= guiContext.getScreenHeight() / 2 - 25 + 60 + 9 && y >= guiContext.getScreenHeight() / 2 - 25 + 60) {
                     border = false;
@@ -111,28 +107,18 @@ public class Colorizer {
                     border = true;
                 }
             } else {
-                borderRed = borderRed <= 0 ? 0 : borderRed;
-                borderRed = borderRed > 255 ? 255 : borderRed;
-                borderGreen = borderGreen <= 0 ? 0 : borderGreen;
-                borderGreen = borderGreen > 255 ? 255 : borderGreen;
-                borderBlue = borderBlue <= 0 ? 0 : borderBlue;
-                borderBlue = borderBlue > 255 ? 255 : borderBlue;
-                borderAlpha = borderAlpha <= 0 ? 0 : borderAlpha;
-                borderAlpha = borderAlpha > 255 ? 255 : borderAlpha;
-                thickness = thickness <= 0 ? 0 : thickness;
-                thickness = thickness > 255 ? 255 : thickness;
                 if ((y < redKnobY + 7 && y >= redKnobY && x < redKnobX + 5 && x >= redKnobX) || grabbedRed) {
                     grabbedRed = true;
-                    window.setBorderRGB(borderRed + dx, borderGreen, borderBlue, borderAlpha);
+                    window.setBorderRGB(clamp(borderRed + dx), borderGreen, borderBlue, borderAlpha);
                 } else if ((y < greenKnobY + 7 && y >= greenKnobY && x < greenKnobX + 5 && x >= greenKnobX) || grabbedGreen) {
                     grabbedGreen = true;
-                    window.setBorderRGB(borderRed, borderGreen + dx, borderBlue, borderAlpha);
+                    window.setBorderRGB(borderRed, clamp(borderGreen + dx), borderBlue, borderAlpha);
                 } else if ((y < blueKnobY + 7 && y >= blueKnobY && x < blueKnobX + 5 && x >= blueKnobX) || grabbedBlue) {
                     grabbedBlue = true;
-                    window.setBorderRGB(borderRed, borderGreen, borderBlue + dx, borderAlpha);
+                    window.setBorderRGB(borderRed, borderGreen, clamp(borderBlue + dx), borderAlpha);
                 } else if ((y < alphaKnobY + 7 && y >= alphaKnobY && x < alphaKnobX + 5 && x >= alphaKnobX) || grabbedAlpha) {
                     grabbedAlpha = true;
-                    window.setBorderRGB(borderRed, borderGreen, borderBlue, borderAlpha + dx);
+                    window.setBorderRGB(borderRed, borderGreen, borderBlue, clamp(borderAlpha + dx));
                 } else if ((y < thicknessKnobY + 7 && y >= thicknessKnobY && x < thicknessKnobX + 5 && x >= thicknessKnobX) || grabbedThickness) {
                     window.setThickness(thickness / 255.0f + (float) (dx / 255));
                     grabbedThickness = true;
