@@ -50,7 +50,6 @@ public class Colorizer {
         this.window = window;
         this.guiContext = guiContext;
         getInts();
-        this.thickness = (float) window.getThickness();
     }
 
     public void update() {
