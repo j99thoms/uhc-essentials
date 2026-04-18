@@ -177,16 +177,6 @@ public class Colorizer {
     }
 
     private void renderSlider(int x, int y, String effector) {
-        if (fillRed > 255 || fillRed < 0 || fillGreen > 255 || fillGreen < 0
-                || fillBlue > 255 || fillBlue < 0 || fillAlpha > 255 || fillAlpha < 0
-                || borderRed > 255 || borderRed < 0 || borderGreen > 255 || borderGreen < 0
-                || borderBlue > 255 || borderBlue < 0 || borderAlpha > 255 || borderAlpha < 0) {
-            window.setRGBA(Math.abs(fillRed <= 255 ? fillRed : 255), Math.abs(fillGreen <= 255 ? fillGreen : 255),
-                    Math.abs(fillBlue <= 255 ? fillBlue : 255), Math.abs(fillAlpha <= 255 ? fillAlpha : 255));
-            window.setBorderRGB(Math.abs(borderRed <= 255 ? borderRed : 255), Math.abs(borderGreen <= 255 ? borderGreen : 255),
-                    Math.abs(borderBlue <= 255 ? borderBlue : 255), Math.abs(borderAlpha <= 255 ? borderAlpha : 255));
-            getInts();
-        }
         hudGraphics.drawHUDRectWithBorder(x, y, 255, 5, 69, 69, 69, 180, 0, 0, 0, 255, 0.5);
         y -= 10;
         if (!border) {
