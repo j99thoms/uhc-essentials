@@ -123,41 +123,33 @@ public class Colorizer {
     }
 
     private void render() {
-        if (!border) {
-            redKnobX = guiContext.getScreenWidth() / 2 - 127 + fillRed;
-            redKnobY = guiContext.getScreenHeight() / 2 - 2 - 32;
-            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 - 32, "Red", fillRed);
-            renderKnob(redKnobX, redKnobY, "red");
-            greenKnobX = guiContext.getScreenWidth() / 2 - 127 + fillGreen;
-            greenKnobY = guiContext.getScreenHeight() / 2 - 2;
-            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2, "Green", fillGreen);
-            renderKnob(greenKnobX, greenKnobY, "green");
-            blueKnobX = guiContext.getScreenWidth() / 2 - 127 + fillBlue;
-            blueKnobY = guiContext.getScreenHeight() / 2 - 2 + 32;
-            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 + 32, "Blue", fillBlue);
-            renderKnob(blueKnobX, blueKnobY, "blue");
-            alphaKnobX = guiContext.getScreenWidth() / 2 - 127 + fillAlpha;
-            alphaKnobY = guiContext.getScreenHeight() / 2 - 2 + 64;
-            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 + 64, "Alpha", fillAlpha);
-            renderKnob(alphaKnobX, alphaKnobY, "alpha");
-        } else {
-            redKnobX = guiContext.getScreenWidth() / 2 - 127 + borderRed;
-            redKnobY = guiContext.getScreenHeight() / 2 - 2 - 32;
-            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 - 32, "Red", borderRed);
-            renderKnob(redKnobX, redKnobY, "red");
-            greenKnobX = guiContext.getScreenWidth() / 2 - 127 + borderGreen;
-            greenKnobY = guiContext.getScreenHeight() / 2 - 2;
-            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2, "Green", borderGreen);
-            renderKnob(greenKnobX, greenKnobY, "green");
-            blueKnobX = guiContext.getScreenWidth() / 2 - 127 + borderBlue;
-            blueKnobY = guiContext.getScreenHeight() / 2 - 2 + 32;
-            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 + 32, "Blue", borderBlue);
-            renderKnob(blueKnobX, blueKnobY, "blue");
-            alphaKnobX = guiContext.getScreenWidth() / 2 - 127 + borderAlpha;
-            alphaKnobY = guiContext.getScreenHeight() / 2 - 2 + 64;
-            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 + 64, "Alpha", borderAlpha);
-            renderKnob(alphaKnobX, alphaKnobY, "alpha");
-        }
+        int sliderBaseX = guiContext.getScreenWidth() / 2 - 127;
+        int sliderMidY = guiContext.getScreenHeight() / 2 - 2;
+
+        int activeRed   = border ? borderRed   : fillRed;
+        int activeGreen = border ? borderGreen : fillGreen;
+        int activeBlue  = border ? borderBlue  : fillBlue;
+        int activeAlpha = border ? borderAlpha : fillAlpha;
+
+        redKnobX   = sliderBaseX + activeRed;
+        greenKnobX = sliderBaseX + activeGreen;
+        blueKnobX  = sliderBaseX + activeBlue;
+        alphaKnobX = sliderBaseX + activeAlpha;
+
+        redKnobY   = sliderMidY - 32;
+        greenKnobY = sliderMidY;
+        blueKnobY  = sliderMidY + 32;
+        alphaKnobY = sliderMidY + 64;
+
+        renderSlider(sliderBaseX, redKnobY,   "Red",   activeRed);
+        renderKnob(redKnobX, redKnobY, "red");
+        renderSlider(sliderBaseX, greenKnobY, "Green", activeGreen);
+        renderKnob(greenKnobX, greenKnobY, "green");
+        renderSlider(sliderBaseX, blueKnobY,  "Blue",  activeBlue);
+        renderKnob(blueKnobX, blueKnobY, "blue");
+        renderSlider(sliderBaseX, alphaKnobY, "Alpha", activeAlpha);
+        renderKnob(alphaKnobX, alphaKnobY, "alpha");
+
         hudGraphics.drawHUDRectWithBorder(guiContext.getScreenWidth() / 2 + 150, guiContext.getScreenHeight() / 2 - 25, 50, 50,
                 fillRed, fillGreen, fillBlue, fillAlpha,
                 borderRed, borderGreen, borderBlue, borderAlpha, window.getThickness());
