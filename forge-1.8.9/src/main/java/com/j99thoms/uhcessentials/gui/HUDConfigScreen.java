@@ -11,7 +11,7 @@ import com.j99thoms.uhcessentials.api.GuiContext;
 import com.j99thoms.uhcessentials.api.HUDGraphics;
 import com.j99thoms.uhcessentials.util.FileManager;
 import com.j99thoms.uhcessentials.windows.BaseWindow;
-import com.j99thoms.uhcessentials.windows.Colorizable;
+import com.j99thoms.uhcessentials.windows.ThemedWindow;
 import com.j99thoms.uhcessentials.windows.WindowManager;
 import com.j99thoms.uhcessentials.windows.WindowTheme;
 
@@ -320,10 +320,10 @@ public class HUDConfigScreen {
                 draggedWindow = windowManager.getWindows().get(i);
                 if (x < windowManager.getWindows().get(i).getX() || x > windowManager.getWindows().get(i).getX() + windowManager.getWindows().get(i).getWidth()
                         || y < windowManager.getWindows().get(i).getY() || y > windowManager.getWindows().get(i).getY() + windowManager.getWindows().get(i).getHeight()
-                        || !(draggedWindow instanceof Colorizable))
+                        || !(draggedWindow instanceof ThemedWindow))
                     continue;
                 if (!on) {
-                    colorizer = new Colorizer(hudGraphics, (Colorizable) draggedWindow, guiContext);
+                    colorizer = new Colorizer(hudGraphics, (ThemedWindow) draggedWindow, guiContext);
                     on = true;
                     return ScreenRequest.OPEN_COLORIZER;
                 }
@@ -339,16 +339,16 @@ public class HUDConfigScreen {
                 BaseWindow hoveredWindow = windowManager.getWindows().get(i);
                 if (previewAlpha > 255) {
                     alphaDown = true;
-                } else if (previewAlpha < 0 && hoveredWindow instanceof Colorizable) {
+                } else if (previewAlpha < 0 && hoveredWindow instanceof ThemedWindow) {
                     alphaDown = false;
                     previewR = random.nextInt(255);
                     previewG = random.nextInt(255);
                     previewB = random.nextInt(255);
-                } else if (previewAlpha < 150 && !(hoveredWindow instanceof Colorizable)) {
+                } else if (previewAlpha < 150 && !(hoveredWindow instanceof ThemedWindow)) {
                     alphaDown = false;
                 }
                 int time = 10;
-                if (hoveredWindow instanceof Colorizable) {
+                if (hoveredWindow instanceof ThemedWindow) {
                     time = 5;
                 }
                 if (System.currentTimeMillis() - lastTime > time) {
@@ -362,7 +362,7 @@ public class HUDConfigScreen {
                         if (hudGraphics.getStringWidth(split[j]) > longestWidth)
                             longestWidth = hudGraphics.getStringWidth(split[j]);
                     }
-                    if (hoveredWindow instanceof Colorizable) {
+                    if (hoveredWindow instanceof ThemedWindow) {
                         hudGraphics.drawHUDRectWithBorder(x - 1 + 10, y - 1, longestWidth + 2, split.length * 10,
                                 previewR, previewG, previewB, previewAlpha,
                                 theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), previewAlpha,

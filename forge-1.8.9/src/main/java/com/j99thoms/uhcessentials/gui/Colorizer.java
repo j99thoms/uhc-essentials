@@ -2,12 +2,12 @@ package com.j99thoms.uhcessentials.gui;
 
 import com.j99thoms.uhcessentials.api.GuiContext;
 import com.j99thoms.uhcessentials.api.HUDGraphics;
-import com.j99thoms.uhcessentials.windows.Colorizable;
+import com.j99thoms.uhcessentials.windows.ThemedWindow;
 
 public class Colorizer {
 
     private final HUDGraphics hudGraphics;
-    private final Colorizable window;
+    private final ThemedWindow window;
     private final GuiContext guiContext;
 
     private int fillRed;
@@ -45,7 +45,7 @@ public class Colorizer {
     private int cooldown = 0;
     private boolean isCooldown = false;
 
-    public Colorizer(HUDGraphics hudGraphics, Colorizable window, GuiContext guiContext) {
+    public Colorizer(HUDGraphics hudGraphics, ThemedWindow window, GuiContext guiContext) {
         this.hudGraphics = hudGraphics;
         this.window = window;
         this.guiContext = guiContext;
