@@ -65,52 +65,42 @@ public class Colorizer {
         borderAlpha = window.getBorderA();
     }
 
+    private void setActiveRGBA(int r, int g, int b, int a) {
+        if (border) window.setBorderRGB(r, g, b, a);
+        else window.setRGBA(r, g, b, a);
+    }
+
     private void mouse() {
         if (guiContext.isMouseButtonDown(0)) {
             x = guiContext.getMouseX();
             y = guiContext.getMouseY();
             dx = x - lastX;
             lastX = x;
-            if (!border) {
-                if ((y < redKnobY + 7 && y >= redKnobY && x < redKnobX + 5 && x >= redKnobX) || grabbedRed) {
-                    grabbedRed = true;
-                    window.setRGBA(clamp(fillRed + dx), fillGreen, fillBlue, fillAlpha);
-                } else if ((y < greenKnobY + 7 && y >= greenKnobY && x < greenKnobX + 5 && x >= greenKnobX) || grabbedGreen) {
-                    grabbedGreen = true;
-                    window.setRGBA(fillRed, clamp(fillGreen + dx), fillBlue, fillAlpha);
-                } else if ((y < blueKnobY + 7 && y >= blueKnobY && x < blueKnobX + 5 && x >= blueKnobX) || grabbedBlue) {
-                    grabbedBlue = true;
-                    window.setRGBA(fillRed, fillGreen, clamp(fillBlue + dx), fillAlpha);
-                } else if ((y < alphaKnobY + 7 && y >= alphaKnobY && x < alphaKnobX + 5 && x >= alphaKnobX) || grabbedAlpha) {
-                    grabbedAlpha = true;
-                    window.setRGBA(fillRed, fillGreen, fillBlue, clamp(fillAlpha + dx));
-                } else if (x <= guiContext.getScreenWidth() / 2 + 150 + 12 && x >= guiContext.getScreenWidth() / 2 + 150
-                        && y <= guiContext.getScreenHeight() / 2 - 25 + 60 + 9 && y >= guiContext.getScreenHeight() / 2 - 25 + 60) {
-                    border = false;
-                } else if (x <= guiContext.getScreenWidth() / 2 + 150 + 12 + 21 && x >= guiContext.getScreenWidth() / 2 + 150
-                        && y <= guiContext.getScreenHeight() / 2 - 25 + 70 + 9 && y >= guiContext.getScreenHeight() / 2 - 25 + 70) {
-                    border = true;
-                }
-            } else {
-                if ((y < redKnobY + 7 && y >= redKnobY && x < redKnobX + 5 && x >= redKnobX) || grabbedRed) {
-                    grabbedRed = true;
-                    window.setBorderRGB(clamp(borderRed + dx), borderGreen, borderBlue, borderAlpha);
-                } else if ((y < greenKnobY + 7 && y >= greenKnobY && x < greenKnobX + 5 && x >= greenKnobX) || grabbedGreen) {
-                    grabbedGreen = true;
-                    window.setBorderRGB(borderRed, clamp(borderGreen + dx), borderBlue, borderAlpha);
-                } else if ((y < blueKnobY + 7 && y >= blueKnobY && x < blueKnobX + 5 && x >= blueKnobX) || grabbedBlue) {
-                    grabbedBlue = true;
-                    window.setBorderRGB(borderRed, borderGreen, clamp(borderBlue + dx), borderAlpha);
-                } else if ((y < alphaKnobY + 7 && y >= alphaKnobY && x < alphaKnobX + 5 && x >= alphaKnobX) || grabbedAlpha) {
-                    grabbedAlpha = true;
-                    window.setBorderRGB(borderRed, borderGreen, borderBlue, clamp(borderAlpha + dx));
-                } else if (x <= guiContext.getScreenWidth() / 2 + 150 + 12 && x >= guiContext.getScreenWidth() / 2 + 150
-                        && y <= guiContext.getScreenHeight() / 2 - 25 + 60 + 9 && y >= guiContext.getScreenHeight() / 2 - 25 + 60) {
-                    border = false;
-                } else if (x <= guiContext.getScreenWidth() / 2 + 150 + 12 + 21 && x >= guiContext.getScreenWidth() / 2 + 150
-                        && y <= guiContext.getScreenHeight() / 2 - 25 + 70 + 9 && y >= guiContext.getScreenHeight() / 2 - 25 + 70) {
-                    border = true;
-                }
+
+            int previewX = guiContext.getScreenWidth() / 2 + 150;
+            int previewY = guiContext.getScreenHeight() / 2 - 25;
+
+            int r = border ? borderRed   : fillRed;
+            int g = border ? borderGreen : fillGreen;
+            int b = border ? borderBlue  : fillBlue;
+            int a = border ? borderAlpha : fillAlpha;
+
+            if ((y < redKnobY + 7 && y >= redKnobY && x < redKnobX + 5 && x >= redKnobX) || grabbedRed) {
+                grabbedRed = true;
+                setActiveRGBA(clamp(r + dx), g, b, a);
+            } else if ((y < greenKnobY + 7 && y >= greenKnobY && x < greenKnobX + 5 && x >= greenKnobX) || grabbedGreen) {
+                grabbedGreen = true;
+                setActiveRGBA(r, clamp(g + dx), b, a);
+            } else if ((y < blueKnobY + 7 && y >= blueKnobY && x < blueKnobX + 5 && x >= blueKnobX) || grabbedBlue) {
+                grabbedBlue = true;
+                setActiveRGBA(r, g, clamp(b + dx), a);
+            } else if ((y < alphaKnobY + 7 && y >= alphaKnobY && x < alphaKnobX + 5 && x >= alphaKnobX) || grabbedAlpha) {
+                grabbedAlpha = true;
+                setActiveRGBA(r, g, b, clamp(a + dx));
+            } else if (x <= previewX + 12 && x >= previewX && y <= previewY + 69 && y >= previewY + 60) {
+                border = false;
+            } else if (x <= previewX + 33 && x >= previewX && y <= previewY + 79 && y >= previewY + 70) {
+                border = true;
             }
             window.save();
         } else {
