@@ -36,8 +36,6 @@ public class Colorizer {
     private boolean grabbedBlue = false;
     private boolean grabbedAlpha = false;
     private boolean border = false;
-    private int cooldown = 0;
-    private boolean isCooldown = false;
 
     public Colorizer(HUDGraphics hudGraphics, ThemedWindow window, GuiContext guiContext) {
         this.hudGraphics = hudGraphics;
@@ -68,12 +66,6 @@ public class Colorizer {
     }
 
     private void mouse() {
-        if (isCooldown) {
-            cooldown++;
-        }
-        if (cooldown % 2 == 0 && isCooldown) {
-            isCooldown = false;
-        }
         if (guiContext.isMouseButtonDown(0)) {
             x = guiContext.getMouseX();
             y = guiContext.getMouseY();
@@ -122,7 +114,6 @@ public class Colorizer {
             }
             window.save();
         } else {
-            cooldown = 0;
             grabbedRed = false;
             grabbedGreen = false;
             grabbedBlue = false;
