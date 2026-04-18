@@ -126,36 +126,36 @@ public class Colorizer {
         if (!border) {
             redKnobX = guiContext.getScreenWidth() / 2 - 127 + fillRed;
             redKnobY = guiContext.getScreenHeight() / 2 - 2 - 32;
-            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 - 32, "Red");
+            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 - 32, "Red", fillRed);
             renderKnob(redKnobX, redKnobY, "red");
             greenKnobX = guiContext.getScreenWidth() / 2 - 127 + fillGreen;
             greenKnobY = guiContext.getScreenHeight() / 2 - 2;
-            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2, "Green");
+            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2, "Green", fillGreen);
             renderKnob(greenKnobX, greenKnobY, "green");
             blueKnobX = guiContext.getScreenWidth() / 2 - 127 + fillBlue;
             blueKnobY = guiContext.getScreenHeight() / 2 - 2 + 32;
-            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 + 32, "Blue");
+            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 + 32, "Blue", fillBlue);
             renderKnob(blueKnobX, blueKnobY, "blue");
             alphaKnobX = guiContext.getScreenWidth() / 2 - 127 + fillAlpha;
             alphaKnobY = guiContext.getScreenHeight() / 2 - 2 + 64;
-            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 + 64, "Alpha");
+            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 + 64, "Alpha", fillAlpha);
             renderKnob(alphaKnobX, alphaKnobY, "alpha");
         } else {
             redKnobX = guiContext.getScreenWidth() / 2 - 127 + borderRed;
             redKnobY = guiContext.getScreenHeight() / 2 - 2 - 32;
-            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 - 32, "Red");
+            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 - 32, "Red", borderRed);
             renderKnob(redKnobX, redKnobY, "red");
             greenKnobX = guiContext.getScreenWidth() / 2 - 127 + borderGreen;
             greenKnobY = guiContext.getScreenHeight() / 2 - 2;
-            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2, "Green");
+            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2, "Green", borderGreen);
             renderKnob(greenKnobX, greenKnobY, "green");
             blueKnobX = guiContext.getScreenWidth() / 2 - 127 + borderBlue;
             blueKnobY = guiContext.getScreenHeight() / 2 - 2 + 32;
-            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 + 32, "Blue");
+            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 + 32, "Blue", borderBlue);
             renderKnob(blueKnobX, blueKnobY, "blue");
             alphaKnobX = guiContext.getScreenWidth() / 2 - 127 + borderAlpha;
             alphaKnobY = guiContext.getScreenHeight() / 2 - 2 + 64;
-            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 + 64, "Alpha");
+            renderSlider(guiContext.getScreenWidth() / 2 - 127, guiContext.getScreenHeight() / 2 - 2 + 64, "Alpha", borderAlpha);
             renderKnob(alphaKnobX, alphaKnobY, "alpha");
         }
         hudGraphics.drawHUDRectWithBorder(guiContext.getScreenWidth() / 2 + 150, guiContext.getScreenHeight() / 2 - 25, 50, 50,
@@ -176,28 +176,9 @@ public class Colorizer {
         hudGraphics.drawShadowedFont("Outline", guiContext.getScreenWidth() / 2 + 150, guiContext.getScreenHeight() / 2 - 25 + 70, 0xFFFFFF);
     }
 
-    private void renderSlider(int x, int y, String effector) {
+    private void renderSlider(int x, int y, String label, int value) {
         hudGraphics.drawHUDRectWithBorder(x, y, 255, 5, 69, 69, 69, 180, 0, 0, 0, 255, 0.5);
-        y -= 10;
-        if (!border) {
-            if (effector.equalsIgnoreCase("Red")) {
-                hudGraphics.drawShadowedFont(effector + ": " + fillRed, x, y, -1);
-            } else if (effector.equalsIgnoreCase("Green")) {
-                hudGraphics.drawShadowedFont(effector + ": " + fillGreen, x, y, -1);
-            } else if (effector.equalsIgnoreCase("Blue")) {
-                hudGraphics.drawShadowedFont(effector + ": " + fillBlue, x, y, -1);
-            } else if (effector.equalsIgnoreCase("Alpha")) {
-                hudGraphics.drawShadowedFont(effector + ": " + fillAlpha, x, y, -1);
-            }
-        } else if (effector.equalsIgnoreCase("Red")) {
-            hudGraphics.drawShadowedFont(effector + ": " + borderRed, x, y, -1);
-        } else if (effector.equalsIgnoreCase("Green")) {
-            hudGraphics.drawShadowedFont(effector + ": " + borderGreen, x, y, -1);
-        } else if (effector.equalsIgnoreCase("Blue")) {
-            hudGraphics.drawShadowedFont(effector + ": " + borderBlue, x, y, -1);
-        } else if (effector.equalsIgnoreCase("Alpha")) {
-            hudGraphics.drawShadowedFont(effector + ": " + borderAlpha, x, y, -1);
-        }
+        hudGraphics.drawShadowedFont(label + ": " + value, x, y - 10, -1);
     }
 
     private void renderKnob(int x, int y, String color) {
