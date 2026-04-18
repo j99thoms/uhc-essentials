@@ -201,17 +201,7 @@ public class Colorizer {
     }
 
     private void renderKnob(int x, int y, String color) {
-        if (!border) {
-            if (color.equalsIgnoreCase("red")) {
-                hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 255, 0, 0, 255, 0, 0, 0, 255, 0.3f);
-            } else if (color.equalsIgnoreCase("green")) {
-                hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 0, 255, 0, 255, 0, 0, 0, 255, 0.3f);
-            } else if (color.equalsIgnoreCase("blue")) {
-                hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 0, 0, 255, 255, 0, 0, 0, 255, 0.3f);
-            } else if (color.equalsIgnoreCase("alpha")) {
-                hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 255, 255, 255, 100, 0, 0, 0, 255, 0.3f);
-            }
-        } else if (color.equalsIgnoreCase("red")) {
+        if (color.equalsIgnoreCase("red")) {
             hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 255, 0, 0, 255, 0, 0, 0, 255, 0.3f);
         } else if (color.equalsIgnoreCase("green")) {
             hudGraphics.drawHUDRectWithBorder(x, y - 1, 2, 7, 0, 255, 0, 255, 0, 0, 0, 255, 0.3f);
