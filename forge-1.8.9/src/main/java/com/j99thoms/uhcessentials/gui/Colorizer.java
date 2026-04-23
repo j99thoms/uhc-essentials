@@ -6,37 +6,28 @@ import com.j99thoms.uhcessentials.windows.ThemedWindow;
 
 public class Colorizer {
 
-    private static final int PREVIEW_X_OFFSET = 150;
-    private static final int PREVIEW_Y_OFFSET = 25;
-    private static final int SLIDER_SPACING   = 32;
-    private static final int KNOB_WIDTH       = 2;
-    private static final int KNOB_HEIGHT      = 7;
-    private static final int KNOB_HIT_WIDTH   = 5;
-    private static final int BUTTON_Y_OFFSET  = 60;
+    // GUI layout constants: all are values in pixels
+    private static final int PREVIEW_WINDOW_X_OFFSET = 150;
+    private static final int PREVIEW_WINDOW_Y_OFFSET = -25;
+    private static final int PREVIEW_WINDOW_SIZE     = 50;
+    private static final int SLIDER_BASE_X_OFFSET    = -127;
+    private static final int SLIDER_BASE_Y_OFFSET    = -34;
+    private static final int SLIDER_SPACING          = 32;
+    private static final int KNOB_WIDTH              = 2;
+    private static final int KNOB_HEIGHT             = 7;
+    private static final int KNOB_HIT_WIDTH          = 5;
+    private static final int FILL_BUTTON_WIDTH       = 13;
+    private static final int BORDER_BUTTON_WIDTH     = 34;
+    private static final int BUTTON_HEIGHT           = 9;
+    private static final int FILL_BUTTON_Y_OFFSET    = PREVIEW_WINDOW_SIZE + 10;
+    private static final int BORDER_BUTTON_Y_OFFSET  = PREVIEW_WINDOW_SIZE + 20;
 
     private final HUDGraphics hudGraphics;
     private final ThemedWindow window;
     private final GuiContext guiContext;
 
-    private int fillRed;
-    private int fillGreen;
-    private int fillBlue;
-    private int fillAlpha;
-    private int borderRed;
-    private int borderGreen;
-    private int borderBlue;
-    private int borderAlpha;
-
     private int lastX;
-
-    private int redKnobX;
-    private int redKnobY;
-    private int greenKnobX;
-    private int greenKnobY;
-    private int blueKnobX;
-    private int blueKnobY;
-    private int alphaKnobX;
-    private int alphaKnobY;
+    private boolean mouseHeldDown = false;
     private boolean grabbedRed = false;
     private boolean grabbedGreen = false;
     private boolean grabbedBlue = false;
@@ -47,28 +38,120 @@ public class Colorizer {
         this.hudGraphics = hudGraphics;
         this.window = window;
         this.guiContext = guiContext;
-        getInts();
+        lastX = guiContext.getMouseX();
     }
 
     public void update() {
-        getInts();
         mouse();
         render();
     }
 
-    private static int clamp(int value) {
-        return Math.max(0, Math.min(255, value));
+    private void mouse() {
+        int x = guiContext.getMouseX();
+        int y = guiContext.getMouseY();
+
+        if (!guiContext.isMouseButtonDown(0)) {
+            mouseHeldDown = grabbedRed = grabbedGreen = grabbedBlue = grabbedAlpha = false;
+            lastX = x;
+            return;
+        } else if (mouseHeldDown && !(grabbedRed || grabbedGreen || grabbedBlue || grabbedAlpha)) {
+            lastX = x;
+            return;
+        } else if (!mouseHeldDown) {
+            // If mouse was clicked this frame, need to check if a knob or button was clicked:
+            if (knobIsClicked(Channel.RED, x, y))
+                grabbedRed = true;
+            else if (knobIsClicked(Channel.GREEN, x, y))
+                grabbedGreen = true;
+            else if (knobIsClicked(Channel.BLUE, x, y))
+                grabbedBlue = true;
+            else if (knobIsClicked(Channel.ALPHA, x, y))
+                grabbedAlpha = true;
+            else if (fillButtonIsClicked(x, y))
+                border = false;
+            else if (borderButtonIsClicked(x, y))
+                border = true;
+
+            mouseHeldDown = true;
+            lastX = x;
+            return;
+        }
+        // Else, the mouse is held down and a knob is grabbed:
+        int dx = x - lastX;
+        lastX = x;
+
+        int r = getActiveVal(Channel.RED) + (grabbedRed ? dx : 0);
+        int g = getActiveVal(Channel.GREEN) + (grabbedGreen ? dx : 0);
+        int b = getActiveVal(Channel.BLUE) + (grabbedBlue ? dx : 0);
+        int a = getActiveVal(Channel.ALPHA) + (grabbedAlpha ? dx : 0);
+
+        setActiveRGBA(clamp(r), clamp(g), clamp(b), clamp(a));
+        window.save();
     }
 
-    private void getInts() {
-        fillRed = window.getR();
-        fillGreen = window.getG();
-        fillBlue = window.getB();
-        fillAlpha = window.getA();
-        borderRed = window.getBorderR();
-        borderGreen = window.getBorderG();
-        borderBlue = window.getBorderB();
-        borderAlpha = window.getBorderA();
+    private boolean knobIsClicked(Channel channel, int mouseX, int mouseY) {
+        int knobX = getKnobX(channel);
+        int knobY = getKnobY(channel);
+        return mouseX <= knobX + KNOB_HIT_WIDTH && mouseX >= knobX && mouseY < knobY + KNOB_HEIGHT && mouseY >= knobY;
+    }
+
+    private boolean fillButtonIsClicked(int mouseX, int mouseY) {
+        int buttonX = getPreviewWindowX() - 1;
+        int buttonY = getFillButtonY();
+        return mouseX <= buttonX + FILL_BUTTON_WIDTH && mouseX >= buttonX && mouseY <= buttonY + BUTTON_HEIGHT && mouseY >= buttonY;
+    }
+
+    private boolean borderButtonIsClicked(int mouseX, int mouseY) {
+        int buttonX = getPreviewWindowX() - 1;
+        int buttonY = getBorderButtonY();
+        return mouseX <= buttonX + BORDER_BUTTON_WIDTH && mouseX >= buttonX && mouseY <= buttonY + BUTTON_HEIGHT && mouseY >= buttonY;
+    }
+
+    private int getKnobX(Channel channel) {
+        return getSliderBaseX() + getActiveVal(channel);
+    }
+
+    private int getKnobY(Channel channel) {
+        return getSliderBaseY(channel) - 1;
+    }
+
+    private int getSliderBaseX() {
+        return guiContext.getScreenWidth() / 2 + SLIDER_BASE_X_OFFSET;
+    }
+
+    private int getSliderBaseY(Channel channel) {
+        return guiContext.getScreenHeight() / 2 + SLIDER_BASE_Y_OFFSET + channel.index * SLIDER_SPACING;
+    }
+
+    private int getPreviewWindowX() {
+        return guiContext.getScreenWidth() / 2 + PREVIEW_WINDOW_X_OFFSET;
+    }
+
+    private int getPreviewWindowY() {
+        return guiContext.getScreenHeight() / 2 + PREVIEW_WINDOW_Y_OFFSET;
+    }
+
+    private int getFillButtonY() {
+        return getPreviewWindowY() + FILL_BUTTON_Y_OFFSET;
+    }
+
+    private int getBorderButtonY() {
+        return getPreviewWindowY() + BORDER_BUTTON_Y_OFFSET;
+    }
+
+    private int getActiveVal(Channel channel) {
+        switch (channel) {
+            case RED:
+                return border ? window.getBorderR() : window.getR();
+            case GREEN:
+                return border ? window.getBorderG() : window.getG();
+            case BLUE:
+                return border ? window.getBorderB() : window.getB();
+            case ALPHA:
+                return border ? window.getBorderA() : window.getA();
+            default:
+                throw new IllegalStateException("Unknown channel: " + channel);
+        }
     }
 
     private void setActiveRGBA(int r, int g, int b, int a) {
@@ -76,110 +159,75 @@ public class Colorizer {
         else window.setRGBA(r, g, b, a);
     }
 
-    private void mouse() {
-        if (guiContext.isMouseButtonDown(0)) {
-            int x = guiContext.getMouseX();
-            int y = guiContext.getMouseY();
-            int dx = x - lastX;
-            lastX = x;
-
-            int previewX = guiContext.getScreenWidth() / 2 + PREVIEW_X_OFFSET;
-            int previewY = guiContext.getScreenHeight() / 2 - PREVIEW_Y_OFFSET;
-
-            int r = border ? borderRed   : fillRed;
-            int g = border ? borderGreen : fillGreen;
-            int b = border ? borderBlue  : fillBlue;
-            int a = border ? borderAlpha : fillAlpha;
-
-            if ((y < redKnobY + KNOB_HEIGHT && y >= redKnobY && x < redKnobX + KNOB_HIT_WIDTH && x >= redKnobX) || grabbedRed) {
-                grabbedRed = true;
-                setActiveRGBA(clamp(r + dx), g, b, a);
-            } else if ((y < greenKnobY + KNOB_HEIGHT && y >= greenKnobY && x < greenKnobX + KNOB_HIT_WIDTH && x >= greenKnobX) || grabbedGreen) {
-                grabbedGreen = true;
-                setActiveRGBA(r, clamp(g + dx), b, a);
-            } else if ((y < blueKnobY + KNOB_HEIGHT && y >= blueKnobY && x < blueKnobX + KNOB_HIT_WIDTH && x >= blueKnobX) || grabbedBlue) {
-                grabbedBlue = true;
-                setActiveRGBA(r, g, clamp(b + dx), a);
-            } else if ((y < alphaKnobY + KNOB_HEIGHT && y >= alphaKnobY && x < alphaKnobX + KNOB_HIT_WIDTH && x >= alphaKnobX) || grabbedAlpha) {
-                grabbedAlpha = true;
-                setActiveRGBA(r, g, b, clamp(a + dx));
-            } else if (x <= previewX + 12 && x >= previewX
-                    && y <= previewY + BUTTON_Y_OFFSET + 9 && y >= previewY + BUTTON_Y_OFFSET) {
-                border = false;
-            } else if (x <= previewX + 33 && x >= previewX
-                    && y <= previewY + BUTTON_Y_OFFSET + 19 && y >= previewY + BUTTON_Y_OFFSET + 10) {
-                border = true;
-            }
-            window.save();
-        } else {
-            grabbedRed = false;
-            grabbedGreen = false;
-            grabbedBlue = false;
-            grabbedAlpha = false;
-            lastX = guiContext.getMouseX();
-        }
-    }
-
     private void render() {
-        int previewX = guiContext.getScreenWidth() / 2 + PREVIEW_X_OFFSET;
-        int previewY = guiContext.getScreenHeight() / 2 - PREVIEW_Y_OFFSET;
-        int sliderBaseX = guiContext.getScreenWidth() / 2 - 127;
-        int sliderMidY = guiContext.getScreenHeight() / 2 - 2;
-
-        int activeRed   = border ? borderRed   : fillRed;
-        int activeGreen = border ? borderGreen : fillGreen;
-        int activeBlue  = border ? borderBlue  : fillBlue;
-        int activeAlpha = border ? borderAlpha : fillAlpha;
-
-        redKnobX   = sliderBaseX + activeRed;
-        greenKnobX = sliderBaseX + activeGreen;
-        blueKnobX  = sliderBaseX + activeBlue;
-        alphaKnobX = sliderBaseX + activeAlpha;
-
-        redKnobY   = sliderMidY - SLIDER_SPACING;
-        greenKnobY = sliderMidY;
-        blueKnobY  = sliderMidY + SLIDER_SPACING;
-        alphaKnobY = sliderMidY + 2 * SLIDER_SPACING;
-
-        renderSlider(sliderBaseX, redKnobY,   "Red",   activeRed);
-        renderKnob(redKnobX, redKnobY, "red");
-        renderSlider(sliderBaseX, greenKnobY, "Green", activeGreen);
-        renderKnob(greenKnobX, greenKnobY, "green");
-        renderSlider(sliderBaseX, blueKnobY,  "Blue",  activeBlue);
-        renderKnob(blueKnobX, blueKnobY, "blue");
-        renderSlider(sliderBaseX, alphaKnobY, "Alpha", activeAlpha);
-        renderKnob(alphaKnobX, alphaKnobY, "alpha");
-
-        hudGraphics.drawHUDRectWithBorder(previewX, previewY, 50, 50,
-                fillRed, fillGreen, fillBlue, fillAlpha,
-                borderRed, borderGreen, borderBlue, borderAlpha, window.getThickness());
-        int px = previewX - 1;
-        int py = previewY + BUTTON_Y_OFFSET;
-        if (!border) {
-            hudGraphics.drawHUDRectWithBorder(px, py, 13, 9, 120, 120, 120, 150, 0, 0, 0, 255, 0.5);
-            hudGraphics.drawHUDRectWithBorder(px, py + 10, 34, 9, 69, 69, 69, 150, 0, 0, 0, 255, 0.2f);
-        } else {
-            hudGraphics.drawHUDRectWithBorder(px, py + 10, 34, 9, 120, 120, 120, 150, 0, 0, 0, 255, 0.5);
-            hudGraphics.drawHUDRectWithBorder(px, py, 13, 9, 69, 69, 69, 150, 0, 0, 0, 255, 0.2f);
+        for (Channel channel : Channel.values()) {
+            renderSlider(channel);
+            renderKnob(channel);
         }
-        hudGraphics.drawShadowedFont("BG", previewX, py, 0xFFFFFF);
-        hudGraphics.drawShadowedFont("Outline", previewX, py + 10, 0xFFFFFF);
+        renderPreviewWindow();
+        renderButtons();
     }
 
-    private void renderSlider(int x, int y, String label, int value) {
-        hudGraphics.drawHUDRectWithBorder(x, y, 255, 5, 69, 69, 69, 180, 0, 0, 0, 255, 0.5);
-        hudGraphics.drawShadowedFont(label + ": " + value, x, y - 10, -1);
+    private void renderSlider(Channel channel) {
+        int baseX = getSliderBaseX();
+        int baseY = getSliderBaseY(channel);
+        hudGraphics.drawHUDRectWithBorder(baseX, baseY, 255, 5, 69, 69, 69, 180, 0, 0, 0, 255, 0.5);
+        hudGraphics.drawShadowedFont(channel.toString() + ": " + getActiveVal(channel), baseX, baseY - 10, -1);
     }
 
-    private void renderKnob(int x, int y, String color) {
-        if (color.equalsIgnoreCase("red")) {
-            hudGraphics.drawHUDRectWithBorder(x, y - 1, KNOB_WIDTH, KNOB_HEIGHT, 255, 0, 0, 255, 0, 0, 0, 255, 0.3f);
-        } else if (color.equalsIgnoreCase("green")) {
-            hudGraphics.drawHUDRectWithBorder(x, y - 1, KNOB_WIDTH, KNOB_HEIGHT, 0, 255, 0, 255, 0, 0, 0, 255, 0.3f);
-        } else if (color.equalsIgnoreCase("blue")) {
-            hudGraphics.drawHUDRectWithBorder(x, y - 1, KNOB_WIDTH, KNOB_HEIGHT, 0, 0, 255, 255, 0, 0, 0, 255, 0.3f);
-        } else if (color.equalsIgnoreCase("alpha")) {
-            hudGraphics.drawHUDRectWithBorder(x, y - 1, KNOB_WIDTH, KNOB_HEIGHT, 255, 255, 255, 100, 0, 0, 0, 255, 0.3f);
+    private void renderKnob(Channel channel) {
+        int knobR, knobG, knobB, knobA;
+        if (channel == Channel.ALPHA) {
+            knobR = knobG = knobB = 255;
+            knobA = 100;
+        } else {
+            knobR = channel == Channel.RED ? 255 : 0;
+            knobG = channel == Channel.GREEN ? 255 : 0;
+            knobB = channel == Channel.BLUE ? 255 : 0;
+            knobA = 255;
+        }
+
+        hudGraphics.drawHUDRectWithBorder(getKnobX(channel), getKnobY(channel), KNOB_WIDTH, KNOB_HEIGHT,
+            knobR, knobG, knobB, knobA,
+            0, 0, 0, 255, 0.3f);
+    }
+
+    private void renderPreviewWindow() {
+        hudGraphics.drawHUDRectWithBorder(getPreviewWindowX(), getPreviewWindowY(), PREVIEW_WINDOW_SIZE, PREVIEW_WINDOW_SIZE,
+                window.getR(), window.getG(), window.getB(), window.getA(),
+                window.getBorderR(), window.getBorderG(), window.getBorderB(), window.getBorderA(), window.getThickness());
+    }
+
+    private void renderButtons() {
+        int buttonX = getPreviewWindowX() - 1;
+        int fillButtonY = getFillButtonY();
+        int borderButtonY = getBorderButtonY();
+
+        int fillButtonShade = !border ? 120 : 69;
+        int borderButtonShade = border ? 120 : 69;
+
+        hudGraphics.drawHUDRectWithBorder(buttonX, fillButtonY, FILL_BUTTON_WIDTH, BUTTON_HEIGHT,
+            fillButtonShade, fillButtonShade, fillButtonShade, 150,
+            0, 0, 0, 255, 0.5);
+        hudGraphics.drawHUDRectWithBorder(buttonX, borderButtonY, BORDER_BUTTON_WIDTH, BUTTON_HEIGHT,
+            borderButtonShade, borderButtonShade, borderButtonShade, 150,
+            0, 0, 0, 255, 0.2f);
+
+        hudGraphics.drawShadowedFont("BG", buttonX + 1, fillButtonY, 0xFFFFFF);
+        hudGraphics.drawShadowedFont("Outline", buttonX + 1, borderButtonY, 0xFFFFFF);
+    }
+
+    private static int clamp(int value) { return Math.max(0, Math.min(255, value)); }
+
+    private static enum Channel {
+        RED(0), GREEN(1), BLUE(2), ALPHA(3);
+
+        final int index;
+        Channel(int index) { this.index = index; }
+
+        @Override
+        public String toString() {
+            return name().charAt(0) + name().substring(1).toLowerCase();
         }
     }
 }
