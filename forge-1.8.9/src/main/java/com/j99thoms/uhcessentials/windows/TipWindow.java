@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.j99thoms.uhcessentials.api.HUDGraphics;
 
-public class TipWindow extends ThemedWindow {
+public class TipWindow extends BaseWindow implements Themeable {
 
     private static final Logger LOGGER = LogManager.getLogger(TipWindow.class);
 
@@ -26,14 +26,19 @@ public class TipWindow extends ThemedWindow {
     private boolean closeTip = true;
     private int currentTipIndex = 0;
     private String tipOfThePage = "";
+    private final WindowTheme theme;
 
     public TipWindow(HUDGraphics hudGraphics, WindowTheme theme) {
-        super(hudGraphics, theme);
+        super(hudGraphics);
+        this.theme = theme;
         setX(DEFAULT_X);
         setY(DEFAULT_Y);
         this.toggle = 0;
         this.tips = new ArrayList<String>();
     }
+
+    @Override
+    public WindowTheme getTheme() { return theme; }
 
     @Override
     public String getToolTip() {

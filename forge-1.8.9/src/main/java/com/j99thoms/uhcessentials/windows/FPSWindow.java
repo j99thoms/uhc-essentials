@@ -6,7 +6,7 @@ import com.j99thoms.uhcessentials.api.GameContext;
 import com.j99thoms.uhcessentials.api.HUDGraphics;
 import com.j99thoms.uhcessentials.util.FileManager;
 
-public class FPSWindow extends ThemedWindow {
+public class FPSWindow extends BaseWindow implements Themeable {
 
     private static final int DEFAULT_X = 2;
     private static final int DEFAULT_Y = 34;
@@ -18,15 +18,20 @@ public class FPSWindow extends ThemedWindow {
     private ArrayList<Double> data = new ArrayList<Double>();
     private final FileManager fileManager;
     private final GameContext gameContext;
+    private final WindowTheme theme;
 
     public FPSWindow(HUDGraphics hudGraphics, GameContext gameContext, WindowTheme theme) {
-        super(hudGraphics, theme);
+        super(hudGraphics);
+        this.theme = theme;
         this.gameContext = gameContext;
         setX(DEFAULT_X);
         setY(DEFAULT_Y);
         fileManager = new FileManager("FPSWindow", 3);
         load();
     }
+
+    @Override
+    public WindowTheme getTheme() { return theme; }
 
     @Override
     public String getToolTip() {

@@ -2,7 +2,7 @@ package com.j99thoms.uhcessentials.gui;
 
 import com.j99thoms.uhcessentials.api.GuiContext;
 import com.j99thoms.uhcessentials.api.HUDGraphics;
-import com.j99thoms.uhcessentials.windows.ThemedWindow;
+import com.j99thoms.uhcessentials.windows.Themeable;
 
 public class Colorizer {
 
@@ -23,7 +23,7 @@ public class Colorizer {
     private static final int BORDER_BUTTON_Y_OFFSET  = PREVIEW_WINDOW_SIZE + 20;
 
     private final HUDGraphics hudGraphics;
-    private final ThemedWindow window;
+    private final Themeable window;
     private final GuiContext guiContext;
 
     private int lastX;
@@ -34,7 +34,7 @@ public class Colorizer {
     private boolean grabbedAlpha = false;
     private boolean border = false;
 
-    public Colorizer(HUDGraphics hudGraphics, ThemedWindow window, GuiContext guiContext) {
+    public Colorizer(HUDGraphics hudGraphics, Themeable window, GuiContext guiContext) {
         this.hudGraphics = hudGraphics;
         this.window = window;
         this.guiContext = guiContext;

@@ -6,7 +6,7 @@ import com.j99thoms.uhcessentials.api.GameContext;
 import com.j99thoms.uhcessentials.api.HUDGraphics;
 import com.j99thoms.uhcessentials.util.FileManager;
 
-public class CoordinateWindow extends ThemedWindow {
+public class CoordinateWindow extends BaseWindow implements Themeable {
     private final GameContext gameContext;
 
     private static final int DEFAULT_X = 2;
@@ -27,15 +27,20 @@ public class CoordinateWindow extends ThemedWindow {
 
     private final FileManager fileManager;
     private ArrayList<Double> data = new ArrayList<Double>();
+    private final WindowTheme theme;
 
     public CoordinateWindow(HUDGraphics hudGraphics, GameContext gameContext, WindowTheme theme) {
-        super(hudGraphics, theme);
+        super(hudGraphics);
+        this.theme = theme;
         this.gameContext = gameContext;
         setX(DEFAULT_X);
         setY(DEFAULT_Y);
         fileManager = new FileManager("CoordPos", 3);
         load();
     }
+
+    @Override
+    public WindowTheme getTheme() { return theme; }
 
     @Override
     public String getToolTip() {

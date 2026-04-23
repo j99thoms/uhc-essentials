@@ -50,7 +50,7 @@ src/main/java/com/j99thoms/uhcessentials/
         VersionChecker.java   - Background version check (pure Java, no Minecraft imports)
     windows/
         BaseWindow.java       - Abstract base class for all HUD windows
-        ThemedWindow.java     - Abstract base for themed windows; delegates color/theme methods to WindowTheme
+        Themeable.java        - Interface for themed windows; default methods delegate color/theme accessors to WindowTheme
         WindowManager.java    - Registry of all active windows, delegates update/render
         ...                   - Individual window classes
 src/main/resources/
