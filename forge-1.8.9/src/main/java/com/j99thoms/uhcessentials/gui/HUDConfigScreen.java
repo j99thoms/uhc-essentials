@@ -4,11 +4,13 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.Random;
 
 import com.j99thoms.uhcessentials.api.GameContext;
 import com.j99thoms.uhcessentials.api.GuiContext;
 import com.j99thoms.uhcessentials.api.HUDGraphics;
+import com.j99thoms.uhcessentials.api.Key;
 import com.j99thoms.uhcessentials.util.FileManager;
 import com.j99thoms.uhcessentials.windows.BaseWindow;
 import com.j99thoms.uhcessentials.windows.Themeable;
@@ -17,11 +19,12 @@ import com.j99thoms.uhcessentials.windows.WindowTheme;
 
 public class HUDConfigScreen {
 
-    private boolean[] keyStates;
     private final WindowManager windowManager;
     private final HUDGraphics hudGraphics;
     private final GuiContext guiContext;
     private final GameContext gameContext;
+    
+    private final EnumMap<Key, Boolean> keyStates = new EnumMap<>(Key.class);
     private OptionMenu optionMenu;
     private boolean fullbright = false;
     private boolean shouldChange = false;
@@ -35,8 +38,8 @@ public class HUDConfigScreen {
     private boolean mouseFree = false;
     private boolean grabbed = false;
     private BaseWindow draggedWindow;
-    private int drag = 54;
-    private int bright = 48;
+    private Key dragKey = Key.RIGHT_SHIFT;
+    private Key brightKey = Key.B;
     private int lastMove;
     private boolean firstDrag = false;
     private boolean on = false;
@@ -44,7 +47,7 @@ public class HUDConfigScreen {
     private FileManager gammaFileManager;
     private FileManager keysFileManager;
     private ArrayList<Double> gammaData;
-    private ArrayList<Double> keysData;
+    private ArrayList<String> keysData;
     private boolean pressed = false;
     private int previewAlpha = 255;
     private int previewR = 255;
@@ -65,20 +68,20 @@ public class HUDConfigScreen {
         this.windowManager = windowManager;
         this.guiContext = guiContext;
         this.gameContext = gameContext;
-        keyStates = new boolean[256];
         this.hudGraphics = hudGraphics;
         this.theme = windowManager.getTheme();
         gammaFileManager = new FileManager("Gamma", 1);
         keysFileManager = new FileManager("keys.txt", 2);
-        keysData = keysFileManager.getArray();
+        keysData = keysFileManager.getStringArray();
         if (keysData.size() < 2) {
-            keysData.add((double) drag);
-            keysData.add((double) bright);
-            keysFileManager.setArray(keysData);
+            keysData.clear();
+            keysData.add(dragKey.name());
+            keysData.add(brightKey.name());
+            keysFileManager.setStringArray(keysData);
             keysData.clear();
         } else {
-            drag = (int) keysData.get(0).doubleValue();
-            bright = (int) keysData.get(1).doubleValue();
+            try { dragKey   = Key.valueOf(keysData.get(0)); } catch (Exception e) { dragKey   = Key.RIGHT_SHIFT; }
+            try { brightKey = Key.valueOf(keysData.get(1)); } catch (Exception e) { brightKey = Key.B; }
         }
         optionMenu = new OptionMenu(hudGraphics, guiContext);
         gammaData = gammaFileManager.getArray();
@@ -172,10 +175,12 @@ public class HUDConfigScreen {
         return ScreenRequest.NONE;
     }
 
-    public boolean checkKey(int i) {
-        if (guiContext.isKeyDown(i) != keyStates[i]) {
-            keyStates[i] = !keyStates[i];
-            return keyStates[i];
+    private boolean checkKey(Key key) {
+        boolean current = guiContext.isKeyDown(key);
+        boolean previous = keyStates.getOrDefault(key, false);
+        if (current != previous) {
+            keyStates.put(key, current);
+            return current;
         }
         return false;
     }
@@ -183,27 +188,27 @@ public class HUDConfigScreen {
     public ScreenRequest checkKeys() {
         if (guiContext.getEventKeyState()) {
             keysFileManager = new FileManager("keys.txt", 2);
-            keysData = keysFileManager.getArray();
+            keysData = keysFileManager.getStringArray();
             if (keysData.size() < 2) {
-                keysData.add((double) drag);
-                keysData.add((double) bright);
-                keysFileManager.setArray(keysData);
+                keysData.add(dragKey.name());
+                keysData.add(brightKey.name());
+                keysFileManager.setStringArray(keysData);
                 keysData.clear();
             } else {
-                drag = (int) keysData.get(0).doubleValue();
-                bright = (int) keysData.get(1).doubleValue();
+                try { dragKey   = Key.valueOf(keysData.get(0)); } catch (Exception e) { dragKey   = Key.RIGHT_SHIFT; }
+                try { brightKey = Key.valueOf(keysData.get(1)); } catch (Exception e) { brightKey = Key.B; }
             }
         }
         if (!guiContext.isScreenOpen() && !optionsMenu) {
-            if (checkKey(drag)) {
+            if (checkKey(dragKey)) {
                 WindowManager.configScreenOpen = true;
                 windowManager.showAll();
                 mouseFree = true;
                 return ScreenRequest.OPEN_CONFIG;
-            } else if (checkKey(bright)) {
+            } else if (checkKey(brightKey)) {
                 fullbright = !fullbright;
                 shouldChange = true;
-            } else if (checkKey(71)) {
+            } else if (checkKey(Key.NUMPAD_7)) {
                 // NumPad7 — copy coordinates to clipboard
                 String myString = "x: " + (int) gameContext.getPlayerX()
                         + " y: " + (int) Math.floor(gameContext.getPlayerY())
@@ -213,7 +218,7 @@ public class HUDConfigScreen {
                 clpbrd.setContents(stringSelection, null);
             }
         }
-        if (checkKey(1)) {
+        if (checkKey(Key.ESCAPE)) {
             // ESC — close config GUI
             WindowManager.configScreenOpen = false;
             optionsMenu = false;

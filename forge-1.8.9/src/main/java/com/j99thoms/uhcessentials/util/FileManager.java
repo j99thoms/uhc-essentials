@@ -19,6 +19,7 @@ public class FileManager {
     private BufferedReader reader;
     private BufferedWriter writer;
     private ArrayList<Double> data = new ArrayList<Double>();
+    private ArrayList<String> stringData = new ArrayList<String>();
     private int amount;
     private static String filePath = "UHC Essentials/configs";
 
@@ -118,5 +119,56 @@ public class FileManager {
     public void setArray(ArrayList<Double> doubles) {
         data = doubles;
         writeToFile();
+    }
+
+    private void readStringsFromFile() {
+        load();
+        stringData.clear();
+
+        try {
+            FileReader fileReader = new FileReader(file);
+            reader = new BufferedReader(fileReader);
+
+            for (int i = 0; i < amount; i++) {
+                String line = reader.readLine();
+                if (line != null)
+                    stringData.add(line);
+                else
+                    break;
+            }
+
+            reader.close();
+            fileReader.close();
+        } catch (Exception e) {
+            LOGGER.warn("Could not read config file '{}': {}", fileName, e.toString());
+        }
+    }
+
+    private void writeStringsToFile() {
+        clearFile();
+
+        try {
+            FileWriter fileWriter = new FileWriter(file);
+            writer = new BufferedWriter(fileWriter);
+
+            for (int i = 0; i < stringData.size(); i++) {
+                writer.write(stringData.get(i));
+                writer.newLine();
+            }
+            writer.close();
+            fileWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<String> getStringArray() {
+        readStringsFromFile();
+        return stringData;
+    }
+
+    public void setStringArray(ArrayList<String> strings) {
+        stringData = strings;
+        writeStringsToFile();
     }
 }

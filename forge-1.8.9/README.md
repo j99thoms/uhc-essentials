@@ -31,7 +31,9 @@ src/main/java/com/j99thoms/uhcessentials/
         GameContext.java      - Interface for game-state reads (pure Java, no Minecraft imports)
         GuiContext.java       - Interface for GUI/input context (pure Java, no Minecraft imports)
         HUDGraphics.java      - Interface for HUD drawing operations (pure Java, no Minecraft imports)
+        Key.java              - Platform-neutral key enum (pure Java, no LWJGL imports)
     forge/
+        LwjglKeyMap.java           - Bidirectional translation table between Key enum and LWJGL 2 key codes
         UHCEssentialsMod.java      - @Mod entry point, registers event handler
         HUDEventHandler.java       - Forge event subscriptions (tick + render overlay)
         ForgeGameContext.java      - Forge implementation of GameContext

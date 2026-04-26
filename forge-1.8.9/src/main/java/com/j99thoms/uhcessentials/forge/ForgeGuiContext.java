@@ -3,6 +3,7 @@ package com.j99thoms.uhcessentials.forge;
 import net.minecraft.client.Minecraft;
 
 import com.j99thoms.uhcessentials.api.GuiContext;
+import com.j99thoms.uhcessentials.api.Key;
 import net.minecraft.client.gui.ScaledResolution;
 
 import org.lwjgl.input.Keyboard;
@@ -52,17 +53,12 @@ public class ForgeGuiContext implements GuiContext {
     }
 
     @Override
-    public int getEventKey() {
-        return Keyboard.getEventKey();
+    public Key getEventKey() {
+        return LwjglKeyMap.fromKeyCode(Keyboard.getEventKey());
     }
 
     @Override
-    public boolean isKeyDown(int key) {
-        return Keyboard.isKeyDown(key);
-    }
-
-    @Override
-    public String getKeyName(int keyCode) {
-        return Keyboard.getKeyName(keyCode);
+    public boolean isKeyDown(Key key) {
+        return Keyboard.isKeyDown(LwjglKeyMap.toKeyCode(key));
     }
 }

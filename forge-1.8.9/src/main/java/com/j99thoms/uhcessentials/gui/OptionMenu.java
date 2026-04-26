@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.j99thoms.uhcessentials.api.GuiContext;
 import com.j99thoms.uhcessentials.api.HUDGraphics;
+import com.j99thoms.uhcessentials.api.Key;
 import com.j99thoms.uhcessentials.util.FileManager;
 
 public class OptionMenu {
@@ -11,10 +12,10 @@ public class OptionMenu {
     private final HUDGraphics hudGraphics;
     private final GuiContext guiContext;
     private FileManager fileManager;
-    private ArrayList<Double> data = new ArrayList<Double>();
+    private ArrayList<String> data = new ArrayList<String>();
 
-    private double drag;
-    private double bright;
+    private Key dragKey;
+    private Key brightKey;
     private int button1X;
     private int button2X;
     private int button1Y;
@@ -25,8 +26,8 @@ public class OptionMenu {
     private int button2Height;
     private String key1Name;
     private String key2Name;
-    private double keyCode1;
-    private double keyCode2;
+    private Key keyCode1;
+    private Key keyCode2;
     private boolean awaitingKey1;
     private boolean awaitingKey2;
 
@@ -41,11 +42,11 @@ public class OptionMenu {
         this.button1Height = 10;
         this.button2Height = 10;
         fileManager = new FileManager("keys.txt", 2);
-        data = fileManager.getArray();
-        drag = (int) data.get(0).doubleValue();
-        bright = (int) data.get(1).doubleValue();
-        key1Name = guiContext.getKeyName((int) drag);
-        key2Name = guiContext.getKeyName((int) bright);
+        data = fileManager.getStringArray();
+        try { dragKey   = Key.valueOf(data.get(0)); } catch (Exception e) { dragKey   = Key.RIGHT_SHIFT; }
+        try { brightKey = Key.valueOf(data.get(1)); } catch (Exception e) { brightKey = Key.B; }
+        key1Name = dragKey.name();
+        key2Name = brightKey.name();
     }
 
     public void render() {
@@ -53,18 +54,24 @@ public class OptionMenu {
             mouse();
         } else if (awaitingKey1) {
             if (guiContext.getEventKeyState()) {
-                keyCode1 = guiContext.getEventKey();
-                key1Name = guiContext.getKeyName((int) keyCode1);
-                awaitingKey1 = false;
-                data.set(0, keyCode1);
-                save();
+                Key key = guiContext.getEventKey();
+                if (key != null) {
+                    keyCode1 = key;
+                    key1Name = keyCode1.name();
+                    awaitingKey1 = false;
+                    data.set(0, keyCode1.name());
+                    save();
+                }
             }
         } else if (awaitingKey2 && guiContext.getEventKeyState()) {
-            keyCode2 = guiContext.getEventKey();
-            key2Name = guiContext.getKeyName((int) keyCode2);
-            awaitingKey2 = false;
-            data.set(1, keyCode2);
-            save();
+            Key key = guiContext.getEventKey();
+            if (key != null) {
+                keyCode2 = key;
+                key2Name = keyCode2.name();
+                awaitingKey2 = false;
+                data.set(1, keyCode2.name());
+                save();
+            }
         }
         button1X = guiContext.getScreenWidth() / 2 - button1Width / 2;
         button1Y = guiContext.getScreenHeight() / 2 - button1Height / 2 - 22;
@@ -92,7 +99,7 @@ public class OptionMenu {
     }
 
     public void save() {
-        fileManager.setArray(data);
+        fileManager.setStringArray(data);
     }
 
     public void mouse() {

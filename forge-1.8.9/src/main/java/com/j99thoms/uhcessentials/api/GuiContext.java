@@ -11,7 +11,6 @@ public interface GuiContext {
     boolean isMouseButtonDown(int button);
 
     boolean getEventKeyState();
-    int getEventKey();
-    boolean isKeyDown(int key);
-    String getKeyName(int keyCode);
+    Key getEventKey(); // nullable — returns null for unmapped codes
+    boolean isKeyDown(Key key);
 }
