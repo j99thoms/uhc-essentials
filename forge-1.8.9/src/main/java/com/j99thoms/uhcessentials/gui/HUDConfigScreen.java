@@ -4,6 +4,8 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.EnumMap;
 import java.util.Random;
 
@@ -18,6 +20,10 @@ import com.j99thoms.uhcessentials.windows.WindowManager;
 import com.j99thoms.uhcessentials.windows.WindowTheme;
 
 public class HUDConfigScreen {
+
+    private static final int BUTTON_PADDING = 2;
+    private static final int BUTTON_HEIGHT  = 10;
+    private static final int BUTTON_SPACING = 12;
 
     private final WindowManager windowManager;
     private final HUDGraphics hudGraphics;
@@ -59,10 +65,8 @@ public class HUDConfigScreen {
     private boolean optionsMenu = false;
     private WindowTheme theme;
 
-    private String resetAll = "Reset All Windows";
-    private String toggleButton = "Toggle UHC Essentials";
-    private String copyCoordinates = "Copy coordinates to clipboard(or press NumPad7)";
-    String options = "Options";
+    private Button optionsButton, resetButton, toggleButton, copyCoordsButton;
+    private List<Button> buttons;
 
     public HUDConfigScreen(WindowManager windowManager, HUDGraphics hudGraphics, GuiContext guiContext, GameContext gameContext) {
         this.windowManager = windowManager;
@@ -93,6 +97,16 @@ public class HUDConfigScreen {
             gamma = gammaData.get(0);
             gameContext.setGamma((float) gamma);
         }
+
+        resetButton      = getButton("Reset All Windows");
+        toggleButton     = getButton("Toggle UHC Essentials");
+        copyCoordsButton = getButton("Copy coordinates to clipboard(or press NumPad7)");
+        optionsButton    = getButton("Options");
+        buttons = Arrays.asList(optionsButton, resetButton, toggleButton, copyCoordsButton);
+    }
+
+    private Button getButton(String label) {
+        return Button.fromLabel(hudGraphics, label, BUTTON_PADDING, BUTTON_HEIGHT);
     }
 
     public OptionMenu getOptionMenu() {
@@ -118,34 +132,8 @@ public class HUDConfigScreen {
             colorizer.update();
         }
         if (mouseFree && !optionsMenu && !on) {
-            hudGraphics.drawHUDRectWithBorder(
-                    guiContext.getScreenWidth() / 2 - hudGraphics.getStringWidth(options) / 2,
-                    guiContext.getScreenHeight() / 2 - 5,
-                    hudGraphics.getStringWidth(options) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
-            hudGraphics.drawShadowedFont(options,
-                    guiContext.getScreenWidth() / 2 - hudGraphics.getStringWidth(options) / 2 + 1,
-                    guiContext.getScreenHeight() / 2 - 4, -1);
-            hudGraphics.drawHUDRectWithBorder(
-                    guiContext.getScreenWidth() / 2 - hudGraphics.getStringWidth(resetAll) / 2,
-                    guiContext.getScreenHeight() / 2 - 5 + 12,
-                    hudGraphics.getStringWidth(resetAll) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
-            hudGraphics.drawShadowedFont(resetAll,
-                    guiContext.getScreenWidth() / 2 - hudGraphics.getStringWidth(resetAll) / 2 + 1,
-                    guiContext.getScreenHeight() / 2 - 4 + 12, -1);
-            hudGraphics.drawHUDRectWithBorder(
-                    guiContext.getScreenWidth() / 2 - hudGraphics.getStringWidth(toggleButton) / 2,
-                    guiContext.getScreenHeight() / 2 - 5 + 24,
-                    hudGraphics.getStringWidth(toggleButton) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
-            hudGraphics.drawShadowedFont(toggleButton,
-                    guiContext.getScreenWidth() / 2 - hudGraphics.getStringWidth(toggleButton) / 2 + 1,
-                    guiContext.getScreenHeight() / 2 - 4 + 24, -1);
-            hudGraphics.drawHUDRectWithBorder(
-                    guiContext.getScreenWidth() / 2 - hudGraphics.getStringWidth(copyCoordinates) / 2,
-                    guiContext.getScreenHeight() / 2 - 5 + 36,
-                    hudGraphics.getStringWidth(copyCoordinates) + 1, 10, 0, 0, 0, 255, 255, 255, 255, 255, 0.5);
-            hudGraphics.drawShadowedFont(copyCoordinates,
-                    guiContext.getScreenWidth() / 2 - hudGraphics.getStringWidth(copyCoordinates) / 2 + 1,
-                    guiContext.getScreenHeight() / 2 - 4 + 36, -1);
+            updateButtonPositions();
+            buttons.forEach(b -> b.render(0,0,0,255, 255,255,255,255, 0.5));
         }
         if (mouseFree && !optionsMenu) {
             ScreenRequest dragRequest = drag();
@@ -173,6 +161,17 @@ public class HUDConfigScreen {
             save();
         }
         return ScreenRequest.NONE;
+    }
+
+    private void updateButtonPositions() {
+        int centerX = guiContext.getScreenWidth()  / 2;
+        int centerY = guiContext.getScreenHeight() / 2;
+
+        for (int i = 0; i < buttons.size(); i++) {
+            Button button = buttons.get(i);
+            button.x = centerX - button.width / 2;
+            button.y = centerY - button.height / 2 + i * BUTTON_SPACING;
+        }
     }
 
     private boolean checkKey(Key key) {
@@ -243,13 +242,9 @@ public class HUDConfigScreen {
         dy = y - lastY;
         lastX = x;
         lastY = y;
-        int screenWidth = guiContext.getScreenWidth();
-        int screenHeight = guiContext.getScreenHeight();
         if (guiContext.isMouseButtonDown(0) && (!pressed || grabbed) && !optionsMenu) {
             if (!guiContext.isMouseButtonDown(3)) {
-                if (x >= screenWidth / 2 - hudGraphics.getStringWidth(options) / 2
-                        && x <= screenWidth / 2 + hudGraphics.getStringWidth(options) / 2
-                        && y >= screenHeight / 2 - 22 && y <= screenHeight / 2 + 22) {
+                if (optionsButton.contains(x, y)) {
                     windowManager.reset();
                 }
                 if (!firstDrag) {
@@ -265,29 +260,21 @@ public class HUDConfigScreen {
                             firstDrag = true;
                             return ScreenRequest.NONE;
                         }
-                        if (x >= screenWidth / 2 - hudGraphics.getStringWidth(options) / 2
-                                && x <= screenWidth / 2 + hudGraphics.getStringWidth(options) / 2
-                                && y >= screenHeight / 2 - 5 && y <= screenHeight / 2 + 5 && !on) {
+                        if (optionsButton.contains(x, y) && !on) {
                             optionsMenu = true;
                             return ScreenRequest.OPEN_OPTIONS;
                         }
-                        if (x >= screenWidth / 2 - hudGraphics.getStringWidth(resetAll) / 2
-                                && x <= screenWidth / 2 + hudGraphics.getStringWidth(resetAll) / 2
-                                && y >= screenHeight / 2 - 5 + 12 && y <= screenHeight / 2 + 5 + 12 && !on) {
+                        if (resetButton.contains(x, y) && !on) {
                             windowManager.resetAllWindowsPositions();
                             pressed = true;
                             return ScreenRequest.NONE;
                         }
-                        if (x >= screenWidth / 2 - hudGraphics.getStringWidth(toggleButton) / 2
-                                && x <= screenWidth / 2 + hudGraphics.getStringWidth(toggleButton) / 2
-                                && y >= screenHeight / 2 - 5 + 24 && y <= screenHeight / 2 + 5 + 24 && !on) {
+                        if (toggleButton.contains(x, y) && !on) {
                             WindowManager.setToggled(!WindowManager.isToggled());
                             pressed = true;
                             return ScreenRequest.NONE;
                         }
-                        if (x < screenWidth / 2 - hudGraphics.getStringWidth(copyCoordinates) / 2
-                                || x > screenWidth / 2 + hudGraphics.getStringWidth(copyCoordinates) / 2
-                                || y < screenHeight / 2 - 5 + 36 || y > screenHeight / 2 + 5 + 36 || on)
+                        if (!copyCoordsButton.contains(x, y) || on)
                             continue;
                         String myString = "x: " + (int) gameContext.getPlayerX()
                                 + " y: " + (int) Math.floor(gameContext.getPlayerY())

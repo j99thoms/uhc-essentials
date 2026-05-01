@@ -44,6 +44,7 @@ src/main/java/com/j99thoms/uhcessentials/
         ForgeColorizer.java        - Forge wrapper for Colorizer
     gui/
         ScreenRequest.java    - Enum signalling screen lifecycle intent from logic classes to Forge wrappers
+        Button.java           - Reusable GUI button (geometry, hit detection, rendering) (pure Java, no Minecraft imports)
         HUDConfigScreen.java  - Config screen logic (pure Java, no Minecraft imports)
         OptionMenu.java       - Keybind settings logic (pure Java, no Minecraft imports)
         Colorizer.java        - Per-window color/theme editor logic (pure Java, no Minecraft imports)

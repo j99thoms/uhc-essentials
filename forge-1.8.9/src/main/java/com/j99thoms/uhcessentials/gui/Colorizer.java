@@ -1,5 +1,7 @@
 package com.j99thoms.uhcessentials.gui;
 
+import java.util.EnumMap;
+
 import com.j99thoms.uhcessentials.api.GuiContext;
 import com.j99thoms.uhcessentials.api.HUDGraphics;
 import com.j99thoms.uhcessentials.windows.Themeable;
@@ -15,9 +17,8 @@ public class Colorizer {
     private static final int SLIDER_SPACING          = 32;
     private static final int KNOB_WIDTH              = 2;
     private static final int KNOB_HEIGHT             = 7;
-    private static final int KNOB_HIT_WIDTH          = 5;
-    private static final int FILL_BUTTON_WIDTH       = 13;
-    private static final int BORDER_BUTTON_WIDTH     = 34;
+    private static final int KNOB_HIT_PADDING_X      = 2;
+    private static final int BUTTON_PADDING          = 2;
     private static final int BUTTON_HEIGHT           = 9;
     private static final int FILL_BUTTON_Y_OFFSET    = PREVIEW_WINDOW_SIZE + 10;
     private static final int BORDER_BUTTON_Y_OFFSET  = PREVIEW_WINDOW_SIZE + 20;
@@ -28,83 +29,60 @@ public class Colorizer {
 
     private int lastX;
     private boolean mouseHeldDown = false;
-    private boolean grabbedRed = false;
-    private boolean grabbedGreen = false;
-    private boolean grabbedBlue = false;
-    private boolean grabbedAlpha = false;
     private boolean border = false;
+    private Button fillButton, borderButton;
+    private Channel grabbedKnob = null;
+    private EnumMap<Channel, Button> knobButtons = new EnumMap<>(Channel.class);
 
     public Colorizer(HUDGraphics hudGraphics, Themeable window, GuiContext guiContext) {
         this.hudGraphics = hudGraphics;
         this.window = window;
         this.guiContext = guiContext;
+
         lastX = guiContext.getMouseX();
+
+        fillButton = Button.fromLabel(hudGraphics, "BG", BUTTON_PADDING, BUTTON_HEIGHT);
+        borderButton = Button.fromLabel(hudGraphics, "Outline", BUTTON_PADDING, BUTTON_HEIGHT);
     }
 
     public void update() {
+        updateButtonPositions();
+        updateKnobPositions();
         mouse();
         render();
     }
 
-    private void mouse() {
-        int x = guiContext.getMouseX();
-        int y = guiContext.getMouseY();
+    private void updateButtonPositions() {
+        int previewWindowX = getPreviewWindowX();
+        int previewWindowY = getPreviewWindowY();
 
-        if (!guiContext.isMouseButtonDown(0)) {
-            mouseHeldDown = grabbedRed = grabbedGreen = grabbedBlue = grabbedAlpha = false;
-            lastX = x;
-            return;
-        } else if (mouseHeldDown && !(grabbedRed || grabbedGreen || grabbedBlue || grabbedAlpha)) {
-            lastX = x;
-            return;
-        } else if (!mouseHeldDown) {
-            // If mouse was clicked this frame, need to check if a knob or button was clicked:
-            if (knobIsClicked(Channel.RED, x, y))
-                grabbedRed = true;
-            else if (knobIsClicked(Channel.GREEN, x, y))
-                grabbedGreen = true;
-            else if (knobIsClicked(Channel.BLUE, x, y))
-                grabbedBlue = true;
-            else if (knobIsClicked(Channel.ALPHA, x, y))
-                grabbedAlpha = true;
-            else if (fillButtonIsClicked(x, y))
-                border = false;
-            else if (borderButtonIsClicked(x, y))
-                border = true;
+        fillButton.x   = previewWindowX - 1;
+        borderButton.x = previewWindowX - 1;
 
-            mouseHeldDown = true;
-            lastX = x;
-            return;
+        fillButton.y   = previewWindowY + FILL_BUTTON_Y_OFFSET;
+        borderButton.y = previewWindowY + BORDER_BUTTON_Y_OFFSET;
+    }
+
+    private int getPreviewWindowX() {
+        return guiContext.getScreenWidth() / 2 + PREVIEW_WINDOW_X_OFFSET;
+    }
+
+    private int getPreviewWindowY() {
+        return guiContext.getScreenHeight() / 2 + PREVIEW_WINDOW_Y_OFFSET;
+    }
+
+    private void updateKnobPositions() {
+        for (Channel channel : Channel.values()) {
+            Button knob = knobButtons.computeIfAbsent(channel, c -> getKnob(c));
+            knob.x = getKnobX(channel);
+            knob.y = getKnobY(channel);
         }
-        // Else, the mouse is held down and a knob is grabbed:
-        int dx = x - lastX;
-        lastX = x;
-
-        int r = getActiveVal(Channel.RED) + (grabbedRed ? dx : 0);
-        int g = getActiveVal(Channel.GREEN) + (grabbedGreen ? dx : 0);
-        int b = getActiveVal(Channel.BLUE) + (grabbedBlue ? dx : 0);
-        int a = getActiveVal(Channel.ALPHA) + (grabbedAlpha ? dx : 0);
-
-        setActiveRGBA(clamp(r), clamp(g), clamp(b), clamp(a));
-        window.save();
     }
 
-    private boolean knobIsClicked(Channel channel, int mouseX, int mouseY) {
-        int knobX = getKnobX(channel);
-        int knobY = getKnobY(channel);
-        return mouseX <= knobX + KNOB_HIT_WIDTH && mouseX >= knobX && mouseY < knobY + KNOB_HEIGHT && mouseY >= knobY;
-    }
-
-    private boolean fillButtonIsClicked(int mouseX, int mouseY) {
-        int buttonX = getPreviewWindowX() - 1;
-        int buttonY = getFillButtonY();
-        return mouseX <= buttonX + FILL_BUTTON_WIDTH && mouseX >= buttonX && mouseY <= buttonY + BUTTON_HEIGHT && mouseY >= buttonY;
-    }
-
-    private boolean borderButtonIsClicked(int mouseX, int mouseY) {
-        int buttonX = getPreviewWindowX() - 1;
-        int buttonY = getBorderButtonY();
-        return mouseX <= buttonX + BORDER_BUTTON_WIDTH && mouseX >= buttonX && mouseY <= buttonY + BUTTON_HEIGHT && mouseY >= buttonY;
+    private Button getKnob(Channel channel) {
+        Button knob = new Button(hudGraphics, getKnobX(channel), getKnobY(channel), KNOB_WIDTH, KNOB_HEIGHT);
+        knob.hitPaddingX = KNOB_HIT_PADDING_X;
+        return knob;
     }
 
     private int getKnobX(Channel channel) {
@@ -123,20 +101,47 @@ public class Colorizer {
         return guiContext.getScreenHeight() / 2 + SLIDER_BASE_Y_OFFSET + channel.index * SLIDER_SPACING;
     }
 
-    private int getPreviewWindowX() {
-        return guiContext.getScreenWidth() / 2 + PREVIEW_WINDOW_X_OFFSET;
-    }
+    private void mouse() {
+        int x = guiContext.getMouseX();
+        int y = guiContext.getMouseY();
 
-    private int getPreviewWindowY() {
-        return guiContext.getScreenHeight() / 2 + PREVIEW_WINDOW_Y_OFFSET;
-    }
+        if (!guiContext.isMouseButtonDown(0)) {
+            mouseHeldDown = false;
+            grabbedKnob = null;
+            lastX = x;
+            return;
+        } else if (mouseHeldDown && grabbedKnob == null) {
+            lastX = x;
+            return;
+        } else if (!mouseHeldDown) {
+            // If mouse was clicked this frame, need to check if a knob or button was clicked:
+            for (Channel channel : Channel.values()) {
+                if (knobButtons.get(channel).contains(x, y)) {
+                    grabbedKnob = channel;
+                    break;
+                }
+            }
 
-    private int getFillButtonY() {
-        return getPreviewWindowY() + FILL_BUTTON_Y_OFFSET;
-    }
+            if (fillButton.contains(x, y))
+                border = false;
+            else if (borderButton.contains(x, y))
+                border = true;
 
-    private int getBorderButtonY() {
-        return getPreviewWindowY() + BORDER_BUTTON_Y_OFFSET;
+            mouseHeldDown = true;
+            lastX = x;
+            return;
+        }
+        // Else, the mouse is held down and a knob is grabbed:
+        int dx = x - lastX;
+        lastX = x;
+
+        int r = getActiveVal(Channel.RED)   + (grabbedKnob == Channel.RED   ? dx : 0);
+        int g = getActiveVal(Channel.GREEN) + (grabbedKnob == Channel.GREEN ? dx : 0);
+        int b = getActiveVal(Channel.BLUE)  + (grabbedKnob == Channel.BLUE  ? dx : 0);
+        int a = getActiveVal(Channel.ALPHA) + (grabbedKnob == Channel.ALPHA ? dx : 0);
+
+        setActiveRGBA(clamp(r), clamp(g), clamp(b), clamp(a));
+        window.save();
     }
 
     private int getActiveVal(Channel channel) {
@@ -160,12 +165,28 @@ public class Colorizer {
     }
 
     private void render() {
+        renderPreviewWindow();
+        renderButtons();
         for (Channel channel : Channel.values()) {
             renderSlider(channel);
             renderKnob(channel);
         }
-        renderPreviewWindow();
-        renderButtons();
+    }
+
+    private void renderPreviewWindow() {
+        hudGraphics.drawHUDRectWithBorder(getPreviewWindowX(), getPreviewWindowY(), PREVIEW_WINDOW_SIZE, PREVIEW_WINDOW_SIZE,
+            window.getR(), window.getG(), window.getB(), window.getA(),
+            window.getBorderR(), window.getBorderG(), window.getBorderB(), window.getBorderA(), window.getThickness());
+    }
+
+    private void renderButtons() {
+        int fillButtonShade = !border ? 120 : 69;
+        int borderButtonShade = border ? 120 : 69;
+
+        fillButton.render(fillButtonShade, fillButtonShade, fillButtonShade, 150,
+            0,0,0,255, 0.5);
+        borderButton.render(borderButtonShade, borderButtonShade, borderButtonShade, 150,
+            0,0,0,255, 0.5);
     }
 
     private void renderSlider(Channel channel) {
@@ -187,34 +208,8 @@ public class Colorizer {
             knobA = 255;
         }
 
-        hudGraphics.drawHUDRectWithBorder(getKnobX(channel), getKnobY(channel), KNOB_WIDTH, KNOB_HEIGHT,
-            knobR, knobG, knobB, knobA,
-            0, 0, 0, 255, 0.3f);
-    }
-
-    private void renderPreviewWindow() {
-        hudGraphics.drawHUDRectWithBorder(getPreviewWindowX(), getPreviewWindowY(), PREVIEW_WINDOW_SIZE, PREVIEW_WINDOW_SIZE,
-                window.getR(), window.getG(), window.getB(), window.getA(),
-                window.getBorderR(), window.getBorderG(), window.getBorderB(), window.getBorderA(), window.getThickness());
-    }
-
-    private void renderButtons() {
-        int buttonX = getPreviewWindowX() - 1;
-        int fillButtonY = getFillButtonY();
-        int borderButtonY = getBorderButtonY();
-
-        int fillButtonShade = !border ? 120 : 69;
-        int borderButtonShade = border ? 120 : 69;
-
-        hudGraphics.drawHUDRectWithBorder(buttonX, fillButtonY, FILL_BUTTON_WIDTH, BUTTON_HEIGHT,
-            fillButtonShade, fillButtonShade, fillButtonShade, 150,
-            0, 0, 0, 255, 0.5);
-        hudGraphics.drawHUDRectWithBorder(buttonX, borderButtonY, BORDER_BUTTON_WIDTH, BUTTON_HEIGHT,
-            borderButtonShade, borderButtonShade, borderButtonShade, 150,
-            0, 0, 0, 255, 0.2f);
-
-        hudGraphics.drawShadowedFont("BG", buttonX + 1, fillButtonY, 0xFFFFFF);
-        hudGraphics.drawShadowedFont("Outline", buttonX + 1, borderButtonY, 0xFFFFFF);
+        knobButtons.get(channel).render(knobR, knobG, knobB, knobA,
+            0,0,0,255, 0.3f);
     }
 
     private static int clamp(int value) { return Math.max(0, Math.min(255, value)); }
