@@ -240,9 +240,21 @@ public class HUDConfigScreen {
         int dy = y - lastY;
         lastX = x;
         lastY = y;
+        ScreenRequest leftClickRequest = handleLeftMouseButton(x, y, dx, dy);
+        if (leftClickRequest != ScreenRequest.NONE) return leftClickRequest;
+        if (!guiContext.isMouseButtonDown(0) && !guiContext.isMouseButtonDown(1)) {
+            mouseWasDown = false;
+        }
+        ScreenRequest rightClickRequest = handleRightMouseButton(x, y);
+        if (rightClickRequest != ScreenRequest.NONE) return rightClickRequest;
+        renderHoverTooltips(x, y);
+        return ScreenRequest.NONE;
+    }
+
+    private ScreenRequest handleLeftMouseButton(int mouseX, int mouseY, int dx, int dy) {
         if (guiContext.isMouseButtonDown(0) && (!mouseWasDown || isDraggingWindow) && !optionsMenuOpen) {
             if (!guiContext.isMouseButtonDown(3)) {
-                if (optionsButton.contains(x, y)) {
+                if (optionsButton.contains(mouseX, mouseY)) {
                     windowManager.reset();
                 }
                 if (!dragJustStarted) {
@@ -250,29 +262,29 @@ public class HUDConfigScreen {
                 }
                 if (!isDraggingWindow) {
                     for (int i = 0; i < windowManager.getWindows().size(); i++) {
-                        if (x >= windowManager.getWindows().get(i).getX() && x <= windowManager.getWindows().get(i).getX() + windowManager.getWindows().get(i).getWidth()) {
-                            if (y < windowManager.getWindows().get(i).getY() || y > windowManager.getWindows().get(i).getY() + windowManager.getWindows().get(i).getHeight())
+                        if (mouseX >= windowManager.getWindows().get(i).getX() && mouseX <= windowManager.getWindows().get(i).getX() + windowManager.getWindows().get(i).getWidth()) {
+                            if (mouseY < windowManager.getWindows().get(i).getY() || mouseY > windowManager.getWindows().get(i).getY() + windowManager.getWindows().get(i).getHeight())
                                 continue;
                             draggedWindow = windowManager.getWindows().get(i);
                             isDraggingWindow = true;
                             dragJustStarted = true;
                             return ScreenRequest.NONE;
                         }
-                        if (optionsButton.contains(x, y) && !colorizerOpen) {
+                        if (optionsButton.contains(mouseX, mouseY) && !colorizerOpen) {
                             optionsMenuOpen = true;
                             return ScreenRequest.OPEN_OPTIONS;
                         }
-                        if (resetButton.contains(x, y) && !colorizerOpen) {
+                        if (resetButton.contains(mouseX, mouseY) && !colorizerOpen) {
                             windowManager.resetAllWindowsPositions();
                             mouseWasDown = true;
                             return ScreenRequest.NONE;
                         }
-                        if (toggleButton.contains(x, y) && !colorizerOpen) {
+                        if (toggleButton.contains(mouseX, mouseY) && !colorizerOpen) {
                             WindowManager.setToggled(!WindowManager.isToggled());
                             mouseWasDown = true;
                             return ScreenRequest.NONE;
                         }
-                        if (!copyCoordsButton.contains(x, y) || colorizerOpen)
+                        if (!copyCoordsButton.contains(mouseX, mouseY) || colorizerOpen)
                             continue;
                         String myString = "x: " + (int) gameContext.getPlayerX()
                                 + " y: " + (int) Math.floor(gameContext.getPlayerY())
@@ -297,16 +309,10 @@ public class HUDConfigScreen {
             draggedWindow.save();
         } else {
             dragJustStarted = false;
-            lastX = x;
-            lastY = y;
+            lastX = mouseX;
+            lastY = mouseY;
             isDraggingWindow = false;
         }
-        if (!guiContext.isMouseButtonDown(0) && !guiContext.isMouseButtonDown(1)) {
-            mouseWasDown = false;
-        }
-        ScreenRequest rightClickRequest = handleRightMouseButton(x, y);
-        if (rightClickRequest != ScreenRequest.NONE) return rightClickRequest;
-        renderHoverTooltips(x, y);
         return ScreenRequest.NONE;
     }
 
