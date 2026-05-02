@@ -304,24 +304,31 @@ public class HUDConfigScreen {
         if (!guiContext.isMouseButtonDown(0) && !guiContext.isMouseButtonDown(1)) {
             mouseWasDown = false;
         }
-        if (guiContext.isMouseButtonDown(1) && !mouseWasDown) {
-            mouseWasDown = true;
-            for (int i = 0; i < windowManager.getWindows().size(); i++) {
-                draggedWindow = windowManager.getWindows().get(i);
-                if (x < windowManager.getWindows().get(i).getX() || x > windowManager.getWindows().get(i).getX() + windowManager.getWindows().get(i).getWidth()
-                        || y < windowManager.getWindows().get(i).getY() || y > windowManager.getWindows().get(i).getY() + windowManager.getWindows().get(i).getHeight()
-                        || !(draggedWindow instanceof Themeable))
-                    continue;
-                if (!colorizerOpen) {
-                    colorizer = new Colorizer(hudGraphics, (Themeable) draggedWindow, guiContext);
-                    colorizerOpen = true;
-                    return ScreenRequest.OPEN_COLORIZER;
-                }
-                colorizer = null;
-                colorizerOpen = false;
-            }
-        }
+        ScreenRequest rightClickRequest = handleRightMouseButton(x, y);
+        if (rightClickRequest != ScreenRequest.NONE) return rightClickRequest;
         renderHoverTooltips(x, y);
+        return ScreenRequest.NONE;
+    }
+
+    private ScreenRequest handleRightMouseButton(int mouseX, int mouseY) {
+        if (!guiContext.isMouseButtonDown(1) || mouseWasDown) {
+            return ScreenRequest.NONE;
+        }
+        mouseWasDown = true;
+        for (int i = 0; i < windowManager.getWindows().size(); i++) {
+            draggedWindow = windowManager.getWindows().get(i);
+            if (mouseX < windowManager.getWindows().get(i).getX() || mouseX > windowManager.getWindows().get(i).getX() + windowManager.getWindows().get(i).getWidth()
+                    || mouseY < windowManager.getWindows().get(i).getY() || mouseY > windowManager.getWindows().get(i).getY() + windowManager.getWindows().get(i).getHeight()
+                    || !(draggedWindow instanceof Themeable))
+                continue;
+            if (!colorizerOpen) {
+                colorizer = new Colorizer(hudGraphics, (Themeable) draggedWindow, guiContext);
+                colorizerOpen = true;
+                return ScreenRequest.OPEN_COLORIZER;
+            }
+            colorizer = null;
+            colorizerOpen = false;
+        }
         return ScreenRequest.NONE;
     }
 
