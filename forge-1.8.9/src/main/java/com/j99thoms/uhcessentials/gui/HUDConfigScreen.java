@@ -21,9 +21,16 @@ import com.j99thoms.uhcessentials.windows.WindowTheme;
 
 public class HUDConfigScreen {
 
-    private static final int BUTTON_PADDING = 2;
-    private static final int BUTTON_HEIGHT  = 10;
-    private static final int BUTTON_SPACING = 12;
+    private static final int BUTTON_PADDING                  = 2;
+    private static final int BUTTON_HEIGHT                   = 10;
+    private static final int BUTTON_SPACING                  = 12;
+    private static final int TOOLTIP_ANIM_INTERVAL_MS        = 10;
+    private static final int THEMED_TOOLTIP_ANIM_INTERVAL_MS = 5;
+    private static final int TOOLTIP_ALPHA_STEP              = 2;
+    private static final int TOOLTIP_ALPHA_MAX               = 255;
+    private static final int TOOLTIP_ALPHA_MIN_PLAIN         = 150;
+    private static final int TOOLTIP_ALPHA_MIN_THEMED        = 0;
+    private static final float FULLBRIGHT_GAMMA              = 2000.0f;
 
     private final WindowManager windowManager;
     private final HUDGraphics hudGraphics;
@@ -147,7 +154,7 @@ public class HUDConfigScreen {
             optionMenu.render();
         }
         if (isFullbright) {
-            gameContext.setGamma(2000.0f);
+            gameContext.setGamma(FULLBRIGHT_GAMMA);
         } else if (pendingGammaRestore) {
             gameContext.setGamma((float) gamma);
             pendingGammaRestore = false;
@@ -323,22 +330,21 @@ public class HUDConfigScreen {
                         || y < windowManager.getWindows().get(i).getY() || y > windowManager.getWindows().get(i).getY() + windowManager.getWindows().get(i).getHeight())
                     continue;
                 BaseWindow hoveredWindow = windowManager.getWindows().get(i);
-                if (tooltipAlpha > 255) {
+                if (tooltipAlpha > TOOLTIP_ALPHA_MAX) {
                     tooltipAlphaFading = true;
-                } else if (tooltipAlpha < 0 && hoveredWindow instanceof Themeable) {
+                } else if (tooltipAlpha < TOOLTIP_ALPHA_MIN_THEMED && hoveredWindow instanceof Themeable) {
                     tooltipAlphaFading = false;
                     tooltipColorR = tooltipRandom.nextInt(255);
                     tooltipColorG = tooltipRandom.nextInt(255);
                     tooltipColorB = tooltipRandom.nextInt(255);
-                } else if (tooltipAlpha < 150 && !(hoveredWindow instanceof Themeable)) {
+                } else if (tooltipAlpha < TOOLTIP_ALPHA_MIN_PLAIN && !(hoveredWindow instanceof Themeable)) {
                     tooltipAlphaFading = false;
                 }
-                int time = 10;
-                if (hoveredWindow instanceof Themeable) {
-                    time = 5;
-                }
-                if (System.currentTimeMillis() - lastTooltipAnimTime > time) {
-                    tooltipAlpha = tooltipAlphaFading ? (tooltipAlpha -= 2) : (tooltipAlpha += 2);
+                int animInterval = hoveredWindow instanceof Themeable
+                        ? THEMED_TOOLTIP_ANIM_INTERVAL_MS
+                        : TOOLTIP_ANIM_INTERVAL_MS;
+                if (System.currentTimeMillis() - lastTooltipAnimTime > animInterval) {
+                    tooltipAlpha = tooltipAlphaFading ? (tooltipAlpha -= TOOLTIP_ALPHA_STEP) : (tooltipAlpha += TOOLTIP_ALPHA_STEP);
                     lastTooltipAnimTime = System.currentTimeMillis();
                 }
                 if (hoveredWindow.getToolTip().contains("`")) {
