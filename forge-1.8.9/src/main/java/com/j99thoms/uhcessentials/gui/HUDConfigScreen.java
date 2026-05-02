@@ -321,60 +321,65 @@ public class HUDConfigScreen {
                 colorizerOpen = false;
             }
         }
-        if (!(guiContext.isMouseButtonDown(0) || guiContext.isMouseButtonDown(1) || (mouseWasDown && !isDraggingWindow) || optionsMenuOpen)) {
-            for (int i = 0; i < windowManager.getWindows().size(); i++) {
-                if (x < windowManager.getWindows().get(i).getX() || x > windowManager.getWindows().get(i).getX() + windowManager.getWindows().get(i).getWidth()
-                        || y < windowManager.getWindows().get(i).getY() || y > windowManager.getWindows().get(i).getY() + windowManager.getWindows().get(i).getHeight())
-                    continue;
-                BaseWindow hoveredWindow = windowManager.getWindows().get(i);
-                if (tooltipAlpha > TOOLTIP_ALPHA_MAX) {
-                    tooltipAlphaFading = true;
-                } else if (tooltipAlpha < TOOLTIP_ALPHA_MIN_THEMED && hoveredWindow instanceof Themeable) {
-                    tooltipAlphaFading = false;
-                    tooltipColorR = tooltipRandom.nextInt(255);
-                    tooltipColorG = tooltipRandom.nextInt(255);
-                    tooltipColorB = tooltipRandom.nextInt(255);
-                } else if (tooltipAlpha < TOOLTIP_ALPHA_MIN_PLAIN && !(hoveredWindow instanceof Themeable)) {
-                    tooltipAlphaFading = false;
-                }
-                int animInterval = hoveredWindow instanceof Themeable
-                        ? THEMED_TOOLTIP_ANIM_INTERVAL_MS
-                        : TOOLTIP_ANIM_INTERVAL_MS;
-                if (System.currentTimeMillis() - lastTooltipAnimTime > animInterval) {
-                    tooltipAlpha = tooltipAlphaFading ? (tooltipAlpha -= TOOLTIP_ALPHA_STEP) : (tooltipAlpha += TOOLTIP_ALPHA_STEP);
-                    lastTooltipAnimTime = System.currentTimeMillis();
-                }
-                if (hoveredWindow.getToolTip().contains("`")) {
-                    String[] split = hoveredWindow.getToolTip().split("`");
-                    int longestWidth = 0;
-                    for (int j = 0; j < split.length; j++) {
-                        if (hudGraphics.getStringWidth(split[j]) > longestWidth)
-                            longestWidth = hudGraphics.getStringWidth(split[j]);
-                    }
-                    if (hoveredWindow instanceof Themeable) {
-                        hudGraphics.drawHUDRectWithBorder(x - 1 + 10, y - 1, longestWidth + 2, split.length * 10,
-                                tooltipColorR, tooltipColorG, tooltipColorB, tooltipAlpha,
-                                theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), tooltipAlpha,
-                                theme.getThickness());
-                    } else {
-                        hudGraphics.drawHUDRectWithBorder(x - 1 + 10, y - 1, longestWidth + 2, split.length * 10,
-                                theme.getR(), theme.getG(), theme.getB(), tooltipAlpha,
-                                theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
-                                theme.getThickness());
-                    }
-                    for (int j = 0; j < split.length; j++) {
-                        hudGraphics.drawShadowedFont(split[j], x + 10, y + j * 10, -1);
-                    }
-                    continue;
-                }
-                int tipWidth = hudGraphics.getStringWidth(hoveredWindow.getToolTip());
-                hudGraphics.drawHUDRectWithBorder(x - 1 + 10, y - 1, tipWidth + 2, 10,
-                        theme.getR(), theme.getG(), theme.getB(), tooltipAlpha,
-                        theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
-                        theme.getThickness());
-                hudGraphics.drawShadowedFont(hoveredWindow.getToolTip(), x + 10, y, -1);
-            }
-        }
+        renderHoverTooltips(x, y);
         return ScreenRequest.NONE;
+    }
+
+    private void renderHoverTooltips(int mouseX, int mouseY) {
+        if (guiContext.isMouseButtonDown(0) || guiContext.isMouseButtonDown(1) || (mouseWasDown && !isDraggingWindow) || optionsMenuOpen) {
+            return;
+        }
+        for (int i = 0; i < windowManager.getWindows().size(); i++) {
+            if (mouseX < windowManager.getWindows().get(i).getX() || mouseX > windowManager.getWindows().get(i).getX() + windowManager.getWindows().get(i).getWidth()
+                    || mouseY < windowManager.getWindows().get(i).getY() || mouseY > windowManager.getWindows().get(i).getY() + windowManager.getWindows().get(i).getHeight())
+                continue;
+            BaseWindow hoveredWindow = windowManager.getWindows().get(i);
+            if (tooltipAlpha > TOOLTIP_ALPHA_MAX) {
+                tooltipAlphaFading = true;
+            } else if (tooltipAlpha < TOOLTIP_ALPHA_MIN_THEMED && hoveredWindow instanceof Themeable) {
+                tooltipAlphaFading = false;
+                tooltipColorR = tooltipRandom.nextInt(255);
+                tooltipColorG = tooltipRandom.nextInt(255);
+                tooltipColorB = tooltipRandom.nextInt(255);
+            } else if (tooltipAlpha < TOOLTIP_ALPHA_MIN_PLAIN && !(hoveredWindow instanceof Themeable)) {
+                tooltipAlphaFading = false;
+            }
+            int animInterval = hoveredWindow instanceof Themeable
+                    ? THEMED_TOOLTIP_ANIM_INTERVAL_MS
+                    : TOOLTIP_ANIM_INTERVAL_MS;
+            if (System.currentTimeMillis() - lastTooltipAnimTime > animInterval) {
+                tooltipAlpha = tooltipAlphaFading ? (tooltipAlpha -= TOOLTIP_ALPHA_STEP) : (tooltipAlpha += TOOLTIP_ALPHA_STEP);
+                lastTooltipAnimTime = System.currentTimeMillis();
+            }
+            if (hoveredWindow.getToolTip().contains("`")) {
+                String[] split = hoveredWindow.getToolTip().split("`");
+                int longestWidth = 0;
+                for (int j = 0; j < split.length; j++) {
+                    if (hudGraphics.getStringWidth(split[j]) > longestWidth)
+                        longestWidth = hudGraphics.getStringWidth(split[j]);
+                }
+                if (hoveredWindow instanceof Themeable) {
+                    hudGraphics.drawHUDRectWithBorder(mouseX - 1 + 10, mouseY - 1, longestWidth + 2, split.length * 10,
+                            tooltipColorR, tooltipColorG, tooltipColorB, tooltipAlpha,
+                            theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), tooltipAlpha,
+                            theme.getThickness());
+                } else {
+                    hudGraphics.drawHUDRectWithBorder(mouseX - 1 + 10, mouseY - 1, longestWidth + 2, split.length * 10,
+                            theme.getR(), theme.getG(), theme.getB(), tooltipAlpha,
+                            theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
+                            theme.getThickness());
+                }
+                for (int j = 0; j < split.length; j++) {
+                    hudGraphics.drawShadowedFont(split[j], mouseX + 10, mouseY + j * 10, -1);
+                }
+                continue;
+            }
+            int tipWidth = hudGraphics.getStringWidth(hoveredWindow.getToolTip());
+            hudGraphics.drawHUDRectWithBorder(mouseX - 1 + 10, mouseY - 1, tipWidth + 2, 10,
+                    theme.getR(), theme.getG(), theme.getB(), tooltipAlpha,
+                    theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
+                    theme.getThickness());
+            hudGraphics.drawShadowedFont(hoveredWindow.getToolTip(), mouseX + 10, mouseY, -1);
+        }
     }
 }
