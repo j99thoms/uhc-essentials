@@ -32,8 +32,8 @@ public class HUDConfigScreen {
     
     private final EnumMap<Key, Boolean> keyStates = new EnumMap<>(Key.class);
     private OptionMenu optionMenu;
-    private boolean fullbright = false;
-    private boolean shouldChange = false;
+    private boolean isFullbright = false;
+    private boolean pendingGammaRestore = false;
     private double gamma;
     private int x;
     private int y;
@@ -41,28 +41,28 @@ public class HUDConfigScreen {
     private int lastY;
     private int dx = 0;
     private int dy = 0;
-    private boolean mouseFree = false;
-    private boolean grabbed = false;
+    private boolean configModeActive = false;
+    private boolean isDraggingWindow = false;
     private BaseWindow draggedWindow;
     private Key dragKey = Key.RIGHT_SHIFT;
     private Key brightKey = Key.B;
     private int lastMove;
-    private boolean firstDrag = false;
-    private boolean on = false;
+    private boolean dragJustStarted = false;
+    private boolean colorizerOpen = false;
     private Colorizer colorizer;
     private FileManager gammaFileManager;
     private FileManager keysFileManager;
     private ArrayList<Double> gammaData;
     private ArrayList<String> keysData;
-    private boolean pressed = false;
+    private boolean mouseWasDown = false;
     private int previewAlpha = 255;
     private int previewR = 255;
     private int previewG = 255;
     private int previewB = 255;
-    private boolean alphaDown = true;
+    private boolean tooltipAlphaFading = true;
     private Random random = new Random();
     public long lastTime;
-    private boolean optionsMenu = false;
+    private boolean optionsMenuOpen = false;
     private WindowTheme theme;
 
     private Button optionsButton, resetButton, toggleButton, copyCoordsButton;
@@ -128,14 +128,14 @@ public class HUDConfigScreen {
         if (request != ScreenRequest.NONE) {
             return request;
         }
-        if (colorizer != null && on) {
+        if (colorizer != null && colorizerOpen) {
             colorizer.update();
         }
-        if (mouseFree && !optionsMenu && !on) {
+        if (configModeActive && !optionsMenuOpen && !colorizerOpen) {
             updateButtonPositions();
             buttons.forEach(b -> b.render(0,0,0,255, 255,255,255,255, 0.5));
         }
-        if (mouseFree && !optionsMenu) {
+        if (configModeActive && !optionsMenuOpen) {
             ScreenRequest dragRequest = drag();
             if (dragRequest != ScreenRequest.NONE) {
                 return dragRequest;
@@ -147,14 +147,14 @@ public class HUDConfigScreen {
         } else {
             windowManager.getTipWindow().close();
         }
-        if (optionsMenu) {
+        if (optionsMenuOpen) {
             optionMenu.render();
         }
-        if (fullbright) {
+        if (isFullbright) {
             gameContext.setGamma(2000.0f);
-        } else if (shouldChange) {
+        } else if (pendingGammaRestore) {
             gameContext.setGamma((float) gamma);
-            shouldChange = false;
+            pendingGammaRestore = false;
             save();
         } else if (gamma != gameContext.getGamma()) {
             gamma = gameContext.getGamma();
@@ -198,15 +198,15 @@ public class HUDConfigScreen {
                 try { brightKey = Key.valueOf(keysData.get(1)); } catch (Exception e) { brightKey = Key.B; }
             }
         }
-        if (!guiContext.isScreenOpen() && !optionsMenu) {
+        if (!guiContext.isScreenOpen() && !optionsMenuOpen) {
             if (checkKey(dragKey)) {
                 WindowManager.configScreenOpen = true;
                 windowManager.showAll();
-                mouseFree = true;
+                configModeActive = true;
                 return ScreenRequest.OPEN_CONFIG;
             } else if (checkKey(brightKey)) {
-                fullbright = !fullbright;
-                shouldChange = true;
+                isFullbright = !isFullbright;
+                pendingGammaRestore = true;
             } else if (checkKey(Key.NUMPAD_7)) {
                 // NumPad7 — copy coordinates to clipboard
                 String myString = "x: " + (int) gameContext.getPlayerX()
@@ -220,16 +220,16 @@ public class HUDConfigScreen {
         if (checkKey(Key.ESCAPE)) {
             // ESC — close config GUI
             WindowManager.configScreenOpen = false;
-            optionsMenu = false;
-            mouseFree = false;
+            optionsMenuOpen = false;
+            configModeActive = false;
             optionMenu.reset();
             windowManager.reset();
-            on = false;
+            colorizerOpen = false;
             lastX = 0;
             lastY = 0;
             dx = 0;
             dy = 0;
-            grabbed = false;
+            isDraggingWindow = false;
             colorizer = null;
         }
         return ScreenRequest.NONE;
@@ -242,39 +242,39 @@ public class HUDConfigScreen {
         dy = y - lastY;
         lastX = x;
         lastY = y;
-        if (guiContext.isMouseButtonDown(0) && (!pressed || grabbed) && !optionsMenu) {
+        if (guiContext.isMouseButtonDown(0) && (!mouseWasDown || isDraggingWindow) && !optionsMenuOpen) {
             if (!guiContext.isMouseButtonDown(3)) {
                 if (optionsButton.contains(x, y)) {
                     windowManager.reset();
                 }
-                if (!firstDrag) {
+                if (!dragJustStarted) {
                     lastMove = 0;
                 }
-                if (!grabbed) {
+                if (!isDraggingWindow) {
                     for (int i = 0; i < windowManager.getWindows().size(); i++) {
                         if (x >= windowManager.getWindows().get(i).getX() && x <= windowManager.getWindows().get(i).getX() + windowManager.getWindows().get(i).getWidth()) {
                             if (y < windowManager.getWindows().get(i).getY() || y > windowManager.getWindows().get(i).getY() + windowManager.getWindows().get(i).getHeight())
                                 continue;
                             draggedWindow = windowManager.getWindows().get(i);
-                            grabbed = true;
-                            firstDrag = true;
+                            isDraggingWindow = true;
+                            dragJustStarted = true;
                             return ScreenRequest.NONE;
                         }
-                        if (optionsButton.contains(x, y) && !on) {
-                            optionsMenu = true;
+                        if (optionsButton.contains(x, y) && !colorizerOpen) {
+                            optionsMenuOpen = true;
                             return ScreenRequest.OPEN_OPTIONS;
                         }
-                        if (resetButton.contains(x, y) && !on) {
+                        if (resetButton.contains(x, y) && !colorizerOpen) {
                             windowManager.resetAllWindowsPositions();
-                            pressed = true;
+                            mouseWasDown = true;
                             return ScreenRequest.NONE;
                         }
-                        if (toggleButton.contains(x, y) && !on) {
+                        if (toggleButton.contains(x, y) && !colorizerOpen) {
                             WindowManager.setToggled(!WindowManager.isToggled());
-                            pressed = true;
+                            mouseWasDown = true;
                             return ScreenRequest.NONE;
                         }
-                        if (!copyCoordsButton.contains(x, y) || on)
+                        if (!copyCoordsButton.contains(x, y) || colorizerOpen)
                             continue;
                         String myString = "x: " + (int) gameContext.getPlayerX()
                                 + " y: " + (int) Math.floor(gameContext.getPlayerY())
@@ -282,7 +282,7 @@ public class HUDConfigScreen {
                         StringSelection stringSelection = new StringSelection(myString);
                         Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
                         clpbrd.setContents(stringSelection, null);
-                        pressed = true;
+                        mouseWasDown = true;
                         return ScreenRequest.NONE;
                     }
                 } else {
@@ -291,60 +291,60 @@ public class HUDConfigScreen {
                     draggedWindow.setY(draggedWindow.getY() + dy);
                     draggedWindow.save();
                 }
-                pressed = true;
+                mouseWasDown = true;
             }
-        } else if (lastMove == 0 && firstDrag) {
-            firstDrag = false;
+        } else if (lastMove == 0 && dragJustStarted) {
+            dragJustStarted = false;
             draggedWindow.toggle();
             draggedWindow.save();
         } else {
-            firstDrag = false;
+            dragJustStarted = false;
             lastX = x;
             lastY = y;
-            grabbed = false;
+            isDraggingWindow = false;
         }
         if (!guiContext.isMouseButtonDown(0) && !guiContext.isMouseButtonDown(1)) {
-            pressed = false;
+            mouseWasDown = false;
         }
-        if (guiContext.isMouseButtonDown(1) && !pressed) {
-            pressed = true;
+        if (guiContext.isMouseButtonDown(1) && !mouseWasDown) {
+            mouseWasDown = true;
             for (int i = 0; i < windowManager.getWindows().size(); i++) {
                 draggedWindow = windowManager.getWindows().get(i);
                 if (x < windowManager.getWindows().get(i).getX() || x > windowManager.getWindows().get(i).getX() + windowManager.getWindows().get(i).getWidth()
                         || y < windowManager.getWindows().get(i).getY() || y > windowManager.getWindows().get(i).getY() + windowManager.getWindows().get(i).getHeight()
                         || !(draggedWindow instanceof Themeable))
                     continue;
-                if (!on) {
+                if (!colorizerOpen) {
                     colorizer = new Colorizer(hudGraphics, (Themeable) draggedWindow, guiContext);
-                    on = true;
+                    colorizerOpen = true;
                     return ScreenRequest.OPEN_COLORIZER;
                 }
                 colorizer = null;
-                on = false;
+                colorizerOpen = false;
             }
         }
-        if (!(guiContext.isMouseButtonDown(0) || guiContext.isMouseButtonDown(1) || (pressed && !grabbed) || optionsMenu)) {
+        if (!(guiContext.isMouseButtonDown(0) || guiContext.isMouseButtonDown(1) || (mouseWasDown && !isDraggingWindow) || optionsMenuOpen)) {
             for (int i = 0; i < windowManager.getWindows().size(); i++) {
                 if (x < windowManager.getWindows().get(i).getX() || x > windowManager.getWindows().get(i).getX() + windowManager.getWindows().get(i).getWidth()
                         || y < windowManager.getWindows().get(i).getY() || y > windowManager.getWindows().get(i).getY() + windowManager.getWindows().get(i).getHeight())
                     continue;
                 BaseWindow hoveredWindow = windowManager.getWindows().get(i);
                 if (previewAlpha > 255) {
-                    alphaDown = true;
+                    tooltipAlphaFading = true;
                 } else if (previewAlpha < 0 && hoveredWindow instanceof Themeable) {
-                    alphaDown = false;
+                    tooltipAlphaFading = false;
                     previewR = random.nextInt(255);
                     previewG = random.nextInt(255);
                     previewB = random.nextInt(255);
                 } else if (previewAlpha < 150 && !(hoveredWindow instanceof Themeable)) {
-                    alphaDown = false;
+                    tooltipAlphaFading = false;
                 }
                 int time = 10;
                 if (hoveredWindow instanceof Themeable) {
                     time = 5;
                 }
                 if (System.currentTimeMillis() - lastTime > time) {
-                    previewAlpha = alphaDown ? (previewAlpha -= 2) : (previewAlpha += 2);
+                    previewAlpha = tooltipAlphaFading ? (previewAlpha -= 2) : (previewAlpha += 2);
                     lastTime = System.currentTimeMillis();
                 }
                 if (hoveredWindow.getToolTip().contains("`")) {
