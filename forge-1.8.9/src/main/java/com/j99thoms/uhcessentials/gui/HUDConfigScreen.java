@@ -117,7 +117,7 @@ public class HUDConfigScreen {
         return colorizer;
     }
 
-    public void save() {
+    private void save() {
         gammaData.clear();
         gammaData.add(gamma);
         gammaFileManager.setArray(gammaData);
@@ -184,7 +184,7 @@ public class HUDConfigScreen {
         return false;
     }
 
-    public ScreenRequest checkKeys() {
+    private ScreenRequest checkKeys() {
         if (guiContext.getEventKeyState()) {
             keysFileManager = new FileManager("keys.txt", 2);
             keysData = keysFileManager.getStringArray();
@@ -235,7 +235,7 @@ public class HUDConfigScreen {
         return ScreenRequest.NONE;
     }
 
-    public ScreenRequest drag() {
+    private ScreenRequest drag() {
         x = guiContext.getMouseX();
         y = guiContext.getMouseY();
         dx = x - lastX;
