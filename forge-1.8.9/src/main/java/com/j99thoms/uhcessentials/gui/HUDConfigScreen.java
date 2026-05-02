@@ -45,8 +45,8 @@ public class HUDConfigScreen {
     private boolean isDraggingWindow = false;
     private BaseWindow draggedWindow;
     private Key dragKey = Key.RIGHT_SHIFT;
-    private Key brightKey = Key.B;
-    private int lastMove;
+    private Key fullbrightKey = Key.B;
+    private int totalDragDelta;
     private boolean dragJustStarted = false;
     private boolean colorizerOpen = false;
     private Colorizer colorizer;
@@ -55,13 +55,13 @@ public class HUDConfigScreen {
     private ArrayList<Double> gammaData;
     private ArrayList<String> keysData;
     private boolean mouseWasDown = false;
-    private int previewAlpha = 255;
-    private int previewR = 255;
-    private int previewG = 255;
-    private int previewB = 255;
+    private int tooltipAlpha = 255;
+    private int tooltipColorR = 255;
+    private int tooltipColorG = 255;
+    private int tooltipColorB = 255;
     private boolean tooltipAlphaFading = true;
-    private Random random = new Random();
-    public long lastTime;
+    private Random tooltipRandom = new Random();
+    private long lastTooltipAnimTime;
     private boolean optionsMenuOpen = false;
     private WindowTheme theme;
 
@@ -80,12 +80,12 @@ public class HUDConfigScreen {
         if (keysData.size() < 2) {
             keysData.clear();
             keysData.add(dragKey.name());
-            keysData.add(brightKey.name());
+            keysData.add(fullbrightKey.name());
             keysFileManager.setStringArray(keysData);
             keysData.clear();
         } else {
             try { dragKey   = Key.valueOf(keysData.get(0)); } catch (Exception e) { dragKey   = Key.RIGHT_SHIFT; }
-            try { brightKey = Key.valueOf(keysData.get(1)); } catch (Exception e) { brightKey = Key.B; }
+            try { fullbrightKey = Key.valueOf(keysData.get(1)); } catch (Exception e) { fullbrightKey = Key.B; }
         }
         optionMenu = new OptionMenu(hudGraphics, guiContext);
         gammaData = gammaFileManager.getArray();
@@ -190,12 +190,12 @@ public class HUDConfigScreen {
             keysData = keysFileManager.getStringArray();
             if (keysData.size() < 2) {
                 keysData.add(dragKey.name());
-                keysData.add(brightKey.name());
+                keysData.add(fullbrightKey.name());
                 keysFileManager.setStringArray(keysData);
                 keysData.clear();
             } else {
                 try { dragKey   = Key.valueOf(keysData.get(0)); } catch (Exception e) { dragKey   = Key.RIGHT_SHIFT; }
-                try { brightKey = Key.valueOf(keysData.get(1)); } catch (Exception e) { brightKey = Key.B; }
+                try { fullbrightKey = Key.valueOf(keysData.get(1)); } catch (Exception e) { fullbrightKey = Key.B; }
             }
         }
         if (!guiContext.isScreenOpen() && !optionsMenuOpen) {
@@ -204,7 +204,7 @@ public class HUDConfigScreen {
                 windowManager.showAll();
                 configModeActive = true;
                 return ScreenRequest.OPEN_CONFIG;
-            } else if (checkKey(brightKey)) {
+            } else if (checkKey(fullbrightKey)) {
                 isFullbright = !isFullbright;
                 pendingGammaRestore = true;
             } else if (checkKey(Key.NUMPAD_7)) {
@@ -248,7 +248,7 @@ public class HUDConfigScreen {
                     windowManager.reset();
                 }
                 if (!dragJustStarted) {
-                    lastMove = 0;
+                    totalDragDelta = 0;
                 }
                 if (!isDraggingWindow) {
                     for (int i = 0; i < windowManager.getWindows().size(); i++) {
@@ -286,14 +286,14 @@ public class HUDConfigScreen {
                         return ScreenRequest.NONE;
                     }
                 } else {
-                    lastMove += dx + dy;
+                    totalDragDelta += dx + dy;
                     draggedWindow.setX(draggedWindow.getX() + dx);
                     draggedWindow.setY(draggedWindow.getY() + dy);
                     draggedWindow.save();
                 }
                 mouseWasDown = true;
             }
-        } else if (lastMove == 0 && dragJustStarted) {
+        } else if (totalDragDelta == 0 && dragJustStarted) {
             dragJustStarted = false;
             draggedWindow.toggle();
             draggedWindow.save();
@@ -329,23 +329,23 @@ public class HUDConfigScreen {
                         || y < windowManager.getWindows().get(i).getY() || y > windowManager.getWindows().get(i).getY() + windowManager.getWindows().get(i).getHeight())
                     continue;
                 BaseWindow hoveredWindow = windowManager.getWindows().get(i);
-                if (previewAlpha > 255) {
+                if (tooltipAlpha > 255) {
                     tooltipAlphaFading = true;
-                } else if (previewAlpha < 0 && hoveredWindow instanceof Themeable) {
+                } else if (tooltipAlpha < 0 && hoveredWindow instanceof Themeable) {
                     tooltipAlphaFading = false;
-                    previewR = random.nextInt(255);
-                    previewG = random.nextInt(255);
-                    previewB = random.nextInt(255);
-                } else if (previewAlpha < 150 && !(hoveredWindow instanceof Themeable)) {
+                    tooltipColorR = tooltipRandom.nextInt(255);
+                    tooltipColorG = tooltipRandom.nextInt(255);
+                    tooltipColorB = tooltipRandom.nextInt(255);
+                } else if (tooltipAlpha < 150 && !(hoveredWindow instanceof Themeable)) {
                     tooltipAlphaFading = false;
                 }
                 int time = 10;
                 if (hoveredWindow instanceof Themeable) {
                     time = 5;
                 }
-                if (System.currentTimeMillis() - lastTime > time) {
-                    previewAlpha = tooltipAlphaFading ? (previewAlpha -= 2) : (previewAlpha += 2);
-                    lastTime = System.currentTimeMillis();
+                if (System.currentTimeMillis() - lastTooltipAnimTime > time) {
+                    tooltipAlpha = tooltipAlphaFading ? (tooltipAlpha -= 2) : (tooltipAlpha += 2);
+                    lastTooltipAnimTime = System.currentTimeMillis();
                 }
                 if (hoveredWindow.getToolTip().contains("`")) {
                     String[] split = hoveredWindow.getToolTip().split("`");
@@ -356,12 +356,12 @@ public class HUDConfigScreen {
                     }
                     if (hoveredWindow instanceof Themeable) {
                         hudGraphics.drawHUDRectWithBorder(x - 1 + 10, y - 1, longestWidth + 2, split.length * 10,
-                                previewR, previewG, previewB, previewAlpha,
-                                theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), previewAlpha,
+                                tooltipColorR, tooltipColorG, tooltipColorB, tooltipAlpha,
+                                theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), tooltipAlpha,
                                 theme.getThickness());
                     } else {
                         hudGraphics.drawHUDRectWithBorder(x - 1 + 10, y - 1, longestWidth + 2, split.length * 10,
-                                theme.getR(), theme.getG(), theme.getB(), previewAlpha,
+                                theme.getR(), theme.getG(), theme.getB(), tooltipAlpha,
                                 theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
                                 theme.getThickness());
                     }
@@ -372,7 +372,7 @@ public class HUDConfigScreen {
                 }
                 int tipWidth = hudGraphics.getStringWidth(hoveredWindow.getToolTip());
                 hudGraphics.drawHUDRectWithBorder(x - 1 + 10, y - 1, tipWidth + 2, 10,
-                        theme.getR(), theme.getG(), theme.getB(), previewAlpha,
+                        theme.getR(), theme.getG(), theme.getB(), tooltipAlpha,
                         theme.getBorderR(), theme.getBorderG(), theme.getBorderB(), theme.getBorderA(),
                         theme.getThickness());
                 hudGraphics.drawShadowedFont(hoveredWindow.getToolTip(), x + 10, y, -1);
