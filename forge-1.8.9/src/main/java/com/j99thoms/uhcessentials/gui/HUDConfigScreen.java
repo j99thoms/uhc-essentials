@@ -35,12 +35,8 @@ public class HUDConfigScreen {
     private boolean isFullbright = false;
     private boolean pendingGammaRestore = false;
     private double gamma;
-    private int x;
-    private int y;
     private int lastX;
     private int lastY;
-    private int dx = 0;
-    private int dy = 0;
     private boolean configModeActive = false;
     private boolean isDraggingWindow = false;
     private BaseWindow draggedWindow;
@@ -227,8 +223,6 @@ public class HUDConfigScreen {
             colorizerOpen = false;
             lastX = 0;
             lastY = 0;
-            dx = 0;
-            dy = 0;
             isDraggingWindow = false;
             colorizer = null;
         }
@@ -236,10 +230,10 @@ public class HUDConfigScreen {
     }
 
     private ScreenRequest drag() {
-        x = guiContext.getMouseX();
-        y = guiContext.getMouseY();
-        dx = x - lastX;
-        dy = y - lastY;
+        int x  = guiContext.getMouseX();
+        int y  = guiContext.getMouseY();
+        int dx = x - lastX;
+        int dy = y - lastY;
         lastX = x;
         lastY = y;
         if (guiContext.isMouseButtonDown(0) && (!mouseWasDown || isDraggingWindow) && !optionsMenuOpen) {
