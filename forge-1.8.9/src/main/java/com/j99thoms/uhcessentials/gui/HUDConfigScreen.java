@@ -146,7 +146,7 @@ public class HUDConfigScreen {
             buttons.forEach(b -> b.render(0,0,0,255, 255,255,255,255, 0.5));
         }
         if (configModeActive && !optionsMenuOpen) {
-            ScreenRequest dragRequest = drag();
+            ScreenRequest dragRequest = handleMouseInput();
             if (dragRequest != ScreenRequest.NONE) {
                 return dragRequest;
             }
@@ -233,7 +233,7 @@ public class HUDConfigScreen {
         return ScreenRequest.NONE;
     }
 
-    private ScreenRequest drag() {
+    private ScreenRequest handleMouseInput() {
         int x  = guiContext.getMouseX();
         int y  = guiContext.getMouseY();
         int dx = x - lastX;
