@@ -53,8 +53,8 @@ public class HUDConfigScreen {
     private boolean dragJustStarted = false;
     private boolean colorizerOpen = false;
     private Colorizer colorizer;
-    private FileManager gammaFileManager;
-    private FileManager keysFileManager;
+    private final FileManager gammaFileManager;
+    private final FileManager keysFileManager;
     private ArrayList<Double> gammaData;
     private ArrayList<String> keysData;
     private boolean mouseWasDown = false;
@@ -77,8 +77,45 @@ public class HUDConfigScreen {
         this.gameContext = gameContext;
         this.hudGraphics = hudGraphics;
         this.theme = windowManager.getTheme();
-        gammaFileManager = new FileManager("Gamma", 1);
-        keysFileManager = new FileManager("keys.txt", 2);
+        this.gammaFileManager = new FileManager("Gamma", 1);
+        this.keysFileManager = new FileManager("keys.txt", 2);
+        loadGamma();
+        loadKeys();
+        optionMenu = new OptionMenu(hudGraphics, guiContext);
+        resetButton      = getButton("Reset All Windows");
+        toggleButton     = getButton("Toggle UHC Essentials");
+        copyCoordsButton = getButton("Copy coordinates to clipboard(or press NumPad7)");
+        optionsButton    = getButton("Options");
+        buttons = Arrays.asList(optionsButton, resetButton, toggleButton, copyCoordsButton);
+    }
+
+    public OptionMenu getOptionMenu() {
+        return optionMenu;
+    }
+
+    public Colorizer getColorizer() {
+        return colorizer;
+    }
+
+    private void loadGamma() {
+        gammaData = gammaFileManager.getArray();
+        if (gammaData.size() < 1) {
+            gammaData.add((double) gameContext.getGamma());
+            gammaFileManager.setArray(gammaData);
+            gammaData.clear();
+        } else {
+            gamma = gammaData.get(0);
+            gameContext.setGamma((float) gamma);
+        }
+    }
+
+    private void saveGamma() {
+        gammaData.clear();
+        gammaData.add(gamma);
+        gammaFileManager.setArray(gammaData);
+    }
+
+    private void loadKeys() {
         keysData = keysFileManager.getStringArray();
         if (keysData.size() < 2) {
             keysData.clear();
@@ -90,40 +127,10 @@ public class HUDConfigScreen {
             try { dragKey   = Key.valueOf(keysData.get(0)); } catch (Exception e) { dragKey   = Key.RIGHT_SHIFT; }
             try { fullbrightKey = Key.valueOf(keysData.get(1)); } catch (Exception e) { fullbrightKey = Key.B; }
         }
-        optionMenu = new OptionMenu(hudGraphics, guiContext);
-        gammaData = gammaFileManager.getArray();
-        if (gammaData.size() < 1) {
-            gammaData.add((double) gameContext.getGamma());
-            gammaFileManager.setArray(gammaData);
-            gammaData.clear();
-        } else {
-            gamma = gammaData.get(0);
-            gameContext.setGamma((float) gamma);
-        }
-
-        resetButton      = getButton("Reset All Windows");
-        toggleButton     = getButton("Toggle UHC Essentials");
-        copyCoordsButton = getButton("Copy coordinates to clipboard(or press NumPad7)");
-        optionsButton    = getButton("Options");
-        buttons = Arrays.asList(optionsButton, resetButton, toggleButton, copyCoordsButton);
     }
 
     private Button getButton(String label) {
         return Button.fromLabel(hudGraphics, label, BUTTON_PADDING, BUTTON_HEIGHT);
-    }
-
-    public OptionMenu getOptionMenu() {
-        return optionMenu;
-    }
-
-    public Colorizer getColorizer() {
-        return colorizer;
-    }
-
-    private void save() {
-        gammaData.clear();
-        gammaData.add(gamma);
-        gammaFileManager.setArray(gammaData);
     }
 
     public ScreenRequest render() {
@@ -158,10 +165,10 @@ public class HUDConfigScreen {
         } else if (pendingGammaRestore) {
             gameContext.setGamma((float) gamma);
             pendingGammaRestore = false;
-            save();
+            saveGamma();
         } else if (gamma != gameContext.getGamma()) {
             gamma = gameContext.getGamma();
-            save();
+            saveGamma();
         }
         return ScreenRequest.NONE;
     }
@@ -189,17 +196,7 @@ public class HUDConfigScreen {
 
     private ScreenRequest checkKeys() {
         if (guiContext.getEventKeyState()) {
-            keysFileManager = new FileManager("keys.txt", 2);
-            keysData = keysFileManager.getStringArray();
-            if (keysData.size() < 2) {
-                keysData.add(dragKey.name());
-                keysData.add(fullbrightKey.name());
-                keysFileManager.setStringArray(keysData);
-                keysData.clear();
-            } else {
-                try { dragKey   = Key.valueOf(keysData.get(0)); } catch (Exception e) { dragKey   = Key.RIGHT_SHIFT; }
-                try { fullbrightKey = Key.valueOf(keysData.get(1)); } catch (Exception e) { fullbrightKey = Key.B; }
-            }
+            loadKeys();
         }
         if (!guiContext.isScreenOpen() && !optionsMenuOpen) {
             if (checkKey(dragKey)) {
